@@ -16,3 +16,4 @@ class City(models.Model):
     lat = models.FloatField()
     lon = models.FloatField()
     trip = models.ForeignKey(Trip)
+    visited = models.BooleanField(default=False)
