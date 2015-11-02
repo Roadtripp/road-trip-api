@@ -41,8 +41,8 @@ class CityTestCase(TestCase):
         )
 
     def test_city_creation(self):
-        self.AssertEquals(City.objects.get(city_name="Washington, DC").pk, 1),
-        self.AssertEquals(City.objects.get(lat=38.9047).pk, 1),
-        self.AssertEquals(City.objects.get(lon=-77.0164).pk, 1),
-        self.AssertEquals(City.objects.get(trip=Trip.objects.get(pk=1)).pk, 1),
-        self.AssertNotEquals(City.objects.get(lon=-77.0164).pk, 2),
+        self.assertEquals(City.objects.get(city_name="Washington, DC").pk, 1),
+        self.assertEquals(City.objects.get(lat=38.9047).pk, 1),
+        self.assertEquals(City.objects.get(lon=-77.0164).pk, 1),
+        self.assertEquals(City.objects.get(trip=Trip.objects.get(pk=1)).pk, 1),
+        self.assertNotEquals(City.objects.get(lon=-77.0164).pk, 2),
