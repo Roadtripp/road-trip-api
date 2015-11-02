@@ -1,1 +1,1 @@
-web: gunicorn stat_tracker.wsgi --log-file -
+web: gunicorn road_trip.wsgi --log-file -
