@@ -1,0 +1,103 @@
+
+// Signup
+
+{
+  "username": "bob",
+  "password": "password",
+  "email": "bob@email.com",
+  "user_id": 1
+}
+
+// Home
+
+{
+  "username": "bob",
+  "user_id": 1,
+  "trips":  [
+    {
+      "title": "Wedding",
+      "date": 10-12-2015,
+      "trip_id": 1,
+      "origin": "Raleigh, NC",
+      "destination": "New York, NY"
+    },
+
+    {
+      "title": "Wedding",
+      "date": 10-10-2015,
+      "trip_id": 2,
+      "origin": "Raleigh, NC",
+      "destination": "New York, NY"
+    }
+
+  ]
+}
+
+// Start/End locations
+submitted by FE:
+{
+  "user_id": 1,
+  "trip_id": 12,
+  "title": "Wedding",
+  "origin": "Raleigh, NC",
+  "origin_date": 10-12-2015,
+  "origin_time": "7:00AM",
+  "destination": "New York",
+  "destination_date": 10-15-2015,
+  "interests" : {
+    "artist": [
+      "ballads", "jason mraz", "warriors", "taylor swift", "country songs", "ballet", "Chinese food", "Mexican food",
+    ],
+
+    "food": [
+      "ballads", "jason mraz", "warriors", "taylor swift", "country songs", "ballet", "Chinese food", "Mexican food",
+    ],
+
+    "sports": [
+      "ballads", "jason mraz", "warriors", "taylor swift", "country songs", "ballet", "Chinese food", "Mexican food",
+
+    ],
+    "checkbox_museum": true,
+    "checkbox_shopping": true,
+    "checkbox_nature": false,
+    "checkbox_nightlife": false,
+    "checkbox_parks": true,
+  }
+}
+-FE Submit Complete Json to BE
+-BE will give 200ok, path to cities_page.html
+-
+
+FE get api/user/123/trip/12/sugested_cities/567/
+response from BE:
+{
+  "user_id": 1,
+  "trip_id": 12,
+  "created_on": 10-15-2015,
+  "cities_along": [
+    {
+      "city_name": "Washington DC",
+      "Description": "This is the Capital of the Country... Blah Blah",
+      "miles_to_travel": 24,
+      "want_to_go": false,
+      "events": [
+        {
+          "checkbox_concert": null,
+          "event_title": ""
+        }
+      ]
+    },
+    {
+      "city_name": "Richmond",
+      "Description": "Seafoods are great here....",
+      "miles_to_travel": 12,
+      "want_to_go": false
+    },
+    {
+      "city_name": "Baltimore",
+      "Description": "Great Infrastractures here",
+      "miles_to_travel": 17,
+      "want_to_go": false
+    }
+  ]
+}
