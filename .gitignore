@@ -74,3 +74,5 @@ target/
 *.dat
 *__pycache__/
 venv
+.env
+NOTES.md
