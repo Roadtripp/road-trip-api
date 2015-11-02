@@ -20,3 +20,4 @@ class TripTestCase(TestCase):
         self.assertEquals(Trip.objects.get(destination="New York, NY").pk, 1),
         self.assertEquals(Trip.objects.get(start="2008-04-10 11:47:58-05").pk, 1),
         self.assertEquals(Trip.objects.get(end="2008-04-13 11:00:00-05").pk, 1),
+        self.assertNotEquals(Trip.objects.get(end="2008-04-13 11:00:00-05").pk, 2),
