@@ -8,13 +8,13 @@ class Trip(models.Model):
     origin = models.CharField(max_length=255)
     origin_date = models.DateField(null=True, blank=True)
     origin_time = models.TimeField(null=True, blank=True)
-    origin_lat = models.FloatField(default=None)
-    origin_lon = models.FloatField(default=None)
+    origin_lat = models.FloatField(null=True, blank=True)
+    origin_lon = models.FloatField(null=True, blank=True)
     destination = models.CharField(max_length=255)
     destination_date = models.DateField(null=True, blank=True)
     destination_time = models.TimeField(null=True, blank=True)
-    destination_lat = models.FloatField(default=None)
-    destination_lon = models.FloatField(default=None)
+    destination_lat = models.FloatField(null=True, blank=True)
+    destination_lon = models.FloatField(null=True, blank=True)
 
 
 class City(models.Model):
