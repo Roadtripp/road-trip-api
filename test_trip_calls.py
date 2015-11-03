@@ -78,3 +78,7 @@ def city_api_test():
     url = 'http://127.0.0.1:8000/api/trip/'
     res_post = requests.post(url, data=head_post)
     j_post = json.loads(res_post.text)
+    url += str(j_post['id']) + '/'
+
+    res_delete = requests.delete(url)
+    assert res_delete.status_code == 204
