@@ -14,6 +14,7 @@ def trip_api_test():
     """Testing suite for Trip API calls
        (POST, PATCH, GET, DELETE)"""
 
+    # POST a trip
     head_post = {'title': 'TITLE',
                  'origin': '334 Blackwell Street B017, Durham, NC',
                  'origin_date': '08/25/2004', 'origin_time': '12:00 PM',
@@ -40,6 +41,7 @@ def trip_api_test():
     assert j_post['destination_time'] == '12:00:00'
     assert j_post['destination_time'] != '12:01:00'
 
+    # PATCH a trip
     head_patch = {'title': 'TITLE2'}
     res_patch = requests.patch(url+str(j_post['id'])+'/', data=head_patch)
     j_patch = json.loads(res_patch.text)
@@ -48,6 +50,7 @@ def trip_api_test():
     assert j_patch['title'] != 'TITLE'
     assert j_patch['title'] == 'TITLE2'
 
+    # GET a trip
     res_get = requests.get(url+str(j_post['id'])+'/')
     j_get = json.loads(res_get.text)
 
@@ -67,8 +70,8 @@ def trip_api_test():
     assert j_get['destination_time'] == '12:00:00'
     assert j_get['destination_time'] != '12:01:00'
 
+    # DELETE a trip
     res_delete = requests.delete(url+str(j_post['id'])+'/')
-
     assert res_delete.status_code == 204
 
 
