@@ -17,7 +17,7 @@ class GoogleMapsDirections:
 
     def get_waypoints(self):
         parsed_json = self.r.json()
-        print(parsed_json)
+        #print(parsed_json)
         directions = {}
         start_coord = tuple((parsed_json["routes"][0]["legs"][0]["start_location"]["lat"], parsed_json["routes"][0]["legs"][0]["start_location"]["lng"]))
         end_coord = tuple((parsed_json["routes"][0]["legs"][0]["end_location"]["lat"], parsed_json["routes"][0]["legs"][0]["end_location"]["lng"]))
@@ -46,6 +46,7 @@ class GoogleMapsDirections:
         formatted_waypoints = start +"|"+ waypoints + "|" + end
         return formatted_waypoints
 
+
     def format_waypoints(self):
         dictionary = self.get_waypoints()
         waypoints = [dictionary["start_coord"]]
@@ -53,6 +54,7 @@ class GoogleMapsDirections:
             waypoints.append(x)
         waypoints.append(dictionary["end_coord"])
         return waypoints
+
 
     def get_incremental_points(self):
         waypoints = self.format_waypoints
@@ -101,10 +103,6 @@ def find_cities(origin, dest, radius=20):
             dist = find_dist(lat1=point[0],lon1=point[1],lat2=row['latitude'],lon2=row['longitude'])
             if dist <= radius:
                 if (row['City'], row['State']) not in cities:
-                    if row['City'] != origin and row['City'] != dest:
+                    if row['City'] != origin:
                         cities.append((row['City'], row['State']))
-    print(cities)
-
-
-
-find_cities("Raleigh,NC", "Boston,MA", radius=50)
+    return cities
