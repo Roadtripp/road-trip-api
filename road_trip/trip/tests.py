@@ -115,6 +115,16 @@ class SuggestionTestCase(TestCase):
                           'destination_time': '12:00 PM'}
         url_trip_post = '/api/trip/'
         self.res_trip_post = c.post(url_trip_post, head_trip_post)
+        self.j_trip_post = json.loads(self.res_trip_post.text)
+
+        url_trip_suggestions = url_trip_post + self.j_trip_post['id'] + '/suggestions/'
+        self.suggestions = c.get(url_trip_suggestions)
 
     def test_trip_creation(self):
         self.assertEquals(self.res_trip_post.status_code, 201)
+        self.assertIn({
+                'city_name': "Washington, DC",
+                'lat': 38.9047,
+                'lon': -77.0164,
+                'visited': False
+                }, self.suggestions['cities'])
