@@ -9,40 +9,59 @@ import pandas as pd
 gm_key = os.environ["GOOGLE_MAPS"]
 
 
-# class GoogleMapsDirections:
-#     def __init__(self, origin, dest):
-#         self.origin = origin
-#         self.dest = dest
-#         self.r = requests.get('https://maps.googleapis.com/maps/api/directions/json?origin={}&destination={}&key={}'.format(self.origin, self.dest, gm_key))
-#
-#     def get(self):
-#         parsed_json = self.r.json()
-#         #start_coord = tuple(parsed_json["routes"]["legs"]["start_location"]["lat"], parsed_json["routes"]["legs"]["start_location"]["lng"])
-#         #end_coord = tuple(parsed_json["routes"]["legs"]["end_location"]["lat"], parsed_json["routes"]["legs"]["end_location"]["lng"])
-#         print(parsed_json)
-#         #print(end_coord)
+class GoogleMapsDirections:
+    def __init__(self, origin, dest):
+        self.origin = origin
+        self.dest = dest
+        self.r = requests.get('https://maps.googleapis.com/maps/api/directions/json?origin={}&destination={}&key={}'.format(self.origin, self.dest, gm_key))
+
+    def get_waypoints(self):
+        parsed_json = self.r.json()
+        directions = {}
+        start_coord = tuple((parsed_json["routes"][0]["legs"][0]["start_location"]["lat"], parsed_json["routes"][0]["legs"][0]["start_location"]["lng"]))
+        end_coord = tuple((parsed_json["routes"][0]["legs"][0]["end_location"]["lat"], parsed_json["routes"][0]["legs"][0]["end_location"]["lng"]))
+        waypoints = []
+        counter=0
+        for x in range(100):
+            try:
+                waypoints.append(tuple((parsed_json["routes"][0]["legs"][0]["steps"][counter]["end_location"]["lat"], parsed_json["routes"][0]["legs"][0]["steps"][counter]["end_location"]["lng"])))
+                counter += 1
+            except:
+                break
+        directions["start_coord"]=start_coord
+        directions["end_coord"]=end_coord
+        directions["waypoints"]=waypoints
+        return directions
+
+    def format_waypoints_snap(self):
+        dictionary = self.get_waypoints()
+        waypoints = []
+        for x in dictionary["waypoints"]:
+            waypoints.append(str(x[0])+","+str(x[1]))
+        waypoints = "|".join(waypoints)
+        start = str(dictionary["start_coord"][0])+","+ str(dictionary["start_coord"][1])
+        end = str(dictionary["end_coord"][0])+","+ str(dictionary["end_coord"][1])
+        formatted_waypoints = start +"|"+ waypoints + "|" + end
+        return formatted_waypoints
+
+    def format_waypoints(self):
+        dictionary = self.get_waypoints()
+        waypoints = [dictionary["start_coord"]]
+        for x in dictionary["waypoints"]:
+            waypoints.append(x)
+        waypoints.append(dictionary["end_coord"])
+        return waypoints
+
+    def get_incremental_points(self):
+        waypoints = self.format_waypoints
+        r = requests.get('https://roads.googleapis.com/v1/snapToRoads?path={}&interpolate=True&key={}'.format(waypoints, gm_key))
+        print(r.json())
 
 
-# something = GoogleMapsDirections(origin="Seattle", dest="San Diego")
-# something.get()"
+something = GoogleMapsDirections("Seattle", "San Diego")
+something.format_waypoints()
 
 
-# class GoogleMapsDirections:
-#     def __init__(self, origin, dest):
-#         self.origin = origin
-#         self.dest = dest
-#         self.r = requests.get('https://maps.googleapis.com/maps/api/directions/json?origin={}&destination={}&key={}'.format(self.origin, self.dest, gm_key))
-#
-#     def get(self):
-#         parsed_json = self.r.json()
-#         #start_coord = tuple(parsed_json["routes"]["legs"]["start_location"]["lat"], parsed_json["routes"]["legs"]["start_location"]["lng"])
-#         #end_coord = tuple(parsed_json["routes"]["legs"]["end_location"]["lat"], parsed_json["routes"]["legs"]["end_location"]["lng"])
-#         print(parsed_json)
-#         #print(end_coord)
-
-
-# something = GoogleMapsDirections(origin="Seattle", dest="San Diego")
-# something.get()
 
 def make_df():
     df = pd.read_csv("road_trip/trip/largest_cities.csv", encoding="latin-1")
