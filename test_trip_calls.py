@@ -91,14 +91,14 @@ def city_api_test():
     trip_url += str(j_trip_post['id']) + '/'
 
     # POST a city
-    head_city_post = {'city_name': 'Boston, MA', 'trip': j_trip_post['id']}
+    head_city_post = {'city_name': 'Boston, MA', 'lat': 25, 'lon': 35}
     res_city_post = requests.post(trip_url+'city/', data=head_city_post)
     j_city_post = json.loads(res_city_post.text)
     city_url = trip_url+'city/' + str(j_city_post['id']) + '/'
 
     assert res_city_post.status_code == 201
     assert j_city_post['city_name'] == 'Boston, MA'
-    assert j_city_post['trip'] == j_trip_post['id']
+    assert j_city_post['trip_id'] == str(j_trip_post['id'])
 
     # PATCH a city
     head_city_patch = {'city_name': 'Cambridge, MA'}
@@ -108,7 +108,7 @@ def city_api_test():
     assert res_city_patch.status_code == 200
     assert j_city_patch['city_name'] == 'Cambridge, MA'
     assert j_city_patch['city_name'] != 'Boston, MA'
-    assert j_city_patch['trip'] == j_trip_post['id']
+    assert j_city_patch['trip_id'] == j_trip_post['id']
 
     # GET a city
     res_city_get = requests.get(city_url)
@@ -117,7 +117,7 @@ def city_api_test():
     assert res_city_get.status_code == 200
     assert j_city_get['city_name'] == 'Cambridge, MA'
     assert j_city_get['city_name'] != 'Boston, MA'
-    assert j_city_get['trip'] == j_trip_post['id']
+    assert j_city_get['trip_id'] == j_trip_post['id']
 
     # DELETE a city
     res_delete_city = requests.delete(city_url)
