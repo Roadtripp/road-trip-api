@@ -70,7 +70,8 @@ class GoogleMapsDirections:
 def make_df():
     #makes a Pandas dataframe from the cities csv file that contains cities and their
     #coordinates
-    df = pd.read_csv("trip/largest_cities.csv", encoding="latin-1")
+    df = pd.read_csv("largest_cities.csv", encoding="latin-1")
+    #df["city-state"] = df["City"].map(str) + ", " + df["State"]
     newdf = df[['City', 'State', 'Location']]
     newdf = newdf.dropna()
     newdf['latitude']=newdf['Location'].str.extract('(\d\d.\d\d\d\d)')
@@ -104,12 +105,13 @@ def find_cities(origin, dest, radius=20):
     route = GoogleMapsDirections(origin, dest)
     waypoints = route.format_waypoints()
     df = make_df()
-    cities = []
+    cities = {}
     for point in waypoints:
         for index, row in df.iterrows():
             dist = find_dist(lat1=point[0],lon1=point[1],lat2=row['latitude'],lon2=row['longitude'])
             if dist <= radius:
                 if (row['City'], row['State']) not in cities:
                     if row['City'] != origin:
-                        cities.append((row['City'], row['State']))
+                        cities[(row['City'], row['State'])] = [row['latitude'], row['longitude']]
+
     return cities
