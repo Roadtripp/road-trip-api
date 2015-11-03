@@ -16,6 +16,8 @@ class GoogleMapsDirections:
         self.r = requests.get('https://maps.googleapis.com/maps/api/directions/json?origin={}&destination={}&key={}'.format(self.origin, self.dest, gm_key))
 
     def get_waypoints(self):
+        #Sends a call to Google Maps Directions and return a dictionary with
+        #start and end coordinates and a list of all waypoint coordinates
         parsed_json = self.r.json()
         #print(parsed_json)
         directions = {}
@@ -35,7 +37,18 @@ class GoogleMapsDirections:
         return directions
 
 
+    def format_waypoints(self):
+        #formats dictionary response from above into a list of tuples of coordinates
+        dictionary = self.get_waypoints()
+        waypoints = [dictionary["start_coord"]]
+        for x in dictionary["waypoints"]:
+            waypoints.append(x)
+        waypoints.append(dictionary["end_coord"])
+        return waypoints
+
+
     def format_waypoints_snap(self):
+        #To be used with Snap To Roads requests
         dictionary = self.get_waypoints()
         waypoints = []
         for x in dictionary["waypoints"]:
@@ -47,23 +60,17 @@ class GoogleMapsDirections:
         return formatted_waypoints
 
 
-    def format_waypoints(self):
-        dictionary = self.get_waypoints()
-        waypoints = [dictionary["start_coord"]]
-        for x in dictionary["waypoints"]:
-            waypoints.append(x)
-        waypoints.append(dictionary["end_coord"])
-        return waypoints
-
-
     def get_incremental_points(self):
+        #formatting Snap To Roads requests
         waypoints = self.format_waypoints
         r = requests.get('https://roads.googleapis.com/v1/snapToRoads?path={}&interpolate=True&key={}'.format(waypoints, gm_key))
         print(r.json())
 
 
 def make_df():
-    df = pd.read_csv("largest_cities.csv", encoding="latin-1")
+    #makes a Pandas dataframe from the cities csv file that contains cities and their
+    #coordinates
+    df = pd.read_csv("trip/largest_cities.csv", encoding="latin-1")
     newdf = df[['City', 'State', 'Location']]
     newdf = newdf.dropna()
     newdf['latitude']=newdf['Location'].str.extract('(\d\d.\d\d\d\d)')
