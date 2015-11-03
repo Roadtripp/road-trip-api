@@ -9,12 +9,13 @@ def smoke_test():
 # TODO: figure out how to run and kill server in file
 
 
-def trip_post_test():
-    head_post = {'title':'TITLE',
-    'origin':'334 Blackwell Street B017, Durham, NC',
-    'origin_date':'08/25/2004', 'origin_time':'12:00 PM',
-    'destination':'New York, NY', 'destination_date':'08/28/2004',
-    'destination_time':'12:00 PM'}
+def trip_api_test():
+    head_post = {'title': 'TITLE',
+                 'origin': '334 Blackwell Street B017, Durham, NC',
+                 'origin_date': '08/25/2004', 'origin_time': '12:00 PM',
+                 'destination': 'New York, NY',
+                 'destination_date': '08/28/2004',
+                 'destination_time': '12:00 PM'}
     url = 'http://127.0.0.1:8000/api/trip/'
     res_post = requests.post(url, data=head_post)
     j_post = json.loads(res_post.text)
@@ -28,14 +29,14 @@ def trip_post_test():
     assert j_post['destination'] != 'Miami, FL'
     assert j_post['origin_time'] == '12:00:00'
     assert j_post['origin_time'] != '12:00:01'
-    assert j_post['origin_date'] =='08/25/2004'
-    assert j_post['origin_date'] !='08/25/2005'
+    assert j_post['origin_date'] == '08/25/2004'
+    assert j_post['origin_date'] != '08/25/2005'
     assert j_post['destination_date'] == '08/28/2004'
     assert j_post['destination_date'] != '08/29/2004'
     assert j_post['destination_time'] == '12:00:00'
     assert j_post['destination_time'] != '12:01:00'
 
-    head_patch = {'title':'TITLE2'}
+    head_patch = {'title': 'TITLE2'}
     res_patch = requests.patch(url+str(j_post['id'])+'/', data=head_patch)
     j_patch = json.loads(res_patch.text)
 
@@ -55,8 +56,8 @@ def trip_post_test():
     assert j_get['destination'] != 'Miami, FL'
     assert j_get['origin_time'] == '12:00:00'
     assert j_get['origin_time'] != '12:00:01'
-    assert j_get['origin_date'] =='08/25/2004'
-    assert j_get['origin_date'] !='08/25/2005'
+    assert j_get['origin_date'] == '08/25/2004'
+    assert j_get['origin_date'] != '08/25/2005'
     assert j_get['destination_date'] == '08/28/2004'
     assert j_get['destination_date'] != '08/29/2004'
     assert j_get['destination_time'] == '12:00:00'
@@ -65,3 +66,15 @@ def trip_post_test():
     res_delete = requests.delete(url+str(j_post['id'])+'/')
 
     assert res_delete.status_code == 204
+
+
+def city_api_test():
+    head_post = {'title': 'TITLE',
+                 'origin': '334 Blackwell Street B017, Durham, NC',
+                 'origin_date': '08/25/2004', 'origin_time': '12:00 PM',
+                 'destination': 'New York, NY',
+                 'destination_date': '08/28/2004',
+                 'destination_time': '12:00 PM'}
+    url = 'http://127.0.0.1:8000/api/trip/'
+    res_post = requests.post(url, data=head_post)
+    j_post = json.loads(res_post.text)
