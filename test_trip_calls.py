@@ -69,16 +69,18 @@ def trip_api_test():
 
 
 def city_api_test():
-    head_post = {'title': 'TITLE',
-                 'origin': '334 Blackwell Street B017, Durham, NC',
-                 'origin_date': '08/25/2004', 'origin_time': '12:00 PM',
-                 'destination': 'New York, NY',
-                 'destination_date': '08/28/2004',
-                 'destination_time': '12:00 PM'}
+    head_trip_post = {'title': 'TITLE',
+                      'origin': '334 Blackwell Street B017, Durham, NC',
+                      'origin_date': '08/25/2004', 'origin_time': '12:00 PM',
+                      'destination': 'New York, NY',
+                      'destination_date': '08/28/2004',
+                      'destination_time': '12:00 PM'}
     url = 'http://127.0.0.1:8000/api/trip/'
-    res_post = requests.post(url, data=head_post)
-    j_post = json.loads(res_post.text)
-    url += str(j_post['id']) + '/'
+    res_trip_post = requests.post(url, data=head_trip_post)
+    j_trip_post = json.loads(res_trip_post.text)
+    url += str(j_trip_post['id']) + '/'
+
+
 
     res_delete = requests.delete(url)
     assert res_delete.status_code == 204
