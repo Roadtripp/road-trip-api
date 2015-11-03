@@ -17,6 +17,7 @@ class GoogleMapsDirections:
 
     def get_waypoints(self):
         parsed_json = self.r.json()
+        print(parsed_json)
         directions = {}
         start_coord = tuple((parsed_json["routes"][0]["legs"][0]["start_location"]["lat"], parsed_json["routes"][0]["legs"][0]["start_location"]["lng"]))
         end_coord = tuple((parsed_json["routes"][0]["legs"][0]["end_location"]["lat"], parsed_json["routes"][0]["legs"][0]["end_location"]["lng"]))
@@ -32,6 +33,7 @@ class GoogleMapsDirections:
         directions["end_coord"]=end_coord
         directions["waypoints"]=waypoints
         return directions
+
 
     def format_waypoints_snap(self):
         dictionary = self.get_waypoints()
@@ -58,14 +60,9 @@ class GoogleMapsDirections:
         print(r.json())
 
 
-something = GoogleMapsDirections("Seattle", "San Diego")
-something.format_waypoints()
-
-
-
 def make_df():
-    df = pd.read_csv("road_trip/trip/largest_cities.csv", encoding="latin-1")
-    newdf = df[['City', 'Location']]
+    df = pd.read_csv("largest_cities.csv", encoding="latin-1")
+    newdf = df[['City', 'State', 'Location']]
     newdf = newdf.dropna()
     newdf['latitude']=newdf['Location'].str.extract('(\d\d.\d\d\d\d)')
     newdf['longitude']=newdf['Location'].str.extract('N ([\d.]+)')
@@ -92,3 +89,22 @@ def find_dist(lat1,lon1,lat2,lon2):
 
     distance = R * c
     return distance
+
+
+def find_cities(origin, dest, radius=20):
+    route = GoogleMapsDirections(origin, dest)
+    waypoints = route.format_waypoints()
+    df = make_df()
+    cities = []
+    for point in waypoints:
+        for index, row in df.iterrows():
+            dist = find_dist(lat1=point[0],lon1=point[1],lat2=row['latitude'],lon2=row['longitude'])
+            if dist <= radius:
+                if (row['City'], row['State']) not in cities:
+                    if row['City'] != origin and row['City'] != dest:
+                        cities.append((row['City'], row['State']))
+    print(cities)
+
+
+
+find_cities("Raleigh,NC", "Boston,MA", radius=50)
