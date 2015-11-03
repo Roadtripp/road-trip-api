@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Trip
+from .models import Trip, City
 
 
 class TripSerializer(serializers.ModelSerializer):
@@ -15,3 +15,17 @@ class TripSerializer(serializers.ModelSerializer):
                   'origin_lat', 'origin_lon', 'destination',
                   'destination_date', 'destination_time', 'destination_lat',
                   'destination_lon',)
+
+
+class CitySerializer(serializers.ModelSerializer):
+    trip_id = serializers.PrimaryKeyRelatedField(many=False,
+                                                 read_only=True)
+
+    class Meta:
+        model = City
+        fields = ('id', 'city_name', 'lat', 'lon', 'trip_id', 'visited')
+
+    def create(self, validated_data):
+        validated_data['trip_id'] = self.context['trip_pk']
+        city = City.objects.create(**validated_data)
+        return city
