@@ -148,3 +148,31 @@ def trip_creation_test():
             'activities': []
             } in suggestions['waypoints']
     assert {'location': "Fayetteville, NC"} not in suggestions['waypoints']
+
+
+def trip_cities_selection_patching_test():
+    head_trip_post = {'title': 'TITLE',
+                      'origin': '334 Blackwell Street B017, Durham, NC',
+                      'origin_date': '08/25/2004', 'origin_time': '12:00 PM',
+                      'destination': 'New York, NY',
+                      'destination_date': '08/28/2004',
+                      'destination_time': '12:00 PM'}
+    url_trip_post = 'http://127.0.0.1:8000/api/trip/'
+    res_trip_post = requests.post(url_trip_post, head_trip_post)
+    j_trip_post = json.loads(res_trip_post.text)
+    assert res_trip_post.status_code == 201
+
+    head_sel_patch = {"cities": [
+                        {"city_name": "Washington, DC"},
+                        {"city_name": "Baltimore, MD"}]}
+    url_trip_post += str(j_trip_post['id'])
+    res_sel_patch = requests.patch(url_trip_post, data=head_sel_patch)
+    j_sel_patch = json.loads(res_sel_patch.text)
+
+    assert res_sel_patch == 200
+    assert {"city_name": "Washington, DC"} in j_sel_patch["cities"]
+    assert {"city_name": "Baltimore, MD"} in j_sel_patch["cities"]
+    assert {"city_name": "Topeka, KS"} not in j_sel_patch["cities"]
+
+    res_delete = requests.delete(trip_url)
+    assert res_delete.status_code == 204
