@@ -36,7 +36,7 @@ class GoogleMapsDirections:
                 if distance > 50:
                     start = tuple((parsed_json["routes"][0]["legs"][0]["steps"][counter]["start_location"]["lat"], parsed_json["routes"][0]["legs"][0]["steps"][counter]["start_location"]["lng"]))
                     end = tuple((parsed_json["routes"][0]["legs"][0]["steps"][counter]["end_location"]["lat"], parsed_json["routes"][0]["legs"][0]["steps"][counter]["end_location"]["lng"]))
-                    new_waypoints = points_between(start[0], start[1], end[0], end[1])
+                    new_waypoints = points_between(start[0], start[1], end[0], end[1], round(distance/50))
                     for point in new_waypoints:
                         waypoints.append(point)
                 counter+=1
