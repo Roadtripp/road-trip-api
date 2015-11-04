@@ -45,7 +45,7 @@ def selection_json(request, trip_pk):
         selections = json.loads(request.body.decode('utf-8'))
         trip = get_object_or_404(Trip, pk=selections['id'])
         for wp in selections['waypoints']:
-            if not wp['stopover']:
+            if wp['stopover']:
                 City.objects.create(
                     city_name=wp['location'],
                     trip=trip,
