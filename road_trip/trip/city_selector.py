@@ -3,8 +3,10 @@ import urllib
 import json
 import requests
 import os
-from math import sin, cos, sqrt, atan2, radians
+import math
 import pandas as pd
+import re
+from geographiclib.geodesic import Geodesic
 
 
 gm_key = os.environ["GOOGLE_MAPS"]
@@ -29,14 +31,18 @@ class GoogleMapsDirections:
         for x in range(100):
             try:
                 waypoints.append(tuple((parsed_json["routes"][0]["legs"][0]["steps"][counter]["end_location"]["lat"], parsed_json["routes"][0]["legs"][0]["steps"][counter]["end_location"]["lng"])))
-
-                counter += 1
+                distance = re.findall(r'^[,0-9]*', parsed_json["routes"][0]["legs"][0]["steps"][counter]["distance"]["text"])
+                distance = int(distance[0].replace(',',''))
+                if distance > 50:
+                    start = tuple((parsed_json["routes"][0]["legs"][0]["steps"][counter]["start_location"]["lat"], parsed_json["routes"][0]["legs"][0]["steps"][counter]["start_location"]["lng"]))
+                    end = tuple((parsed_json["routes"][0]["legs"][0]["steps"][counter]["end_location"]["lat"], parsed_json["routes"][0]["legs"][0]["steps"][counter]["end_location"]["lng"]))
+                counter+=1
             except:
                 break
         directions["start_coord"]=start_coord
         directions["end_coord"]=end_coord
         directions["waypoints"]=waypoints
-        print(parsed_json)
+        #parsed_json
         return directions
 
 
@@ -67,7 +73,7 @@ class GoogleMapsDirections:
         #formatting Snap To Roads requests
         waypoints = self.format_waypoints
         r = requests.get('https://roads.googleapis.com/v1/snapToRoads?path={}&interpolate=True&key={}'.format(waypoints, gm_key))
-        print(r.json())
+        return r.json()
 
 
 def make_df():
@@ -85,6 +91,72 @@ def make_df():
     return newdf
 
 
+def get_points_between(lat1,lon1,lat2,lon2):
+    number_points = 20
+
+    gd = Geodesic.WGS84.Inverse(35, 0, 35, 90)
+    line = Geodesic.WGS84.Line(gd['lat1'], gd['lon1'], gd['azi1'])
+
+    for i in range(number_points + 1):
+        point = line.Position(gd['s12'] / number_points * i)
+        print((point['lat2'], point['lon2']))
+
+
+
+def points_between(lat1,lon1,lat2,lon2, num=30):
+    numberofsegments = num
+    onelessthansegments = numberofsegments - 1
+    fractionalincrement = (1.0/onelessthansegments)
+
+    lon1 = math.radians(lon1)
+    lat1 = math.radians(lat1)
+    lon2 = math.radians(lon2)
+    lat2 = math.radians(lat2)
+
+    distance_radians=2*math.asin(math.sqrt(math.pow((math.sin((lat1-lat2)/2)),2) + math.cos(lat1)*math.cos(lat2)*math.pow((math.sin((lon1-lon2)/2)),2)))
+    # 3959.999 represents the mean radius of the earth
+    # shortest path distance
+    distance = 3959.999 * distance_radians
+
+    mylats = []
+    mylons = []
+
+    # write the starting coordinates
+    #mylats.append([])
+    #mylons.append([])
+
+    f = fractionalincrement
+    counter = 1
+    while (counter <  onelessthansegments):
+            countmin1 = counter - 1
+            mylats.append([])
+            mylons.append([])
+            # f is expressed as a fraction along the route from point 1 to point 2
+            A=math.sin((1-f)*distance_radians)/math.sin(distance_radians)
+            B=math.sin(f*distance_radians)/math.sin(distance_radians)
+            x = A*math.cos(lat1)*math.cos(lon1) + B*math.cos(lat2)*math.cos(lon2)
+            y = A*math.cos(lat1)*math.sin(lon1) +  B*math.cos(lat2)*math.sin(lon2)
+            z = A*math.sin(lat1) + B*math.sin(lat2)
+            newlat=math.atan2(z,math.sqrt(math.pow(x,2)+math.pow(y,2)))
+            newlon=math.atan2(y,x)
+            newlat_degrees = math.degrees(newlat)
+            newlon_degrees = math.degrees(newlon)
+            mylats[counter] = newlat_degrees
+            mylons[counter] = newlon_degrees
+            counter += 1
+            f = f + fractionalincrement
+
+    # write the ending coordinates
+    mylats.append([])
+    mylons.append([])
+    #mylats[onelessthansegments] = lat2
+    #mylons[onelessthansegments] = lon2
+    print(mylats)
+    print(mylons)
+
+
+points_between(36.1589505, -86.82229009999999, 35.2655141, -89.6591249)
+
 def find_dist(lat1,lon1,lat2,lon2):
     # approximate radius of earth in miles
     R = 3959.999
@@ -101,7 +173,7 @@ def find_dist(lat1,lon1,lat2,lon2):
     c = 2 * atan2(sqrt(a), sqrt(1 - a))
 
     distance = R * c
-    return distance
+    print(distance)
 
 
 def find_cities(origin, dest, radius=20):
