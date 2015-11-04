@@ -1,9 +1,14 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, JsonResponse
 from rest_framework import viewsets
+from rest_framework.response import Response
 from .models import Trip, City
 from .city_selector import *
 from .serializers import TripSerializer, CitySerializer
+from django.views.decorators.csrf import csrf_exempt
+import json
+
+
 
 # Create your views here.
 
@@ -34,5 +39,16 @@ def suggestion_json(request, trip_pk):
     return JsonResponse(json.loads(suggestions))
 
 
+@csrf_exempt
 def selection_json(request, trip_pk):
-    if request.method == 'POST'
+    if request.method == 'POST':
+        selections = json.loads(request.body.decode('utf-8'))
+        trip = get_object_or_404(Trip, pk=selections['id'])
+        for wp in selections['waypoints']:
+            if not wp['stopover']:
+                City.objects.create(
+                    city_name=wp['location'],
+                    trip=trip,
+                    visited=wp['stopover']
+                )
+    return HttpResponse('', status=200)
