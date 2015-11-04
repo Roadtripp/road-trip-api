@@ -13,7 +13,7 @@ class TripSerializer(serializers.ModelSerializer):
         fields = ('id', 'title', 'origin', 'origin_date', 'origin_time',
                   'origin_lat', 'origin_lon', 'destination',
                   'destination_date', 'destination_time', 'destination_lat',
-                  'destination_lon', 'cities')
+                  'destination_lon')
 
 
 class CitySerializer(serializers.ModelSerializer):
