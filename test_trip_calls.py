@@ -150,7 +150,7 @@ def trip_creation_test():
     assert {'location': "Fayetteville, NC"} not in suggestions['waypoints']
 
 
-def trip_cities_selection_patching():
+def trip_cities_selection_patching_test():
     head_trip_post = {'title': 'TITLE',
                       'origin': '334 Blackwell Street B017, Durham, NC',
                       'origin_date': '08/25/2004', 'origin_time': '12:00 PM',

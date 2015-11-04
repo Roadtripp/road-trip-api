@@ -32,3 +32,7 @@ def suggestion_json(request, trip_pk):
     trip = get_object_or_404(Trip, pk=trip_pk)
     suggestions = '{'+'"origin": "{}", "destination": "{}", "waypoints": ['.format(str(trip.origin), str(trip.destination)) + ', '.join(['{'+'"location": "{}", "stopover": false, "activities": []'.format(x[0]+', '+x[1])+'}' for x in find_cities(trip.origin, trip.destination)]) + ']' + '}'
     return JsonResponse(json.loads(suggestions))
+
+
+def selection_json(request, trip_pk):
+    if request.method == 'POST'

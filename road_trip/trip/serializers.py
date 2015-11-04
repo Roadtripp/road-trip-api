@@ -7,13 +7,14 @@ class TripSerializer(serializers.ModelSerializer):
                                         input_formats=['%m/%d/%Y'])
     destination_date = serializers.DateField(format="%m/%d/%Y",
                                              input_formats=['%m/%d/%Y'])
+    cities = CitySerializer(allow_null=True, many=True)
 
     class Meta:
         model = Trip
         fields = ('id', 'title', 'origin', 'origin_date', 'origin_time',
                   'origin_lat', 'origin_lon', 'destination',
                   'destination_date', 'destination_time', 'destination_lat',
-                  'destination_lon',)
+                  'destination_lon', 'cities')
 
 
 class CitySerializer(serializers.ModelSerializer):
