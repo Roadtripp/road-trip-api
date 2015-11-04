@@ -36,6 +36,9 @@ class GoogleMapsDirections:
                 if distance > 50:
                     start = tuple((parsed_json["routes"][0]["legs"][0]["steps"][counter]["start_location"]["lat"], parsed_json["routes"][0]["legs"][0]["steps"][counter]["start_location"]["lng"]))
                     end = tuple((parsed_json["routes"][0]["legs"][0]["steps"][counter]["end_location"]["lat"], parsed_json["routes"][0]["legs"][0]["steps"][counter]["end_location"]["lng"]))
+                    new_waypoints = points_between(start[0], start[1], end[0], end[1])
+                    for point in new_waypoints:
+                        waypoints.append(point)
                 counter+=1
             except:
                 break
@@ -104,9 +107,7 @@ def get_points_between(lat1,lon1,lat2,lon2):
 
 
 def points_between(lat1,lon1,lat2,lon2, num=30):
-    numberofsegments = num
-    onelessthansegments = numberofsegments - 1
-    fractionalincrement = (1.0/onelessthansegments)
+    fractionalincrement = (1.0/(num-1))
 
     lon1 = math.radians(lon1)
     lat1 = math.radians(lat1)
@@ -122,12 +123,12 @@ def points_between(lat1,lon1,lat2,lon2, num=30):
     mylons = []
 
     # write the starting coordinates
-    #mylats.append([])
-    #mylons.append([])
+    mylats.append([])
+    mylons.append([])
 
     f = fractionalincrement
     counter = 1
-    while (counter <  onelessthansegments):
+    while (counter <  (num-1)):
             countmin1 = counter - 1
             mylats.append([])
             mylons.append([])
@@ -146,37 +147,33 @@ def points_between(lat1,lon1,lat2,lon2, num=30):
             counter += 1
             f = f + fractionalincrement
 
-    # write the ending coordinates
-    mylats.append([])
-    mylons.append([])
-    #mylats[onelessthansegments] = lat2
-    #mylons[onelessthansegments] = lon2
-    print(mylats)
-    print(mylons)
+    mycoords = list(zip(mylats,mylons))
+    mycoords = mycoords[1:]
+    return mycoords
 
 
-points_between(36.1589505, -86.82229009999999, 35.2655141, -89.6591249)
+#points_between(36.1589505, -86.82229009999999, 35.2655141, -89.6591249)
 
 def find_dist(lat1,lon1,lat2,lon2):
     # approximate radius of earth in miles
     R = 3959.999
 
-    lat1 = radians(lat1)
-    lon1 = radians(lon1)
-    lat2 = radians(lat2)
-    lon2 = radians(lon2)
+    lat1 = math.radians(lat1)
+    lon1 = math.radians(lon1)
+    lat2 = math.radians(lat2)
+    lon2 = math.radians(lon2)
 
     dlon = lon2 - lon1
     dlat = lat2 - lat1
 
-    a = sin(dlat / 2)**2 + cos(lat1) * cos(lat2) * sin(dlon / 2)**2
-    c = 2 * atan2(sqrt(a), sqrt(1 - a))
+    a = math.sin(dlat / 2)**2 + math.cos(lat1) * math.cos(lat2) * math.sin(dlon / 2)**2
+    c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
 
     distance = R * c
-    print(distance)
+    return distance
 
 
-def find_cities(origin, dest, radius=20):
+def find_cities(origin, dest, radius=50):
     route = GoogleMapsDirections(origin, dest)
     waypoints = route.format_waypoints()
     df = make_df()
@@ -186,7 +183,9 @@ def find_cities(origin, dest, radius=20):
             dist = find_dist(lat1=point[0],lon1=point[1],lat2=row['latitude'],lon2=row['longitude'])
             if dist <= radius:
                 if (row['City'], row['State']) not in cities:
-                    if row['City'] != origin:
+                    if (row['City'], row['State']) != origin:
                         cities.append((row['City'], row['State']))
 
-    return cities
+    print(cities)
+
+find_cities("Raleigh, NC", "Los Angeles, CA")
