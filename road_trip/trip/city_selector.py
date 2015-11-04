@@ -1,3 +1,4 @@
+
 import urllib
 import json
 import requests
@@ -28,12 +29,14 @@ class GoogleMapsDirections:
         for x in range(100):
             try:
                 waypoints.append(tuple((parsed_json["routes"][0]["legs"][0]["steps"][counter]["end_location"]["lat"], parsed_json["routes"][0]["legs"][0]["steps"][counter]["end_location"]["lng"])))
+
                 counter += 1
             except:
                 break
         directions["start_coord"]=start_coord
         directions["end_coord"]=end_coord
         directions["waypoints"]=waypoints
+        print(parsed_json)
         return directions
 
 
@@ -70,7 +73,8 @@ class GoogleMapsDirections:
 def make_df():
     #makes a Pandas dataframe from the cities csv file that contains cities and their
     #coordinates
-    df = pd.read_csv("trip/largest_cities.csv", encoding="latin-1")
+    df = pd.read_csv("road_trip/trip/new_largest_cities.csv", encoding="latin-1")
+    #df["city-state"] = df["City"].map(str) + ", " + df["State"]
     newdf = df[['City', 'State', 'Location']]
     newdf = newdf.dropna()
     newdf['latitude']=newdf['Location'].str.extract('(\d\d.\d\d\d\d)')
@@ -112,4 +116,5 @@ def find_cities(origin, dest, radius=20):
                 if (row['City'], row['State']) not in cities:
                     if row['City'] != origin:
                         cities.append((row['City'], row['State']))
+
     return cities

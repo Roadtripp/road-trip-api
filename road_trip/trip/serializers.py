@@ -4,10 +4,9 @@ from .models import Trip, City
 
 class TripSerializer(serializers.ModelSerializer):
     origin_date = serializers.DateField(format="%m/%d/%Y",
-                                        input_formats=['%m/%d/%Y'])
+                                        input_formats=['iso-8601', "%m/%d/%Y"])
     destination_date = serializers.DateField(format="%m/%d/%Y",
-                                             input_formats=['%m/%d/%Y'])
-    cities = CitySerializer(allow_null=True, many=True)
+                                             input_formats=['iso-8601', "%m/%d/%Y"])
 
     class Meta:
         model = Trip

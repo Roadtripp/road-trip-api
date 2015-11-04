@@ -4,6 +4,8 @@ import dj_database_url
 
 DEBUG = bool(int(os.environ.get('DEBUG', True)))
 SECRET_KEY = os.environ['SECRET_KEY']
+gm_key = os.environ["GOOGLE_MAPS"]
+
 
 BLACKLIST_APPS = ['debugtoolbar', 'django_extensions']
 
