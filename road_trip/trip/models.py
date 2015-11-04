@@ -19,7 +19,7 @@ class Trip(models.Model):
 
 class City(models.Model):
     city_name = models.CharField(max_length=255)
-    lat = models.FloatField()
-    lon = models.FloatField()
+    lat = models.FloatField(null=True, blank=True)
+    lon = models.FloatField(null=True, blank=True)
     trip = models.ForeignKey(Trip)
     visited = models.BooleanField(default=False)

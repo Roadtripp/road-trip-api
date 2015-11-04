@@ -73,7 +73,7 @@ class GoogleMapsDirections:
 def make_df():
     #makes a Pandas dataframe from the cities csv file that contains cities and their
     #coordinates
-    df = pd.read_csv("trip/new_largest_cities.csv", encoding="latin-1")
+    df = pd.read_csv("road_trip/trip/new_largest_cities.csv", encoding="latin-1")
     #df["city-state"] = df["City"].map(str) + ", " + df["State"]
     newdf = df[['City', 'State', 'Location']]
     newdf = newdf.dropna()
