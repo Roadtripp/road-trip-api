@@ -147,3 +147,4 @@ def trip_creation_test():
             'stopover': False,
             'activities': []
             } in suggestions['waypoints']
+    assert {'location': "Fayetteville, NC"} not in suggestions['waypoints']
