@@ -165,7 +165,7 @@ def find_haversine(lat1,lon1,lat2,lon2):
 
 
 
-def find_cities(origin, dest, radius=100):
+def find_cities(origin, dest, radius=50):
     route = GoogleMapsDirections(origin, dest)
     waypoints = route.format_waypoints()
     df = make_df()
