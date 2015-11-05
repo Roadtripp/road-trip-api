@@ -20,7 +20,6 @@ class GoogleMapsDirections:
         #Sends a call to Google Maps Directions and return a dictionary with
         #start and end coordinates and a list of all waypoint coordinates
         parsed_json = self.r.json()
-        #print(parsed_json)
         directions = {}
         start_coord = tuple((parsed_json["routes"][0]["legs"][0]["start_location"]["lat"], parsed_json["routes"][0]["legs"][0]["start_location"]["lng"]))
         end_coord = tuple((parsed_json["routes"][0]["legs"][0]["end_location"]["lat"], parsed_json["routes"][0]["legs"][0]["end_location"]["lng"]))
@@ -75,6 +74,10 @@ class GoogleMapsDirections:
         waypoints = self.format_waypoints
         r = requests.get('https://roads.googleapis.com/v1/snapToRoads?path={}&interpolate=True&key={}'.format(waypoints, gm_key))
         return r.json()
+
+something = GoogleMapsDirections("Raleigh", "Boston")
+something.get_waypoints()
+
 
 
 def make_df():
@@ -162,5 +165,3 @@ def find_cities(origin, dest, radius=20):
                         cities.append((row['City'], row['State']))
 
     return cities
-
-#find_cities("Raleigh, NC", "Las Vegas, NV")
