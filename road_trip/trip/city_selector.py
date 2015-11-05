@@ -107,10 +107,6 @@ def points_between(lat1,lon1,lat2,lon2, num):
     lats = []
     lons = []
 
-    # write the starting coordinates
-    lats.append([])
-    lons.append([])
-
     f = fractionalincrement
     counter = 1
     while (counter <  (num-1)):
@@ -130,7 +126,6 @@ def points_between(lat1,lon1,lat2,lon2, num):
             f = f + fractionalincrement
 
     coords = list(zip(lats,lons))
-    coords = coords[1:]
     return coords
 
 
