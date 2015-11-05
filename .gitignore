@@ -76,3 +76,7 @@ target/
 venv
 .env
 NOTES.md
+categories.md
+categories.py
+categories.txt
+road_trip/categories.json
