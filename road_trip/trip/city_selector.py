@@ -1,5 +1,4 @@
 
-import urllib
 import json
 import requests
 import os
@@ -91,6 +90,7 @@ def make_df():
     newdf['longitude']= -newdf['longitude']
     return newdf
 
+
 def points_between(lat1,lon1,lat2,lon2, num):
     fractionalincrement = (1.0/(num-1))
 
@@ -104,19 +104,16 @@ def points_between(lat1,lon1,lat2,lon2, num):
     # shortest path distance
     distance = 3959.999 * distance_radians
 
-    mylats = []
-    mylons = []
+    lats = []
+    lons = []
 
     # write the starting coordinates
-    mylats.append([])
-    mylons.append([])
+    lats.append([])
+    lons.append([])
 
     f = fractionalincrement
     counter = 1
     while (counter <  (num-1)):
-            countmin1 = counter - 1
-            mylats.append([])
-            mylons.append([])
             # f is expressed as a fraction along the route from point 1 to point 2
             A=math.sin((1-f)*distance_radians)/math.sin(distance_radians)
             B=math.sin(f*distance_radians)/math.sin(distance_radians)
@@ -127,19 +124,17 @@ def points_between(lat1,lon1,lat2,lon2, num):
             newlon=math.atan2(y,x)
             newlat_degrees = math.degrees(newlat)
             newlon_degrees = math.degrees(newlon)
-            mylats[counter] = newlat_degrees
-            mylons[counter] = newlon_degrees
+            lats.append(newlat_degrees)
+            lons.append(newlon_degrees)
             counter += 1
             f = f + fractionalincrement
 
-    mycoords = list(zip(mylats,mylons))
-    mycoords = mycoords[1:]
-    return mycoords
+    coords = list(zip(lats,lons))
+    coords = coords[1:]
+    return coords
 
 
-#points_between(36.1589505, -86.82229009999999, 35.2655141, -89.6591249)
-
-def find_dist(lat1,lon1,lat2,lon2):
+def find_haversine(lat1,lon1,lat2,lon2):
     # approximate radius of earth in miles
     R = 3959.999
 
@@ -158,6 +153,23 @@ def find_dist(lat1,lon1,lat2,lon2):
     return distance
 
 
+# def law_cosines(lat1,lon1,lat2,lon2):
+#     delta = lon2 - lon1
+#     a = math.radians(lat1)
+#     b = math.radians(lat2)
+#     C = math.radians(delta)
+#     x = math.sin(a) * math.sin(b) + math.cos(a) * math.cos(b) * math.cos(C)
+#     distance = math.acos(x) # in radians
+#     distance  = math.degrees(distance) # in degrees
+#     distance  = distance * 60 # 60 nautical miles / lat degree
+#     distance  = distance
+#     return distance
+
+
+
+
+
+
 def find_cities(origin, dest, radius=100):
     route = GoogleMapsDirections(origin, dest)
     waypoints = route.format_waypoints()
@@ -165,7 +177,7 @@ def find_cities(origin, dest, radius=100):
     cities = []
     for point in waypoints:
         for index, row in df.iterrows():
-            dist = find_dist(lat1=point[0],lon1=point[1],lat2=row['latitude'],lon2=row['longitude'])
+            dist = find_haversine(lat1=point[0],lon1=point[1],lat2=row['latitude'],lon2=row['longitude'])
             if dist <= radius:
                 if (row['City'], row['State']) not in cities:
                     if row['City'].lower() != origin.split(",")[0].lower():
@@ -173,4 +185,4 @@ def find_cities(origin, dest, radius=100):
 
     print(cities)
 
-find_cities("Raleigh, NC", "Los Angeles, CA")
+find_cities("Raleigh, NC", "Las Vegas, NV")
