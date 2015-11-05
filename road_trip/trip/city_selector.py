@@ -178,6 +178,6 @@ def find_cities(origin, dest, radius=100):
                     if row['City'].lower() != origin.split(",")[0].lower():
                         cities.append((row['City'], row['State']))
 
-    print(cities)
+    return cities
 
-find_cities("Raleigh, NC", "Las Vegas, NV")
+#find_cities("Raleigh, NC", "Las Vegas, NV")
