@@ -6,7 +6,6 @@ import os
 import math
 import pandas as pd
 import re
-from geographiclib.geodesic import Geodesic
 
 
 gm_key = os.environ["GOOGLE_MAPS"]
@@ -83,7 +82,6 @@ def make_df():
     #makes a Pandas dataframe from the cities csv file that contains cities and their
     #coordinates
     df = pd.read_csv("road_trip/trip/new_largest_cities.csv", encoding="latin-1")
-    #df["city-state"] = df["City"].map(str) + ", " + df["State"]
     newdf = df[['City', 'State', 'Location']]
     newdf = newdf.dropna()
     newdf['latitude']=newdf['Location'].str.extract('(\d\d.\d\d\d\d)')
@@ -92,19 +90,6 @@ def make_df():
     newdf.longitude = newdf.longitude.astype(float)
     newdf['longitude']= -newdf['longitude']
     return newdf
-
-
-def get_points_between(lat1,lon1,lat2,lon2):
-    number_points = 20
-
-    gd = Geodesic.WGS84.Inverse(35, 0, 35, 90)
-    line = Geodesic.WGS84.Line(gd['lat1'], gd['lon1'], gd['azi1'])
-
-    for i in range(number_points + 1):
-        point = line.Position(gd['s12'] / number_points * i)
-        print((point['lat2'], point['lon2']))
-
-
 
 def points_between(lat1,lon1,lat2,lon2, num):
     fractionalincrement = (1.0/(num-1))
