@@ -33,10 +33,10 @@ class GoogleMapsDirections:
                 waypoints.append(tuple((parsed_json["routes"][0]["legs"][0]["steps"][counter]["end_location"]["lat"], parsed_json["routes"][0]["legs"][0]["steps"][counter]["end_location"]["lng"])))
                 distance = re.findall(r'^[,0-9]*', parsed_json["routes"][0]["legs"][0]["steps"][counter]["distance"]["text"])
                 distance = int(distance[0].replace(',',''))
-                if distance > 50:
+                if distance > 100:
                     start = tuple((parsed_json["routes"][0]["legs"][0]["steps"][counter]["start_location"]["lat"], parsed_json["routes"][0]["legs"][0]["steps"][counter]["start_location"]["lng"]))
                     end = tuple((parsed_json["routes"][0]["legs"][0]["steps"][counter]["end_location"]["lat"], parsed_json["routes"][0]["legs"][0]["steps"][counter]["end_location"]["lng"]))
-                    new_waypoints = points_between(start[0], start[1], end[0], end[1], round(distance/50))
+                    new_waypoints = points_between(start[0], start[1], end[0], end[1], num=int(distance/50))
                     for point in new_waypoints:
                         waypoints.append(point)
                 counter+=1
@@ -106,7 +106,7 @@ def get_points_between(lat1,lon1,lat2,lon2):
 
 
 
-def points_between(lat1,lon1,lat2,lon2, num=30):
+def points_between(lat1,lon1,lat2,lon2, num):
     fractionalincrement = (1.0/(num-1))
 
     lon1 = math.radians(lon1)
@@ -173,7 +173,7 @@ def find_dist(lat1,lon1,lat2,lon2):
     return distance
 
 
-def find_cities(origin, dest, radius=50):
+def find_cities(origin, dest, radius=100):
     route = GoogleMapsDirections(origin, dest)
     waypoints = route.format_waypoints()
     df = make_df()
@@ -183,7 +183,7 @@ def find_cities(origin, dest, radius=50):
             dist = find_dist(lat1=point[0],lon1=point[1],lat2=row['latitude'],lon2=row['longitude'])
             if dist <= radius:
                 if (row['City'], row['State']) not in cities:
-                    if (row['City'], row['State']) != origin:
+                    if row['City'].lower() != origin.split(",")[0].lower():
                         cities.append((row['City'], row['State']))
 
     print(cities)
