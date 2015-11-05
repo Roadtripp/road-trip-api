@@ -16,7 +16,7 @@ Including another URLconf
 from django.conf.urls import include, url
 from django.contrib import admin
 from rest_framework_nested import routers
-from trip.views import TripViewSet, CityViewSet, suggestion_json, selection_json
+from trip.views import TripViewSet, CityViewSet, suggestion_json, selection_json, interests_json
 
 router = routers.DefaultRouter()
 router.register(r'trip', TripViewSet)
@@ -30,6 +30,7 @@ urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'api/trip/(?P<trip_pk>\d+)/suggestions/', suggestion_json),
     url(r'api/trip/(?P<trip_pk>\d+)/selections/', selection_json),
+    url(r'api/trip/(?P<trip_pk>\d+)/interests/', interests_json),
     url(r'api/', include(router.urls)),
     url(r'api/', include(trip_router.urls)),
     url(r'^api-auth/', include('rest_framework.urls',
