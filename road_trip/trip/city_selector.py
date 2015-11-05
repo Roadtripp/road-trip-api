@@ -148,24 +148,7 @@ def find_haversine(lat1,lon1,lat2,lon2):
     return distance
 
 
-# def law_cosines(lat1,lon1,lat2,lon2):
-#     delta = lon2 - lon1
-#     a = math.radians(lat1)
-#     b = math.radians(lat2)
-#     C = math.radians(delta)
-#     x = math.sin(a) * math.sin(b) + math.cos(a) * math.cos(b) * math.cos(C)
-#     distance = math.acos(x) # in radians
-#     distance  = math.degrees(distance) # in degrees
-#     distance  = distance * 60 # 60 nautical miles / lat degree
-#     distance  = distance
-#     return distance
-
-
-
-
-
-
-def find_cities(origin, dest, radius=50):
+def find_cities(origin, dest, radius=20):
     route = GoogleMapsDirections(origin, dest)
     waypoints = route.format_waypoints()
     df = make_df()
