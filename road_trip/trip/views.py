@@ -1,8 +1,8 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, JsonResponse
 from rest_framework import viewsets
-from rest_framework.response import Response
-from .models import Trip, City
+# from rest_framework.response import Response
+from .models import Trip, City, Interest
 from .city_selector import *
 from .serializers import TripSerializer, CitySerializer
 from django.views.decorators.csrf import csrf_exempt
@@ -51,4 +51,18 @@ def selection_json(request, trip_pk):
                     trip=trip,
                     visited=wp['stopover']
                 )
+    return HttpResponse('', status=200)
+
+
+@csrf_exempt
+def interests_json(request, trip_pk):
+    if request.method == 'POST':
+        interests = json.loads(request.body.decode('utf-8'))
+        get_trip = get_object_or_404(Trip, pk=trip_pk)
+        for interest in interests:
+            Interest.objects.create(
+                category=interest['category'],
+                sub_category=interest['sub_category'],
+                trip=get_trip
+            )
     return HttpResponse('', status=200)
