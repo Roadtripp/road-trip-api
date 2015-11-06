@@ -61,8 +61,8 @@ def interests_json(request, trip_pk):
         get_trip = get_object_or_404(Trip, pk=trip_pk)
         for interest in interests:
             Interest.objects.create(
-                category=interest.category,
-                sub_category=interest.sub_category,
+                category=interest['category'],
+                sub_category=interest['sub_category'],
                 trip=get_trip
             )
     return HttpResponse('', status=200)
