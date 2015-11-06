@@ -13,9 +13,6 @@ TOKEN = os.environ["YELP_TOKEN"]
 TOKEN_SECRET = os.environ["YELP_TOKEN_SECRET"]
 
 
-#print(json.dumps(r, indent=2))
-
-
 def search_events(trip_id):
     yelp = OAuth1Session(CONSUMER_KEY,
                                 client_secret=CONSUMER_SECRET,

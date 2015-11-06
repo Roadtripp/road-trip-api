@@ -75,9 +75,6 @@ class GoogleMapsDirections:
         r = requests.get('https://roads.googleapis.com/v1/snapToRoads?path={}&interpolate=True&key={}'.format(waypoints, gm_key))
         return r.json()
 
-something = GoogleMapsDirections("Raleigh", "Boston")
-something.get_waypoints()
-
 
 
 def make_df():
@@ -165,5 +162,3 @@ def find_cities(origin, dest, radius=20):
                         cities.append((row['City'], row['State']))
 
     return cities
-
-#find_cities("Raleigh","Seattle")
