@@ -7,6 +7,7 @@ from .city_selector import *
 from .serializers import TripSerializer, CitySerializer
 from django.views.decorators.csrf import csrf_exempt
 import json
+from .event_searches import search_events
 
 
 
