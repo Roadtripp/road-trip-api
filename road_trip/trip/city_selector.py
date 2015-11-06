@@ -165,3 +165,5 @@ def find_cities(origin, dest, radius=20):
                         cities.append((row['City'], row['State']))
 
     return cities
+
+#find_cities("Raleigh","Seattle")

@@ -52,3 +52,45 @@ def selection_json(request, trip_pk):
                     visited=wp['stopover']
                 )
     return HttpResponse('', status=200)
+
+
+
+import os
+import requests
+from requests_oauthlib import OAuth1, OAuth1Session
+
+#OAuth credential placeholders that must be filled in by users.
+CONSUMER_KEY = os.environ["YELP_CONSUMER"]
+CONSUMER_SECRET = os.environ["YELP_CONSUMER_SECRET"]
+TOKEN = os.environ["YELP_TOKEN"]
+TOKEN_SECRET = os.environ["YELP_TOKEN_SECRET"]
+
+
+
+
+yelp = OAuth1Session(CONSUMER_KEY,
+                            client_secret=CONSUMER_SECRET,
+                            resource_owner_key=TOKEN,
+                            resource_owner_secret=TOKEN_SECRET)
+
+#print(json.dumps(r, indent=2))
+
+
+def search_events(trip_id):
+    trip = Trip.objects.get(pk=trip_id)
+    city_list = find_cities(trip.origin, trip.destination)
+    interest_list = Interest.objects.filter(trip=trip)
+    interest_list = [x+',' for x in interest_list]
+    print(interest_list)
+    cities_events = []
+    for city in city_list:
+         url = 'https://api.yelp.com/v2/search/?location={}&sort=2&category_filter={}'.format(city[0], interest_list)
+         r = yelp.get(url)
+         r = r.json()
+         city = {}
+         cities_events.append(city)
+         #for business in r['businesses']
+
+
+
+search_events(1)
