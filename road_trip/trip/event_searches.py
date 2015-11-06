@@ -25,28 +25,42 @@ def search_events(trip_id):
 
     trip = Trip.objects.get(pk=trip_id)
     city_list = find_cities(trip.origin, trip.destination)
-    interest_list = Interest.objects.filter(trip=trip)
-    interest_list = [x.sub_category+',' for x in interest_list]
-    interest_list = ''.join(interest_list)
+    interest_food_list = Interest.objects.filter(trip=trip, category="food").all()
+    interest_food_list = [x.sub_category for x in interest_food_list]
+    interest_activity_list = Interest.objects.filter(trip=trip, category="hotels").all()
+    interest_activity_list = [x.sub_category for x in interest_activity_list]
+    interest_hotels_list = Interest.objects.filter(trip=trip, category="activities").all()
+    interest_hotels_list = [x.sub_category for x in interest_hotels_list]
+    interest_activity_list = ','.join(interest_activity_list)
+    interest_food_list = ','.join(interest_food_list)
+    interest_hotels_list = ','.join(interest_hotels_list)
+
     cities_events = []
     for city in city_list:
-         url = 'https://api.yelp.com/v2/search/?location={}&sort=2&category_filter={}'.format(city[0], "chinese")
-         r = yelp.get(url)
-         r = r.json()
-         city_dict = {}
-         city_dict["city_name"] = city[0]+', '+ city[1]
-         cities_events.append(city_dict)
-         counter = 0
-         for business in r["businesses"]:
-            bus = {}
-            bus["name"] = r['businesses'][counter]['name']
-            bus["rating"] = r['businesses'][counter]['rating']
-            bus["url"] = r['businesses'][counter]['url']
-            bus["num_reviews"] = r['businesses'][counter]['review_count']
-            bus["rating_img_url_small"] = r['businesses'][counter]['rating_img_url_small']
-            bus["rating_img_url"] = r['businesses'][counter]['rating_img_url']
-            bus["phone"] = r['businesses'][counter]['display_phone']
-            bus["address"] = r['businesses'][counter]['location']["display_address"]
-            city_dict["business: "+str(counter)]=bus
-            counter += 1
+         url_activity = 'https://api.yelp.com/v2/search/?location={}&sort=2&category_filter={}'.format(city[0], interest_activity_list)
+         url_food = 'https://api.yelp.com/v2/search/?location={}&sort=2&category_filter={}'.format(city[0], interest_food_list)
+         url_hotel = 'https://api.yelp.com/v2/search/?location={}&sort=2&category_filter={}'.format(city[0], interest_hotels_list)
+         urls = [url_activity, url_food, url_hotel]
+         city_businesses = []
+         for url in urls:
+             r = yelp.get(url)
+             r = r.json()
+             counter = 0
+             for business in r["businesses"]:
+                bus = {}
+                bus["name"] = r['businesses'][counter]['name']
+                bus["category"] = url.replace(r'url_', '')
+                bus["subcategory"] = r["businesses"][counter]["categories"]
+                bus["rating"] = r['businesses'][counter]['rating']
+                bus["url"] = r['businesses'][counter]['url']
+                bus["num_reviews"] = r['businesses'][counter]['review_count']
+                bus["rating_img_url_small"] = r['businesses'][counter]['rating_img_url_small']
+                bus["rating_img_url"] = r['businesses'][counter]['rating_img_url']
+                bus["phone"] = r['businesses'][counter]['display_phone']
+                bus["address"] = r['businesses'][counter]['location']["display_address"]
+                bus["city"]=city
+                city_businesses.append(bus)
+                counter += 1
+         cities_events.append(city_businesses)
+    print(cities_events)
     return cities_events
