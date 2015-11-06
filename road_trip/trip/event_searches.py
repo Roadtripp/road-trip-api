@@ -11,32 +11,117 @@ CONSUMER_KEY = os.environ["YELP_CONSUMER"]
 CONSUMER_SECRET = os.environ["YELP_CONSUMER_SECRET"]
 TOKEN = os.environ["YELP_TOKEN"]
 TOKEN_SECRET = os.environ["YELP_TOKEN_SECRET"]
+SEAT_GEEK = os.environ["SEAT_GEEK_KEY"]
 
+
+yelp = OAuth1Session(CONSUMER_KEY,
+                            client_secret=CONSUMER_SECRET,
+                            resource_owner_key=TOKEN,
+                            resource_owner_secret=TOKEN_SECRET)
+
+
+yelp_food_alias = {
+
+"Asian Fusion":"asianfusion",
+"Barbeque":"bbq",
+"Burgers":"burgers",
+"Cafes":"cafes",
+"Chinese":"chinese",
+"Comfort Food":"comfortfood",
+"Filipino":"filipino",
+"Fish & Chips":"fishnchips",
+"Food Stands":"foodstands",
+"Gastropubs":"gastropubs",
+"Gluten-Free":"gluten_free",
+"Italian":"italian",
+"Mexican":"mexican",
+"American (New)":"newamerican",
+"Pizza":"pizza",
+"Salad":"salad",
+"Sandwiches":"sandwiches",
+"Seafood":"seafood",
+"Steakhouses":"steak",
+"Thai":"thai",
+"American (Traditional)":"tradamerican",
+"Vegan":"vegan"
+
+}
+
+
+yelp_activity_alias  = {
+
+"Amusement Parks":"amusementparks",
+"Aquariums":"aquariums",
+"Beaches":"beaches",
+"Bike Rentals":"bikerentals",
+"Boating":"boating",
+"Bowling":"bowling",
+"Challenge Courses":"challengecourses",
+"Climbing":"climbing",
+"Disc Golf":"discgolf",
+"Jet Skis":"jetskis",
+"Kids Activities":"kids_activities",
+"Parks":"parks",
+"Public Plazas":"publicplazas",
+"Water Parks":"waterparks",
+"Zoos":"zoos",
+"Nightlife":"nightlife",
+"Bars":"bars",
+"Museums":"museums",
+"Sports Teams":"sportsteams",
+"Wineries":"wineries",
+"Shopping":"shoppingcenters,outlet_stores,souvenirs,deptstores",
+"Tours":"tours"
+
+}
+
+yelp_hotels_alias = {
+
+"Bed & Breakfast":"bedbreakfast",
+"Campgrounds":"campgrounds",
+"Health Retreats":"healthretreats",
+"Hostels":"hostels",
+"Hotels":"hotels",
+"Resorts":"resorts",
+"RV Parks":"rvparks",
+"Ski Resorts":"skiresorts"
+
+}
 
 def search_events(trip_id):
-    yelp = OAuth1Session(CONSUMER_KEY,
-                                client_secret=CONSUMER_SECRET,
-                                resource_owner_key=TOKEN,
-                                resource_owner_secret=TOKEN_SECRET)
-
 
     trip = Trip.objects.get(pk=trip_id)
     city_list = find_cities(trip.origin, trip.destination)
     interest_food_list = Interest.objects.filter(trip=trip, category="food").all()
     interest_food_list = [x.sub_category for x in interest_food_list]
+    yelp_food_list = []
+    for item in interest_food_list:
+        item = yelp_food_alias[item]
+        yelp_food_list.append(item)
+
     interest_activity_list = Interest.objects.filter(trip=trip, category="hotels").all()
     interest_activity_list = [x.sub_category for x in interest_activity_list]
+    yelp_activity_list = []
+    for item in interest_activity_list:
+        item = yelp_activity_alias[item]
+        yelp_activity_list.append(item)
+
+
     interest_hotels_list = Interest.objects.filter(trip=trip, category="activities").all()
     interest_hotels_list = [x.sub_category for x in interest_hotels_list]
-    interest_activity_list = ','.join(interest_activity_list)
-    interest_food_list = ','.join(interest_food_list)
-    interest_hotels_list = ','.join(interest_hotels_list)
+    yelp_hotels_list = []
+    for item in interest_food_list:
+        item = yelp_hotels_alias[item]
+        yelp_hotels_list.append(item)
 
+    yelp_activity_list = ','.join(interest_activity_list)
+    yelp_food_list = ','.join(yelp_food_list)
+    yelp_hotels_list = ','.join(interest_hotels_list)
     cities_events = []
     for city in city_list:
-         url_activity = 'https://api.yelp.com/v2/search/?location={}&sort=2&category_filter={}'.format(city[0], interest_activity_list)
-         url_food = 'https://api.yelp.com/v2/search/?location={}&sort=2&category_filter={}'.format(city[0], interest_food_list)
-         url_hotel = 'https://api.yelp.com/v2/search/?location={}&sort=2&category_filter={}'.format(city[0], interest_hotels_list)
+         url_activity = 'https://api.yelp.com/v2/search/?location={}&sort=2&category_filter={}'.format(city[0], yelp_activity_list)
+         url_food = 'https://api.yelp.com/v2/search/?location={}&sort=2&category_filter={}'.format(city[0], yelp_food_list)
+         url_hotel = 'https://api.yelp.com/v2/search/?location={}&sort=2&category_filter={}'.format(city[0], yelp_hotels_list)
          urls = [tuple(url_activity, "activity"), tuple(url_food, "food"), tuple(url_hotel, "hotel")]
          city_businesses = []
          for url in urls:
@@ -63,6 +148,12 @@ def search_events(trip_id):
     #print(cities_events)
     return cities_events
 
+def search_seatgeek(trip_id):
+    
+
+
+
+
 # def search_events(trip_id, city):
 #     yelp = OAuth1Session(CONSUMER_KEY,
 #                                 client_secret=CONSUMER_SECRET,
@@ -74,18 +165,33 @@ def search_events(trip_id):
 #     #city_list = find_cities(trip.origin, trip.destination)
 #     interest_food_list = Interest.objects.filter(trip=trip, category="food").all()
 #     interest_food_list = [x.sub_category for x in interest_food_list]
+#     yelp_food_list = []
+#      for item in interest_food_list:
+#          item = yelp_food_alias[item]
+#          yelp_food_list.append(item)
+
 #     interest_activity_list = Interest.objects.filter(trip=trip, category="hotels").all()
 #     interest_activity_list = [x.sub_category for x in interest_activity_list]
+#     yelp_activity_list = []
+    # for item in interest_activity_list:
+    #     item = yelp_activity_alias[item]
+    #     yelp_activity_list.append(item)
+
 #     interest_hotels_list = Interest.objects.filter(trip=trip, category="activities").all()
 #     interest_hotels_list = [x.sub_category for x in interest_hotels_list]
-#     interest_activity_list = ','.join(interest_activity_list)
-#     interest_food_list = ','.join(interest_food_list)
-#     interest_hotels_list = ','.join(interest_hotels_list)
+#     yelp_hotels_list = []
+    #   for item in interest_hotels_list:
+    #       item = yelp_hotels_alias[item]
+    #       yelp_hotels_list.append(item)
+
+#     yelp_activity_list = ','.join(yelp_activity_list)
+#     yelp_food_list = ','.join(yelp_food_list)
+#     yelp_hotels_list = ','.join(yelp_hotels_list)
 #
 #     city_events = []
-#     url_activity = 'https://api.yelp.com/v2/search/?location={}&sort=2&category_filter={}'.format(city, interest_activity_list)
-#     url_food = 'https://api.yelp.com/v2/search/?location={}&sort=2&category_filter={}'.format(city, interest_food_list)
-#     url_hotel = 'https://api.yelp.com/v2/search/?location={}&sort=2&category_filter={}'.format(city, interest_hotels_list)
+#     url_activity = 'https://api.yelp.com/v2/search/?location={}&sort=2&category_filter={}'.format(city, yelp_activity_list)
+#     url_food = 'https://api.yelp.com/v2/search/?location={}&sort=2&category_filter={}'.format(city, yelp_food_list)
+#     url_hotel = 'https://api.yelp.com/v2/search/?location={}&sort=2&category_filter={}'.format(city, yelp_hotels_list)
 #     urls = [url_activity, url_food, url_hotel]
 #     for url in urls:
 #         r = yelp.get(url)
