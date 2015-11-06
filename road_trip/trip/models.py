@@ -47,3 +47,6 @@ class Interest(models.Model):
     category = models.CharField(max_length=255)
     sub_category = models.CharField(max_length=255)
     trip = models.ForeignKey(Trip)
+
+    # def __str__(self):
+    #       return 'Category: {} Subcategory: {}'.format(self.category, self.sub_category)
