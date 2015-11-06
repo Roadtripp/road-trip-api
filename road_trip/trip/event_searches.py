@@ -11,6 +11,14 @@ CONSUMER_KEY = os.environ["YELP_CONSUMER"]
 CONSUMER_SECRET = os.environ["YELP_CONSUMER_SECRET"]
 TOKEN = os.environ["YELP_TOKEN"]
 TOKEN_SECRET = os.environ["YELP_TOKEN_SECRET"]
+SEAT_GEEK = os.environ["SEAT_GEEK_KEY"]
+
+
+yelp = OAuth1Session(CONSUMER_KEY,
+                            client_secret=CONSUMER_SECRET,
+                            resource_owner_key=TOKEN,
+                            resource_owner_secret=TOKEN_SECRET)
+
 
 yelp_food_alias = {
 
@@ -81,11 +89,6 @@ yelp_hotels_alias = {
 }
 
 def search_events(trip_id):
-    yelp = OAuth1Session(CONSUMER_KEY,
-                                client_secret=CONSUMER_SECRET,
-                                resource_owner_key=TOKEN,
-                                resource_owner_secret=TOKEN_SECRET)
-
 
     trip = Trip.objects.get(pk=trip_id)
     city_list = find_cities(trip.origin, trip.destination)
@@ -144,6 +147,11 @@ def search_events(trip_id):
          cities_events.append(city_businesses)
     #print(cities_events)
     return cities_events
+
+def search_seatgeek(trip_id):
+
+
+
 
 # def search_events(trip_id, city):
 #     yelp = OAuth1Session(CONSUMER_KEY,
