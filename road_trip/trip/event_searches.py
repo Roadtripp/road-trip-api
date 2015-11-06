@@ -12,6 +12,43 @@ CONSUMER_SECRET = os.environ["YELP_CONSUMER_SECRET"]
 TOKEN = os.environ["YELP_TOKEN"]
 TOKEN_SECRET = os.environ["YELP_TOKEN_SECRET"]
 
+yelp_food_alias = {
+
+"Asian Fusion":"asianfusion"
+"Barbeque":"bbq"
+"Burgers":"burgers"
+"Cafes":"cafes"
+"Chinese":"chinese"
+"Comfort Food":"comfortfood"
+"Filipino":"filipino"
+"Fish & Chips":"fishnchips"
+"Food Stands":"foodstands"
+"Gastropubs":"gastropubs"
+"Gluten-Free":"gluten_free"
+"Italian":"italian"
+"Mexican":"mexican"
+"American (New)":"newamerican"
+"Pizza":"pizza"
+"Salad":"salad"
+"Sandwiches":"sandwhiches"
+"Seafood":"seafood"
+"Steakhouses":"steak"
+"Thai":"thai"
+"American (Traditional)":"tradamerican"
+"Vegan":"vegan"
+
+}
+
+
+yelp_activity_alias  = {
+
+
+}
+
+yelp_hotel_alias = {
+
+
+}
 
 def search_events(trip_id):
     yelp = OAuth1Session(CONSUMER_KEY,
@@ -24,10 +61,17 @@ def search_events(trip_id):
     city_list = find_cities(trip.origin, trip.destination)
     interest_food_list = Interest.objects.filter(trip=trip, category="food").all()
     interest_food_list = [x.sub_category for x in interest_food_list]
+    for item in interest_food_list:
+        item = yelp_food_alias["item"]
+
     interest_activity_list = Interest.objects.filter(trip=trip, category="hotels").all()
     interest_activity_list = [x.sub_category for x in interest_activity_list]
+
+
     interest_hotels_list = Interest.objects.filter(trip=trip, category="activities").all()
     interest_hotels_list = [x.sub_category for x in interest_hotels_list]
+
+
     interest_activity_list = ','.join(interest_activity_list)
     interest_food_list = ','.join(interest_food_list)
     interest_hotels_list = ','.join(interest_hotels_list)
