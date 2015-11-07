@@ -63,21 +63,26 @@ def suggestion_json(request, trip_pk):
         for activity in city["all_activities"]:
             city[activity["category"]].append(activity)
 
-    j = [
-            {
-                "location": ", ".join(x["all_activities"][1]["city"]),
-                "location_plus": ",+".join(x["all_activities"][1]["city"]),
-                "stopover": False,
-                "activities": list_gen(x, "activity"),
-                "hotels": list_gen(x, "hotel"),
-                "sports": list_gen(x, "sports"),
-                "food": list_gen(x, "food"),
-                "artist": list_gen(x, "artist")
-            }
-            for x in data
-        ]
+    j = {
+            "origin": trip.origin,
+            "title": trip.title,
+            "destination": trip.destination,
+            "waypoints": [
+                {
+                    "location": ", ".join(x["all_activities"][1]["city"]),
+                    "location_plus": ",+".join(x["all_activities"][1]["city"]),
+                    "stopover": False,
+                    "activities": list_gen(x, "activity"),
+                    "hotels": list_gen(x, "hotel"),
+                    "sports": list_gen(x, "sports"),
+                    "food": list_gen(x, "food"),
+                    "artist": list_gen(x, "artist")
+                }
+                for x in data
+            ]
+        }
 
-    return JsonResponse({"waypoints": j})
+    return JsonResponse(j)
 
 
 @csrf_exempt
