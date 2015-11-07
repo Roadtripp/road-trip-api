@@ -110,7 +110,7 @@ def search_events(trip_id):
     interest_hotels_list = Interest.objects.filter(trip=trip, category="Activity").all()
     interest_hotels_list = [x.sub_category for x in interest_hotels_list]
     yelp_hotels_list = []
-    for item in interest_food_list:
+    for item in interest_hotels_list:
         item = yelp_hotels_alias[item]
         yelp_hotels_list.append(item)
 
