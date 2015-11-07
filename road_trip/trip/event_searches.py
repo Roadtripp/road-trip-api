@@ -154,7 +154,7 @@ def search_events(trip_id):
              r = yelp.get(url[0])
              r = r.json()
              counter = 0
-             for business in r["businesses"]:
+             for x in range(3):
                 bus = {}
                 bus["name"] = r['businesses'][counter]['name']
                 bus["category"] = url[1]
@@ -190,12 +190,11 @@ def search_seatgeek(trip_id, performer, category, city):
     slug = performer.lower().replace(' ', '-')
     performer_data = requests.get("http://api.seatgeek.com/2/performers?slug={}".format(slug))
     performer_json = performer_data.json()
-    print(performer_json)
     try:
         performer_id = performer_json["performers"][0]["id"]
         r = requests.get('http://api.seatgeek.com/2/recommendations?performers.id={id}&datetime_local.gte={start}&datetime_local.lt={end}&range=300mi&lat={lat}&lon={lon}&client_id={key}'.format(id=performer_id, start=str(trip.origin_date), end = str(trip.destination_date),lat = lat, lon = lon, key=SEAT_GEEK))
         parsed_json = r.json()
-        print(parsed_json)
+        print(json.dumps(parsed_json, indent=4))
         if category == "artist":
             recs = []
             counter = 0
@@ -207,9 +206,10 @@ def search_seatgeek(trip_id, performer, category, city):
                     rec["title"] = parsed_json["recommendations"][counter]["event"]["title"]
                     rec["datetime"] = parsed_json["recommendations"][counter]["event"]["datetime_local"]
                     rec["url"] = parsed_json["recommendations"][counter]["event"]["url"]
-                    rec["address"] = parsed_json["recommendations"][counter]["event"]["address"]+", " +parsed_json["recommendations"][counter]["event"]["extended_address"]
+                    rec["address"] = [parsed_json["recommendations"][counter]["event"]["address"], parsed_json["recommendations"][counter]["event"]["extended_address"]]
                     rec["lowest_price"] =parsed_json["recommendations"][counter]["event"]["stats"]["lowest_price"]
                     recs.append(rec_dict)
+                print(recs)
                 return recs
             except:
                 pass
@@ -227,6 +227,8 @@ def search_seatgeek(trip_id, performer, category, city):
                     rec["address"] = parsed_json["recommendations"][counter]["event"]["address"]+", " +parsed_json["recommendations"][counter]["event"]["extended_address"]
                     rec["lowest_price"] =parsed_json["recommendations"][counter]["event"]["stats"]["lowest_price"]
                     recs.append(rec_dict)
+                    counter +=1
+                print(recs)
                 return recs
             except:
                 pass
