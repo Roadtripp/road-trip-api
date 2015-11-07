@@ -167,7 +167,7 @@ def search_events(trip_id):
 
 def search_seatgeek(trip_id, performer, category, city):
     trip = Trip.objects.get(pk=trip_id)
-    if type(city) == tuple:
+    if type(city) is tuple:
         city = city[0]
     else:
         city = city
@@ -179,22 +179,27 @@ def search_seatgeek(trip_id, performer, category, city):
     performer_data = requests.get("http://api.seatgeek.com/2/performers?slug={}".format(slug))
     performer_json = performer_data.json()
     performer_id = performer_json["performers"][0]["id"]
-    r = requests.get('http://api.seatgeek.com/2/recommendations?performers.id={id}&datetime_local.gte={start}&datetime_local.lt={end}&range=50mi&lat={lat}&long={lon}&client_id={key}'.format(id=performer_id, start=str(trip.origin_date), end = str(trip.destination_date),lat = lat, lon = lon, key=SEAT_GEEK))
+    r = requests.get('http://api.seatgeek.com/2/recommendations?performers.id={id}&datetime_local.gte={start}&datetime_local.lt={end}&range=50mi&lat={lat}&lon={lon}&client_id={key}'.format(id=performer_id, start=str(trip.origin_date), end = str(trip.destination_date),lat = lat, lon = lon, key=SEAT_GEEK))
 
     parsed_json = r.json()
     recs = []
     counter = 0
-    for rec in parsed_json["recommendations"]:
-        rec_dict = {}
-        rec["category"]=category
-        rec["subcategory"] = performer
-        rec["title"] = parsed_json["recommendations"][counter]["event"]["title"]
-        rec["datetime"] = parsed_json["recommendations"][counter]["event"]["datetime_local"]
-        rec["url"] = parsed_json["recommendations"][counter]["event"]["url"]
-        rec["address"] = parsed_json["recommendations"][counter]["event"]["address"]+", " +parsed_json["recommendations"][counter]["event"]["extended_address"]
-        rec["lowest_price"] =parsed_json["recommendations"][counter]["event"]["stats"]["lowest_price"]
-        recs.append(rec_dict)
-    return recs
+    #print(parsed_json)
+    try:
+        for rec in parsed_json["recommendations"]:
+            rec_dict = {}
+            rec["category"]=category
+            rec["subcategory"] = performer
+            rec["title"] = parsed_json["recommendations"][counter]["event"]["title"]
+            rec["datetime"] = parsed_json["recommendations"][counter]["event"]["datetime_local"]
+            rec["url"] = parsed_json["recommendations"][counter]["event"]["url"]
+            rec["address"] = parsed_json["recommendations"][counter]["event"]["address"]+", " +parsed_json["recommendations"][counter]["event"]["extended_address"]
+            rec["lowest_price"] =parsed_json["recommendations"][counter]["event"]["stats"]["lowest_price"]
+            recs.append(rec_dict)
+        print(recs)
+        return recs
+    except:
+        pass
 
 
 
