@@ -56,7 +56,7 @@ def suggestion_json(request, trip_pk):
     data = search_events(trip_pk)
     data = [{"all_activities": city} for city in data]
 
-    c = ["activity", "food", "sports", "artist", "hotel"]
+    c = ["activities", "food", "sports", "artist", "hotels"]
     for city in data:
         for category in c:
             city[category] = []
@@ -69,11 +69,11 @@ def suggestion_json(request, trip_pk):
             "destination": trip.destination,
             "waypoints": [
                 {
-                    "location": ", ".join(x["all_activities"][1]["city"]),
-                    "location_plus": ",+".join(x["all_activities"][1]["city"]),
+                    # "location": ", ".join(x["all_activities"][0]["city"]),
+                    # "location_plus": ",+".join(x["all_activities"][0]["city"]),
                     "stopover": False,
-                    "activities": list_gen(x, "activity"),
-                    "hotels": list_gen(x, "hotel"),
+                    "activities": list_gen(x, "activities"),
+                    "hotels": list_gen(x, "hotels"),
                     "sports": list_gen(x, "sports"),
                     "food": list_gen(x, "food"),
                     "artist": list_gen(x, "artist")
