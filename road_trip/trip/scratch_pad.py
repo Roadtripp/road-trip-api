@@ -32,7 +32,16 @@ def main():
                 "activities": [
                     {
                         "title": item["name"],
-                        "address": " ".join(item["address"])
+                        "address": " ".join(item["address"]),
+                        "sub_categories": item["subcategory"],
+                        "activity_stopover": False,
+                        "url": item["url"],
+                        "small_rate_img_url": item["rating_img_url_small"],
+                        "large_rate_img_url": item["rating_img_url"],
+                        "average_rating": item["rating"],
+                        "num_ratings": item["num_reviews"]
+
+
                     }
                     for item in x["activity"]
                 ]
