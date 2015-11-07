@@ -48,7 +48,11 @@ def main():
                 "location": ", ".join(x["all_activities"][1]["city"]),
                 "location_plus": ",+".join(x["all_activities"][1]["city"]),
                 "stopover": False,
-                "activities": list_gen(x, "activity")
+                "activities": list_gen(x, "activity"),
+                "hotels": list_gen(x, "hotel"),
+                "sports": list_gen(x, "sports"),
+                "food": list_gen(x, "food"),
+                "artist": list_gen(x, "artist")
 
             }
 
