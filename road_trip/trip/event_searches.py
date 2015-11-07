@@ -92,14 +92,14 @@ def search_events(trip_id):
 
     trip = Trip.objects.get(pk=trip_id)
     city_list = find_cities(trip.origin, trip.destination)
-    interest_food_list = Interest.objects.filter(trip=trip, category="Food").all()
+    interest_food_list = Interest.objects.filter(trip=trip, category="food").all()
     interest_food_list = [x.sub_category for x in interest_food_list]
     yelp_food_list = []
     for item in interest_food_list:
         ret = yelp_food_alias[item]
         yelp_food_list.append(ret)
 
-    interest_activity_list = Interest.objects.filter(trip=trip, category="Activity").all()
+    interest_activity_list = Interest.objects.filter(trip=trip, category="activities").all()
     interest_activity_list = [x.sub_category for x in interest_activity_list]
     yelp_activity_list = []
     for item in interest_activity_list:
@@ -107,7 +107,7 @@ def search_events(trip_id):
         yelp_activity_list.append(ret)
 
 
-    interest_hotels_list = Interest.objects.filter(trip=trip, category="Hotel").all()
+    interest_hotels_list = Interest.objects.filter(trip=trip, category="hotels").all()
     interest_hotels_list = [x.sub_category for x in interest_hotels_list]
     yelp_hotels_list = []
     for item in interest_hotels_list:
@@ -122,13 +122,11 @@ def search_events(trip_id):
          url_activity = 'https://api.yelp.com/v2/search/?location={}&sort=2&category_filter={}'.format(city[0], yelp_activity_list)
          url_food = 'https://api.yelp.com/v2/search/?location={}&sort=2&category_filter={}'.format(city[0], yelp_food_list)
          url_hotel = 'https://api.yelp.com/v2/search/?location={}&sort=2&category_filter={}'.format(city[0], yelp_hotels_list)
-         urls = [(url_activity, "Activity"), (url_food, "Food"), (url_hotel, "Hotels")]
+         urls = [(url_activity, "activities"), (url_food, "food"), (url_hotel, "hotels")]
          city_businesses = []
          for url in urls:
              r = yelp.get(url[0])
              r = r.json()
-             print(url[0])
-             print(r)
              counter = 0
              for business in r["businesses"]:
                 bus = {}
