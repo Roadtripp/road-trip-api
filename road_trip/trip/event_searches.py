@@ -34,7 +34,7 @@ yelp_food_alias = {
 "Gastropubs":"gastropubs",
 "Gluten-Free":"gluten_free",
 "Italian":"italian",
-"Mexican":"mexican",
+"Aexican":"mexican",
 "American (New)":"newamerican",
 "Pizza":"pizza",
 "Salad":"salad",
@@ -96,14 +96,14 @@ def search_events(trip_id):
     interest_food_list = [x.sub_category for x in interest_food_list]
     yelp_food_list = []
     for item in interest_food_list:
-        ret = yelp_food_alias[item]
+        ret = yelp_food_alias[item.title()]
         yelp_food_list.append(ret)
 
     interest_activity_list = Interest.objects.filter(trip=trip, category="Activity").all()
     interest_activity_list = [x.sub_category for x in interest_activity_list]
     yelp_activity_list = []
     for item in interest_activity_list:
-        ret = yelp_activity_alias[item]
+        ret = yelp_activity_alias[item.title()]
         yelp_activity_list.append(ret)
 
 
@@ -111,7 +111,7 @@ def search_events(trip_id):
     interest_hotels_list = [x.sub_category for x in interest_hotels_list]
     yelp_hotels_list = []
     for item in interest_hotels_list:
-        ret = yelp_hotels_alias[item]
+        ret = yelp_hotels_alias[item.title()]
         yelp_hotels_list.append(ret)
 
 
