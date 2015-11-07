@@ -148,8 +148,24 @@ def search_events(trip_id):
     #print(cities_events)
     return cities_events
 
-def search_seatgeek(trip_id):
-    
+def search_seatgeek(trip_id, performer):
+    trip = Trip.objects.get(pk=trip_id)
+
+    slug = performer.lower().replace(' ', '-')
+    performer_data = requests.get("http://api.seatgeek.com/2/performers?slug={}".format(slug))
+    performer_json = performer_data.json()
+    performer_id = performer_json["performers"][0]["id"]
+    r = requests.get('http://api.seatgeek.com/2/recommendations?performers.id={id}&datetime_local.gte={start}&datetime_local.lt={end}&range=50mi&postal_code=27713&client_id={key}'.format(id=performer_id, start=str(trip.origin_date), end = str(trip.destination_date), key=SEAT_GEEK))
+
+    parsed_json = r.json()
+    print(json.dumps(parsed_json, indent=4, sort_keys=True))
+
+
+
+
+
+
+
 
 
 
@@ -212,5 +228,4 @@ def search_seatgeek(trip_id):
 #             bus["city"]=city
 #             city_events.append(bus)
 #             counter += 1
-#
 #     return city_events[0]
