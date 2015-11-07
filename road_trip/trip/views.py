@@ -36,8 +36,11 @@ class CityViewSet(viewsets.ModelViewSet):
 
 def suggestion_json(request, trip_pk):
     trip = get_object_or_404(Trip, pk=trip_pk)
-    suggestions = '{'+'"id": "{}", "origin": "{}", "destination": "{}", "waypoints": ['.format(str(trip.id), str(trip.origin), str(trip.destination)) + ', '.join(['{'+'"location": "{}", "stopover": false, "activities": []'.format(x[0]+', '+x[1])+'}' for x in find_cities(trip.origin, trip.destination)]) + ']' + '}'
-    return JsonResponse(json.loads(suggestions))
+    data = search_events(trip_pk)
+    suggestions = '{'+'"id": "{}", "origin": "{}", "destination": "{}",
+    "waypoints": ['.format(str(trip.id), str(trip.origin), str(trip.destination)) + ', '.join(['{'+'"location": "{}", "stopover": false, "activities": ['.format(city[0]['city'][0]+', '.join(['{'+'"address": "{}", "small_rate_img_url": "{}", "large_rate_img_url": "{}", "average_rating": "{}", "num_ratings": "{}", "title": "{}", "category": "{}", "sub_category": "{}", "activity_stopover": false, "url": "{}", "phone": "{}"'.format(' '.join(poi['address']), poi['rating_img_url_small'], poi['rating_img_url'], poi['rating'], poi['num_reviews'], poi['name'], poi['category'], poi['subcategory'], poi['url'], poi['phone']) for poi in city])+']'+', '+city[0]['city'][1])+'}' for city in data]) + ']' + '}'
+    json.dump(data, io)
+    return JsonResponse(io)
 
 
 @csrf_exempt
