@@ -134,17 +134,17 @@ def search_events(trip_id):
          url_activity = 'https://api.yelp.com/v2/search/?location={}&sort=2&category_filter={}'.format(city[0], yelp_activity_list)
          url_food = 'https://api.yelp.com/v2/search/?location={}&sort=2&category_filter={}'.format(city[0], yelp_food_list)
          url_hotel = 'https://api.yelp.com/v2/search/?location={}&sort=2&category_filter={}'.format(city[0], yelp_hotels_list)
-         urls = [(url_activity, "Activity"), (url_food, "Food"), (url_hotel, "Hotels")]
+         urls = [(url_activity, "activities"), (url_food, "food"), (url_hotel, "hotels")]
          city_businesses = []
          for x in interest_teams_list:
-             ret = search_seatgeek(trip_id, x, "Teams", city)
+             ret = search_seatgeek(trip_id, x, "sports", city)
              try:
                  for r in ret:
                      city_businesses.append(r)
              except:
                  continue
          for x in interest_performers_list:
-             ret = search_seatgeek(trip_id, x, "Performers", city)
+             ret = search_seatgeek(trip_id, x, "artist", city)
              try:
                  for r in ret:
                      city_businesses.append(r)
