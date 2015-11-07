@@ -37,7 +37,7 @@ def search_events(trip_id):
          url_activity = 'https://api.yelp.com/v2/search/?location={}&sort=2&category_filter={}'.format(city[0], interest_activity_list)
          url_food = 'https://api.yelp.com/v2/search/?location={}&sort=2&category_filter={}'.format(city[0], interest_food_list)
          url_hotel = 'https://api.yelp.com/v2/search/?location={}&sort=2&category_filter={}'.format(city[0], interest_hotels_list)
-         urls = [tuple(url_activity, "activity"), tuple(url_food, "food"), tuple(url_hotel, "hotel")]
+         urls = [(url_activity, "activity"), (url_food, "food"), (url_hotel, "hotel")]
          city_businesses = []
          for url in urls:
              r = yelp.get(url[0])
