@@ -150,9 +150,6 @@ def search_events(trip_id):
              r = yelp.get(url[0])
              r = r.json()
              counter = 0
-             print(yelp_activity_list)
-             print(url[0])
-             print(r)
              for business in r["businesses"]:
                 bus = {}
                 bus["name"] = r['businesses'][counter]['name']
@@ -163,7 +160,10 @@ def search_events(trip_id):
                 bus["num_reviews"] = r['businesses'][counter]['review_count']
                 bus["rating_img_url_small"] = r['businesses'][counter]['rating_img_url_small']
                 bus["rating_img_url"] = r['businesses'][counter]['rating_img_url']
-                bus["phone"] = r['businesses'][counter]['display_phone']
+                try:
+                    bus["phone"] = r['businesses'][counter]['display_phone']
+                except:
+                    continue
                 bus["address"] = r['businesses'][counter]['location']["display_address"]
                 bus["city"]=city
                 city_businesses.append(bus)
@@ -205,7 +205,7 @@ def search_seatgeek(trip_id, performer, category, city):
                 rec["address"] = parsed_json["recommendations"][counter]["event"]["address"]+", " +parsed_json["recommendations"][counter]["event"]["extended_address"]
                 rec["lowest_price"] =parsed_json["recommendations"][counter]["event"]["stats"]["lowest_price"]
                 recs.append(rec_dict)
-            print(recs)
+            #print(recs)
             return recs
         except:
             pass
