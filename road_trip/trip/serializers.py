@@ -28,3 +28,11 @@ class CitySerializer(serializers.ModelSerializer):
         validated_data['trip_id'] = self.context['trip_pk']
         city = City.objects.create(**validated_data)
         return city
+
+
+class UserSerializer(serializers.HyperlinkedModelSerializer):
+    activities = ActivitySerializer(many=True, read_only=True)
+
+    class Meta:
+        model = User
+        fields = ('username', 'id', 'email', 'password', "trips")
