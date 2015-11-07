@@ -128,7 +128,7 @@ def search_events(trip_id):
              r = yelp.get(url[0])
              r = r.json()
              counter = 0
-             for business in r["businesses"]:
+             for x in range(3):
                 bus = {}
                 bus["name"] = r['businesses'][counter]['name']
                 bus["category"] = url[1]
