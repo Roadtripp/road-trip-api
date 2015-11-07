@@ -20,7 +20,6 @@ class GoogleMapsDirections:
         #Sends a call to Google Maps Directions and return a dictionary with
         #start and end coordinates and a list of all waypoint coordinates
         parsed_json = self.r.json()
-        #print(parsed_json)
         directions = {}
         start_coord = tuple((parsed_json["routes"][0]["legs"][0]["start_location"]["lat"], parsed_json["routes"][0]["legs"][0]["start_location"]["lng"]))
         end_coord = tuple((parsed_json["routes"][0]["legs"][0]["end_location"]["lat"], parsed_json["routes"][0]["legs"][0]["end_location"]["lng"]))
@@ -75,6 +74,7 @@ class GoogleMapsDirections:
         waypoints = self.format_waypoints
         r = requests.get('https://roads.googleapis.com/v1/snapToRoads?path={}&interpolate=True&key={}'.format(waypoints, gm_key))
         return r.json()
+
 
 
 def make_df():
@@ -148,24 +148,7 @@ def find_haversine(lat1,lon1,lat2,lon2):
     return distance
 
 
-# def law_cosines(lat1,lon1,lat2,lon2):
-#     delta = lon2 - lon1
-#     a = math.radians(lat1)
-#     b = math.radians(lat2)
-#     C = math.radians(delta)
-#     x = math.sin(a) * math.sin(b) + math.cos(a) * math.cos(b) * math.cos(C)
-#     distance = math.acos(x) # in radians
-#     distance  = math.degrees(distance) # in degrees
-#     distance  = distance * 60 # 60 nautical miles / lat degree
-#     distance  = distance
-#     return distance
-
-
-
-
-
-
-def find_cities(origin, dest, radius=100):
+def find_cities(origin, dest, radius=20):
     route = GoogleMapsDirections(origin, dest)
     waypoints = route.format_waypoints()
     df = make_df()
@@ -179,5 +162,3 @@ def find_cities(origin, dest, radius=100):
                         cities.append((row['City'], row['State']))
 
     return cities
-
-#find_cities("Raleigh, NC", "Las Vegas, NV")
