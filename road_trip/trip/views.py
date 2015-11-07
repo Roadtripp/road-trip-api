@@ -105,10 +105,21 @@ def interests_json(request, trip_pk):
     if request.method == 'POST':
         interests = json.loads(request.body.decode('utf-8'))
         get_trip = get_object_or_404(Trip, pk=trip_pk)
-        for interest in interests:
+        yelp_cats = ['activities', 'food', 'hotels']
+        sg_cats = ['artist1', 'artist2', 'artist3',
+                   'sports1', 'sports2', 'sports3']
+        for cat in yelp_cats:
+            for sub_cat in interests[cat].keys():
+                Interest.objects.create(
+                    category=cat,
+                    sub_category=sub_cat,
+                    trip=get_trip
+                )
+        for cat in sg_cats:
             Interest.objects.create(
-                category=interest['category'],
-                sub_category=interest['sub_category'],
+                category=cat[:-1],
+                sub_category=interests[cat],
                 trip=get_trip
             )
+
     return HttpResponse('', status=200)
