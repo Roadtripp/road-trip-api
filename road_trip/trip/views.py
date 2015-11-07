@@ -69,8 +69,8 @@ def suggestion_json(request, trip_pk):
             "destination": trip.destination,
             "waypoints": [
                 {
-                    # "location": ", ".join(x["all_activities"][0]["city"]),
-                    # "location_plus": ",+".join(x["all_activities"][0]["city"]),
+                    "location": ", ".join(x["all_activities"][0]["city"]),
+                    "location_plus": ",+".join(x["all_activities"][0]["city"]),
                     "stopover": False,
                     "activities": list_gen(x, "activities"),
                     "hotels": list_gen(x, "hotels"),
