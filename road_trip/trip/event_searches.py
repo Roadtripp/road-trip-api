@@ -96,23 +96,23 @@ def search_events(trip_id):
     interest_food_list = [x.sub_category for x in interest_food_list]
     yelp_food_list = []
     for item in interest_food_list:
-        item = yelp_food_alias[item]
-        yelp_food_list.append(item)
+        ret = yelp_food_alias[item]
+        yelp_food_list.append(ret)
 
     interest_activity_list = Interest.objects.filter(trip=trip, category="Activity").all()
     interest_activity_list = [x.sub_category for x in interest_activity_list]
     yelp_activity_list = []
     for item in interest_activity_list:
-        item = yelp_activity_alias[item]
-        yelp_activity_list.append(item)
+        ret = yelp_activity_alias[item]
+        yelp_activity_list.append(ret)
 
 
     interest_hotels_list = Interest.objects.filter(trip=trip, category="Hotels").all()
     interest_hotels_list = [x.sub_category for x in interest_hotels_list]
     yelp_hotels_list = []
     for item in interest_hotels_list:
-        item = yelp_hotels_alias[item]
-        yelp_hotels_list.append(item)
+        ret = yelp_hotels_alias[item]
+        yelp_hotels_list.append(ret)
 
 
     interest_teams_list = Interest.objects.filter(trip=trip, category="Teams").all()
@@ -130,21 +130,29 @@ def search_events(trip_id):
          url_activity = 'https://api.yelp.com/v2/search/?location={}&sort=2&category_filter={}'.format(city[0], yelp_activity_list)
          url_food = 'https://api.yelp.com/v2/search/?location={}&sort=2&category_filter={}'.format(city[0], yelp_food_list)
          url_hotel = 'https://api.yelp.com/v2/search/?location={}&sort=2&category_filter={}'.format(city[0], yelp_hotels_list)
-         urls = [tuple(url_activity, "Activity"), tuple(url_food, "Food"), tuple(url_hotel, "Hotels")]
+         urls = [(url_activity, "Activity"), (url_food, "Food"), (url_hotel, "Hotels")]
          city_businesses = []
          for x in interest_teams_list:
              ret = search_seatgeek(trip_id, x, "Teams", city)
-             for r in ret:
-                 city_businesses.append(r)
+             try:
+                 for r in ret:
+                     city_businesses.append(r)
+             except:
+                 continue
          for x in interest_performers_list:
              ret = search_seatgeek(trip_id, x, "Performers", city)
-             for r in ret:
-                 city_businesses.append(r)
-
+             try:
+                 for r in ret:
+                     city_businesses.append(r)
+             except:
+                 continue
          for url in urls:
              r = yelp.get(url[0])
              r = r.json()
              counter = 0
+             print(yelp_activity_list)
+             print(url[0])
+             print(r)
              for business in r["businesses"]:
                 bus = {}
                 bus["name"] = r['businesses'][counter]['name']
@@ -178,28 +186,29 @@ def search_seatgeek(trip_id, performer, category, city):
     slug = performer.lower().replace(' ', '-')
     performer_data = requests.get("http://api.seatgeek.com/2/performers?slug={}".format(slug))
     performer_json = performer_data.json()
-    performer_id = performer_json["performers"][0]["id"]
-    r = requests.get('http://api.seatgeek.com/2/recommendations?performers.id={id}&datetime_local.gte={start}&datetime_local.lt={end}&range=50mi&lat={lat}&lon={lon}&client_id={key}'.format(id=performer_id, start=str(trip.origin_date), end = str(trip.destination_date),lat = lat, lon = lon, key=SEAT_GEEK))
+    if category == "Performers":
+        performer_id = performer_json["performers"][0]["id"]
+        r = requests.get('http://api.seatgeek.com/2/recommendations?performers.id={id}&datetime_local.gte={start}&datetime_local.lt={end}&range=50mi&lat={lat}&lon={lon}&client_id={key}'.format(id=performer_id, start=str(trip.origin_date), end = str(trip.destination_date),lat = lat, lon = lon, key=SEAT_GEEK))
 
-    parsed_json = r.json()
-    recs = []
-    counter = 0
+        parsed_json = r.json()
+        recs = []
+        counter = 0
     #print(parsed_json)
-    try:
-        for rec in parsed_json["recommendations"]:
-            rec_dict = {}
-            rec["category"]=category
-            rec["subcategory"] = performer
-            rec["title"] = parsed_json["recommendations"][counter]["event"]["title"]
-            rec["datetime"] = parsed_json["recommendations"][counter]["event"]["datetime_local"]
-            rec["url"] = parsed_json["recommendations"][counter]["event"]["url"]
-            rec["address"] = parsed_json["recommendations"][counter]["event"]["address"]+", " +parsed_json["recommendations"][counter]["event"]["extended_address"]
-            rec["lowest_price"] =parsed_json["recommendations"][counter]["event"]["stats"]["lowest_price"]
-            recs.append(rec_dict)
-        print(recs)
-        return recs
-    except:
-        pass
+        try:
+            for rec in parsed_json["recommendations"]:
+                rec_dict = {}
+                rec["category"]=category
+                rec["subcategory"] = performer
+                rec["title"] = parsed_json["recommendations"][counter]["event"]["title"]
+                rec["datetime"] = parsed_json["recommendations"][counter]["event"]["datetime_local"]
+                rec["url"] = parsed_json["recommendations"][counter]["event"]["url"]
+                rec["address"] = parsed_json["recommendations"][counter]["event"]["address"]+", " +parsed_json["recommendations"][counter]["event"]["extended_address"]
+                rec["lowest_price"] =parsed_json["recommendations"][counter]["event"]["stats"]["lowest_price"]
+                recs.append(rec_dict)
+            print(recs)
+            return recs
+        except:
+            pass
 
 
 
