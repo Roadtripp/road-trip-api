@@ -92,14 +92,14 @@ def search_events(trip_id):
 
     trip = Trip.objects.get(pk=trip_id)
     city_list = find_cities(trip.origin, trip.destination)
-    interest_food_list = Interest.objects.filter(trip=trip, category="food").all()
+    interest_food_list = Interest.objects.filter(trip=trip, category="Food").all()
     interest_food_list = [x.sub_category for x in interest_food_list]
     yelp_food_list = []
     for item in interest_food_list:
         item = yelp_food_alias[item]
         yelp_food_list.append(item)
 
-    interest_activity_list = Interest.objects.filter(trip=trip, category="hotels").all()
+    interest_activity_list = Interest.objects.filter(trip=trip, category="Hotels").all()
     interest_activity_list = [x.sub_category for x in interest_activity_list]
     yelp_activity_list = []
     for item in interest_activity_list:
@@ -107,7 +107,7 @@ def search_events(trip_id):
         yelp_activity_list.append(item)
 
 
-    interest_hotels_list = Interest.objects.filter(trip=trip, category="activities").all()
+    interest_hotels_list = Interest.objects.filter(trip=trip, category="Activities").all()
     interest_hotels_list = [x.sub_category for x in interest_hotels_list]
     yelp_hotels_list = []
     for item in interest_food_list:
@@ -168,9 +168,9 @@ def search_events(trip_id):
 def search_seatgeek(trip_id, performer, category, city):
     trip = Trip.objects.get(pk=trip_id)
     if type(city) is tuple:
-        city = city[0]
+        city = city[0].title()
     else:
-        city = city
+        city = city.title()
     df = make_df()
     df = df.set_index("City")
     lat = df.get_value(city, "latitude")
