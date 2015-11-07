@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 
 
 class Trip(models.Model):
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(User, related_name="trips")
     title = models.CharField(max_length=255)
     origin = models.CharField(max_length=255)
     origin_date = models.DateField(null=True, blank=True)
