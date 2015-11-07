@@ -7,6 +7,7 @@ from .city_selector import *
 from .serializers import TripSerializer, CitySerializer
 from django.views.decorators.csrf import csrf_exempt
 import json
+from .event_searches import search_events
 
 
 
@@ -33,10 +34,55 @@ class CityViewSet(viewsets.ModelViewSet):
         return context
 
 
+def list_gen(x, category):
+    return [
+        {
+            "title": item["name"],
+            "address": " ".join(item["address"]),
+            "sub_categories": item["subcategory"],
+            "activity_stopover": False,
+            "url": item["url"],
+            "small_rate_img_url": item["rating_img_url_small"],
+            "large_rate_img_url": item["rating_img_url"],
+            "average_rating": item["rating"],
+            "num_ratings": item["num_reviews"]
+        }
+        for item in x[category]
+    ]
+
+
 def suggestion_json(request, trip_pk):
     trip = get_object_or_404(Trip, pk=trip_pk)
-    suggestions = '{'+'"id": "{}", "origin": "{}", "destination": "{}", "waypoints": ['.format(str(trip.id), str(trip.origin), str(trip.destination)) + ', '.join(['{'+'"location": "{}", "stopover": false, "activities": []'.format(x[0]+', '+x[1])+'}' for x in find_cities(trip.origin, trip.destination)]) + ']' + '}'
-    return JsonResponse(json.loads(suggestions))
+    data = search_events(trip_pk)
+    data = [{"all_activities": city} for city in data]
+
+    c = ["activity", "food", "sports", "artist", "hotel"]
+    for city in data:
+        for category in c:
+            city[category] = []
+        for activity in city["all_activities"]:
+            city[activity["category"]].append(activity)
+
+    j = {
+            "origin": trip.origin,
+            "title": trip.title,
+            "destination": trip.destination,
+            "waypoints": [
+                {
+                    "location": ", ".join(x["all_activities"][1]["city"]),
+                    "location_plus": ",+".join(x["all_activities"][1]["city"]),
+                    "stopover": False,
+                    "activities": list_gen(x, "activity"),
+                    "hotels": list_gen(x, "hotel"),
+                    "sports": list_gen(x, "sports"),
+                    "food": list_gen(x, "food"),
+                    "artist": list_gen(x, "artist")
+                }
+                for x in data
+            ]
+        }
+
+    return JsonResponse(j)
 
 
 @csrf_exempt
