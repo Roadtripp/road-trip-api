@@ -122,9 +122,9 @@ def search_events(trip_id):
     interest_performers_list = [x.sub_category for x in interest_performers_list]
 
 
-    yelp_activity_list = ','.join(interest_activity_list)
+    yelp_activity_list = ','.join(yelp_activity_list)
     yelp_food_list = ','.join(yelp_food_list)
-    yelp_hotels_list = ','.join(interest_hotels_list)
+    yelp_hotels_list = ','.join(yelp_hotels_list)
     cities_events = []
     for city in city_list:
          url_activity = 'https://api.yelp.com/v2/search/?location={}&sort=2&category_filter={}'.format(city[0], yelp_activity_list)
