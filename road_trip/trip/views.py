@@ -76,9 +76,8 @@ def suggestion_json(request, trip_pk):
             }
             for x in data
         ]
-    with open('data.json', 'w') as f:
-        f.write(json.dumps(j))
-    return JsonResponse(json.dumps(j), safe=False)
+
+    return JsonResponse({"waypoints": j})
 
 
 @csrf_exempt
