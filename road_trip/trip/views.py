@@ -34,13 +34,51 @@ class CityViewSet(viewsets.ModelViewSet):
         return context
 
 
+def list_gen(x, category):
+    return [
+        {
+            "title": item["name"],
+            "address": " ".join(item["address"]),
+            "sub_categories": item["subcategory"],
+            "activity_stopover": False,
+            "url": item["url"],
+            "small_rate_img_url": item["rating_img_url_small"],
+            "large_rate_img_url": item["rating_img_url"],
+            "average_rating": item["rating"],
+            "num_ratings": item["num_reviews"]
+        }
+        for item in x[category]
+    ]
+
+
 def suggestion_json(request, trip_pk):
     trip = get_object_or_404(Trip, pk=trip_pk)
     data = search_events(trip_pk)
-    suggestions = '{'+'"id": "{}", "origin": "{}", "destination": "{}",
-    "waypoints": ['.format(str(trip.id), str(trip.origin), str(trip.destination)) + ', '.join(['{'+'"location": "{}", "stopover": false, "activities": ['.format(city[0]['city'][0]+', '.join(['{'+'"address": "{}", "small_rate_img_url": "{}", "large_rate_img_url": "{}", "average_rating": "{}", "num_ratings": "{}", "title": "{}", "category": "{}", "sub_category": "{}", "activity_stopover": false, "url": "{}", "phone": "{}"'.format(' '.join(poi['address']), poi['rating_img_url_small'], poi['rating_img_url'], poi['rating'], poi['num_reviews'], poi['name'], poi['category'], poi['subcategory'], poi['url'], poi['phone']) for poi in city])+']'+', '+city[0]['city'][1])+'}' for city in data]) + ']' + '}'
-    json.dump(data, io)
-    return JsonResponse(io)
+    data = [{"all_activities": city} for city in data]
+
+    c = ["activity", "food", "sports", "artist", "hotel"]
+    for city in data:
+        for category in c:
+            city[category] = []
+        for activity in city["all_activities"]:
+            city[activity["category"]].append(activity)
+
+    j = [
+            {
+                "location": ", ".join(x["all_activities"][1]["city"]),
+                "location_plus": ",+".join(x["all_activities"][1]["city"]),
+                "stopover": False,
+                "activities": list_gen(x, "activity"),
+                "hotels": list_gen(x, "hotel"),
+                "sports": list_gen(x, "sports"),
+                "food": list_gen(x, "food"),
+                "artist": list_gen(x, "artist")
+            }
+            for x in data
+        ]
+    with open('data.json', 'w') as f:
+        f.write(json.dumps(j))
+    return JsonResponse(json.dumps(j), safe=False)
 
 
 @csrf_exempt
