@@ -194,13 +194,13 @@ def search_events(trip_id):
 def search_seatgeek(trip_id, performer, category, city):
     trip = Trip.objects.get(pk=trip_id)
     if type(city) is tuple:
-        city = city[0].title()
+        city_pd = city[0].title()
     else:
-        city = city.title()
+        city_pd = city.title()
     df = make_df()
     df = df.set_index("City")
-    lat = df.get_value(city, "latitude")
-    lon = df.get_value(city, "longitude")
+    lat = df.get_value(city_pd, "latitude")
+    lon = df.get_value(city_pd, "longitude")
     slug = performer.lower().replace(' ', '-')
     performer_data = requests.get("http://api.seatgeek.com/2/performers?slug={}".format(slug))
     performer_json = performer_data.json()
