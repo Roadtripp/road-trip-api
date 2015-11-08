@@ -155,7 +155,9 @@ def search_events(trip_id):
              r = r.json()
              counter = 0
              for x in range(3):
-                bus = {}
+                bus = {
+                #datetime_local: "null"
+                }
                 bus["name"] = r['businesses'][counter]['name']
                 bus["category"] = url[1]
                 bus["subcategory"] = r["businesses"][counter]["categories"]
@@ -167,7 +169,7 @@ def search_events(trip_id):
                 try:
                     bus["phone"] = r['businesses'][counter]['display_phone']
                 except:
-                    continue
+                    bus["phone"] = "null"
                 bus["address"] = r['businesses'][counter]['location']["display_address"]
                 bus["city"]=city
                 city_businesses.append(bus)
@@ -193,10 +195,11 @@ def search_seatgeek(trip_id, performer, category, city):
     performer_id = performer_json["performers"][0]["id"]
     r = requests.get('http://api.seatgeek.com/2/recommendations?performers.id={id}&datetime_local.gte={start}&datetime_local.lt={end}&range=50mi&lat={lat}&lon={lon}&client_id={key}'.format(id=performer_id, start=str(trip.origin_date), end = str(trip.destination_date),lat = lat, lon = lon, key=SEAT_GEEK))
     parsed_json = r.json()
+    #print(json.dumps(parsed_json, indent=4))
     recs = []
     counter = 0
-    for x in parsed_json["recommendations"]:
-        rec_dict = {
+    #for x in parsed_json["recommendations"][0]:
+    rec_dict = {
         "name": parsed_json["recommendations"][counter]["event"]["title"],
         "category": category,
         "subcategory": performer,
@@ -206,12 +209,11 @@ def search_seatgeek(trip_id, performer, category, city):
         "rating_img_url_small": "null",
         "rating_img_url": "null",
         "phone": "null",
-        "address": "null",
-        #"address" :[parsed_json["recommendations"][counter]["event"]["address"], parsed_json["recommendations"][counter]["event"]["extended_address"]],
+        #"datetime_local":parsed_json["recommendations"][counter]["event"]["datetime_local"],
+        "address" :[parsed_json["recommendations"][counter]["event"]["venue"]["address"], parsed_json["recommendations"][counter]["event"]["venue"]["extended_address"]],
         #"lowest_price": parsed_json["recommendations"][counter]["event"]["stats"]["lowest_price"],
-        "city":city,}
-        recs.append(rec_dict)
-        counter += 1
-    print(recs)
+        "city":city,
+    }
+    recs.append(rec_dict)
+    #counter += 1
     return recs
-    
