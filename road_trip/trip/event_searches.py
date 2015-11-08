@@ -22,69 +22,69 @@ yelp = OAuth1Session(CONSUMER_KEY,
 
 yelp_food_alias = {
 
-"Asian Fusion":"asianfusion",
-"Barbeque":"bbq",
-"Burgers":"burgers",
-"Cafes":"cafes",
-"Chinese":"chinese",
-"Comfort Food":"comfortfood",
-"Filipino":"filipino",
-"Fish & Chips":"fishnchips",
-"Food Stands":"foodstands",
-"Gastropubs":"gastropubs",
-"Gluten-Free":"gluten_free",
-"Italian":"italian",
-"Mexican":"mexican",
-"American (New)":"newamerican",
-"Pizza":"pizza",
-"Salad":"salad",
-"Sandwiches":"sandwiches",
-"Seafood":"seafood",
-"Steakhouses":"steak",
-"Thai":"thai",
-"American (Traditional)":"tradamerican",
-"Vegan":"vegan"
+"asianfusion":"asianfusion",
+"barbeque":"bbq",
+"burgers":"burgers",
+"cafes":"cafes",
+"chinese":"chinese",
+"comfortfood":"comfortfood",
+"filipino":"filipino",
+"fishandchips":"fishnchips",
+"foodstands":"foodstands",
+"fastropubs":"gastropubs",
+"glutenfree":"gluten_free",
+"italian":"italian",
+"mexican":"mexican",
+"americannew":"newamerican",
+"pizza":"pizza",
+"salad":"salad",
+"sandwiches":"sandwiches",
+"seafood":"seafood",
+"steakhouses":"steak",
+"thai":"thai",
+"americantraditional":"tradamerican",
+"vegan":"vegan"
 
 }
 
 
 yelp_activity_alias  = {
 
-"Amusement Parks":"amusementparks",
-"Aquariums":"aquariums",
-"Beaches":"beaches",
-"Bike Rentals":"bikerentals",
-"Boating":"boating",
-"Bowling":"bowling",
-"Challenge Courses":"challengecourses",
-"Climbing":"climbing",
-"Disc Golf":"discgolf",
-"Jet Skis":"jetskis",
-"Kids Activities":"kids_activities",
-"Parks":"parks",
-"Public Plazas":"publicplazas",
-"Water Parks":"waterparks",
-"Zoos":"zoos",
-"Nightlife":"nightlife",
-"Bars":"bars",
-"Museums":"museums",
-"Sports Teams":"sportsteams",
-"Wineries":"wineries",
-"Shopping":"shoppingcenters,outlet_stores,souvenirs,deptstores",
-"Tours":"tours"
+"amusementparks":"amusementparks",
+"aquariums":"aquariums",
+"beaches":"beaches",
+"bikerentals":"bikerentals",
+"boating":"boating",
+"bowling":"bowling",
+"challengecourses":"challengecourses",
+"climbing":"climbing",
+"discgolf":"discgolf",
+"jetskis":"jetskis",
+"kidsactivities":"kids_activities",
+"parks":"parks",
+"publicplazas":"publicplazas",
+"waterparks":"waterparks",
+"zoos":"zoos",
+"nightlife":"nightlife",
+"bars":"bars",
+"museums":"museums",
+"sportsteams":"sportsteams",
+"wineries":"wineries",
+"shopping":"shoppingcenters,outlet_stores,souvenirs,deptstores",
+"tours":"tours"
 
 }
 
 yelp_hotels_alias = {
 
-"Bed & Breakfast":"bedbreakfast",
-"Campgrounds":"campgrounds",
-"Health Retreats":"healthretreats",
-"Hostels":"hostels",
-"Hotels":"hotels",
-"Resorts":"resorts",
-"RV Parks":"rvparks",
-"Ski Resorts":"skiresorts"
+"bedandbreakfast":"bedbreakfast",
+"campgrounds":"campgrounds",
+"healthretreats":"healthretreats",
+"hostels":"hostels",
+"hotels":"hotels",
+"resorts":"resorts",
+"rvparks":"rvparks",
+"skiresorts":"skiresorts"
 
 }
 
@@ -141,7 +141,7 @@ def search_events(trip_id):
                 try:
                     bus["phone"] = r['businesses'][counter]['display_phone']
                 except KeyError:
-                    continue
+                    bus["phone"] = "null"
                 bus["address"] = r['businesses'][counter]['location']["display_address"]
                 bus["city"]=city
                 city_businesses.append(bus)
