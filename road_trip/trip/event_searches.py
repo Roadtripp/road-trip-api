@@ -221,7 +221,6 @@ def search_seatgeek(trip_id, performer, category, city):
                  newtime = str(hours) + time[2] +time[3] +time[4] + "PM"
             else:
                 newtime = time + "AM"
-            print(newtime)
             rec_dict = {
                 "name": parsed_json["recommendations"][counter]["event"]["title"],
                 "category": category,
