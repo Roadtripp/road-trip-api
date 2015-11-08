@@ -167,7 +167,8 @@ def search_events(trip_id):
              counter = 0
              for x in range(3):
                 bus = {
-                #datetime_local: "null"
+                #"date": "null",
+                #"time": "null"
                 }
                 bus["name"] = r['businesses'][counter]['name']
                 bus["category"] = url[1]
@@ -194,13 +195,13 @@ def search_events(trip_id):
 def search_seatgeek(trip_id, performer, category, city):
     trip = Trip.objects.get(pk=trip_id)
     if type(city) is tuple:
-        city = city[0].title()
+        city_pd = city[0].title()
     else:
-        city = city.title()
+        city_pd = city.title()
     df = make_df()
     df = df.set_index("City")
-    lat = df.get_value(city, "latitude")
-    lon = df.get_value(city, "longitude")
+    lat = df.get_value(city_pd, "latitude")
+    lon = df.get_value(city_pd, "longitude")
     slug = performer.lower().replace(' ', '-')
     performer_data = requests.get("http://api.seatgeek.com/2/performers?slug={}".format(slug))
     performer_json = performer_data.json()
@@ -212,6 +213,14 @@ def search_seatgeek(trip_id, performer, category, city):
     counter = 0
     try:
         if len(parsed_json["recommendations"]) != 0:
+            time = re.findall(r'\T(.*)[:]', parsed_json["recommendations"][counter]["event"]["datetime_local"])
+            time = ''.join(time)
+            hours = time[0]+time[1]
+            if int(hours) > 12:
+                 hours = int(hours) - 12
+                 newtime = str(hours) + time[2] +time[3] +time[4] + "PM"
+            else:
+                newtime = time + "AM"
             rec_dict = {
                 "name": parsed_json["recommendations"][counter]["event"]["title"],
                 "category": category,
@@ -222,11 +231,11 @@ def search_seatgeek(trip_id, performer, category, city):
                 "rating_img_url_small": "null",
                 "rating_img_url": "null",
                 "phone": "null",
-                #"datetime_local":parsed_json["recommendations"][counter]["event"]["datetime_local"],
+                "date":re.findall(r'/d/d/d/d-/d/d-/d/d', parsed_json["recommendations"][counter]["event"]["datetime_local"]),
+                "time": newtime,
                 "address" :[parsed_json["recommendations"][counter]["event"]["venue"]["address"], parsed_json["recommendations"][counter]["event"]["venue"]["extended_address"]],
                 #"lowest_price": parsed_json["recommendations"][counter]["event"]["stats"]["lowest_price"],
-                "city":city,
-            }
+                "city":city}
             recs.append(rec_dict)
             return recs
     except KeyError:
