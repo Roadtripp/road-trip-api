@@ -215,5 +215,4 @@ def search_seatgeek(trip_id, performer, category, city):
         "city":city,
     }
     recs.append(rec_dict)
-    #counter += 1
     return recs
