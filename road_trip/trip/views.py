@@ -45,7 +45,9 @@ def list_gen(x, category):
             "small_rate_img_url": item["rating_img_url_small"],
             "large_rate_img_url": item["rating_img_url"],
             "average_rating": item["rating"],
-            "num_ratings": item["num_reviews"]
+            "num_ratings": item["num_reviews"],
+            "date": item["date"],
+            "time": item["time"]
         }
         for item in x[category]
     ]

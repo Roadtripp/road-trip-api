@@ -5,6 +5,7 @@ from requests_oauthlib import OAuth1, OAuth1Session
 from .city_selector import *
 from .models import Trip
 from .models import Interest
+import re
 
 #OAuth credential placeholders that must be filled in by users.
 CONSUMER_KEY = os.environ["YELP_CONSUMER"]
@@ -167,8 +168,8 @@ def search_events(trip_id):
              counter = 0
              for x in range(3):
                 bus = {
-                #"date": "null",
-                #"time": "null"
+                "date": "null",
+                "time": "null"
                 }
                 bus["name"] = r['businesses'][counter]['name']
                 bus["category"] = url[1]
@@ -208,7 +209,6 @@ def search_seatgeek(trip_id, performer, category, city):
     performer_id = performer_json["performers"][0]["id"]
     r = requests.get('http://api.seatgeek.com/2/recommendations?performers.id={id}&datetime_local.gte={start}&datetime_local.lt={end}&range=50mi&lat={lat}&lon={lon}&client_id={key}'.format(id=performer_id, start=str(trip.origin_date), end = str(trip.destination_date),lat = lat, lon = lon, key=SEAT_GEEK))
     parsed_json = r.json()
-    #print(json.dumps(parsed_json, indent=4))
     recs = []
     counter = 0
     try:
@@ -219,8 +219,13 @@ def search_seatgeek(trip_id, performer, category, city):
             if int(hours) > 12:
                  hours = int(hours) - 12
                  newtime = str(hours) + time[2] +time[3] +time[4] + "PM"
+            elif int(hours) == 12:
+                newtime = str(hours) + time[2] +time[3] +time[4] + "PM"
             else:
                 newtime = time + "AM"
+
+            date = str((parsed_json["recommendations"][counter]["event"]["datetime_local"])).split("T")
+            date = date[0]
             rec_dict = {
                 "name": parsed_json["recommendations"][counter]["event"]["title"],
                 "category": category,
@@ -231,7 +236,7 @@ def search_seatgeek(trip_id, performer, category, city):
                 "rating_img_url_small": "null",
                 "rating_img_url": "null",
                 "phone": "null",
-                "date":re.findall(r'/d/d/d/d-/d/d-/d/d', parsed_json["recommendations"][counter]["event"]["datetime_local"]),
+                "date":date,
                 "time": newtime,
                 "address" :[parsed_json["recommendations"][counter]["event"]["venue"]["address"], parsed_json["recommendations"][counter]["event"]["venue"]["extended_address"]],
                 #"lowest_price": parsed_json["recommendations"][counter]["event"]["stats"]["lowest_price"],
