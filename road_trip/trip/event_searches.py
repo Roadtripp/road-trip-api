@@ -96,14 +96,14 @@ def search_events(trip_id):
     interest_food_list = [x.sub_category for x in interest_food_list]
     yelp_food_list = []
     for item in interest_food_list:
-        ret = yelp_food_alias[item.title()]
+        ret = yelp_food_alias[item]
         yelp_food_list.append(ret)
 
     interest_activity_list = Interest.objects.filter(trip=trip, category="Activity").all()
     interest_activity_list = [x.sub_category for x in interest_activity_list]
     yelp_activity_list = []
     for item in interest_activity_list:
-        ret = yelp_activity_alias[item.title()]
+        ret = yelp_activity_alias[item]
         yelp_activity_list.append(ret)
 
 
@@ -111,19 +111,26 @@ def search_events(trip_id):
     interest_hotels_list = [x.sub_category for x in interest_hotels_list]
     yelp_hotels_list = []
     for item in interest_hotels_list:
-        ret = yelp_hotels_alias[item.title()]
+        ret = yelp_hotels_alias[item]
         yelp_hotels_list.append(ret)
 
+    interest_teams_list = []
+    if Interest.objects.filter(trip=trip, category="sports1").count() != 0:
+        interest_teams_list.append(Interest.objects.get(trip=trip, category="sports1"))
+        if Interest.objects.filter(trip=trip, category="sports2").count() != 0:
+            interest_teams_list.append(Interest.objects.get(trip=trip, category="sports2"))
+            if Interest.objects.filter(trip=trip, category="sports3").count() !=0:
+                interest_teams_list.append(Interest.objects.get(trip=trip, category="sports3"))
+        interest_teams_list = [x.sub_category for x in interest_teams_list]
 
-    interest_teams_list = Interest.objects.get(trip=trip, category="sports1")
-    interest_teams_list.append(Interest.objects.get(trip=trip, category="sports2"))
-    interest_teams_list.append(Interest.objects.get(trip=trip, category="sports3"))
-    interest_teams_list = [x.sub_category for x in interest_teams_list]
-
-    interest_performers_list = Interest.objects.filter(trip=trip, category="artist1").all()
-    interest_teams_list.append(Interest.objects.get(trip=trip, category="artist2"))
-    interest_teams_list.append(Interest.objects.get(trip=trip, category="artist3"))
-    interest_performers_list = [x.sub_category for x in interest_performers_list]
+    interest_performers_list = []
+    if Interest.objects.filter(trip=trip, category="artist1").count() != 0:
+        interest_performers_list.append(Interest.objects.get(trip=trip, category="artist1"))
+        if Interest.objects.filter(trip=trip, category="artist2").count() != 0:
+            interest_performers_list.append(Interest.objects.get(trip=trip, category="artist2"))
+            if Interest.objects.filter(trip=trip, category="artist3").count() != 0:
+                interest_performers_list.append(Interest.objects.get(trip=trip, category="artist3"))
+        interest_performers_list = [x.sub_category for x in interest_performers_list]
 
 
     yelp_activity_list = ','.join(yelp_activity_list)
@@ -136,20 +143,25 @@ def search_events(trip_id):
          url_hotel = 'https://api.yelp.com/v2/search/?location={}&sort=2&category_filter={}'.format(city[0], yelp_hotels_list)
          urls = [(url_activity, "activities"), (url_food, "food"), (url_hotel, "hotels")]
          city_businesses = []
-         for x in interest_teams_list:
-             ret = search_seatgeek(trip_id, x, "sports", city)
-             try:
-                 for r in ret:
-                     city_businesses.append(r)
-             except:
-                 continue
-         for x in interest_performers_list:
-             ret = search_seatgeek(trip_id, x, "artist", city)
-             try:
-                 for r in ret:
-                     city_businesses.append(r)
-             except:
-                 continue
+         if len(interest_teams_list) != 0:
+             for x in interest_teams_list:
+                 ret = search_seatgeek(trip_id, x, "sports", city)
+                 try:
+                     for r in ret:
+                         if type(r) is not None:
+                             city_businesses.append(r)
+                 except:
+                     continue
+
+         if len(interest_performers_list) != 0:
+             for x in interest_performers_list:
+                 ret = search_seatgeek(trip_id, x, "artist", city)
+                 try:
+                     for r in ret:
+                         if type(r) is not None:
+                             city_businesses.append(r)
+                 except:
+                     continue
          for url in urls:
              r = yelp.get(url[0])
              r = r.json()
@@ -198,21 +210,24 @@ def search_seatgeek(trip_id, performer, category, city):
     #print(json.dumps(parsed_json, indent=4))
     recs = []
     counter = 0
-    #for x in parsed_json["recommendations"][0]:
-    rec_dict = {
-        "name": parsed_json["recommendations"][counter]["event"]["title"],
-        "category": category,
-        "subcategory": performer,
-        "rating": "null",
-        "url":parsed_json["recommendations"][counter]["event"]["url"],
-        "num_reviews": "null",
-        "rating_img_url_small": "null",
-        "rating_img_url": "null",
-        "phone": "null",
-        #"datetime_local":parsed_json["recommendations"][counter]["event"]["datetime_local"],
-        "address" :[parsed_json["recommendations"][counter]["event"]["venue"]["address"], parsed_json["recommendations"][counter]["event"]["venue"]["extended_address"]],
-        #"lowest_price": parsed_json["recommendations"][counter]["event"]["stats"]["lowest_price"],
-        "city":city,
-    }
-    recs.append(rec_dict)
-    return recs
+    try:
+        if len(parsed_json["recommendations"]) != 0:
+            rec_dict = {
+                "name": parsed_json["recommendations"][counter]["event"]["title"],
+                "category": category,
+                "subcategory": performer,
+                "rating": "null",
+                "url":parsed_json["recommendations"][counter]["event"]["url"],
+                "num_reviews": "null",
+                "rating_img_url_small": "null",
+                "rating_img_url": "null",
+                "phone": "null",
+                #"datetime_local":parsed_json["recommendations"][counter]["event"]["datetime_local"],
+                "address" :[parsed_json["recommendations"][counter]["event"]["venue"]["address"], parsed_json["recommendations"][counter]["event"]["venue"]["extended_address"]],
+                #"lowest_price": parsed_json["recommendations"][counter]["event"]["stats"]["lowest_price"],
+                "city":city,
+            }
+            recs.append(rec_dict)
+            return recs
+    except KeyError:
+        pass
