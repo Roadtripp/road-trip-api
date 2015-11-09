@@ -8,7 +8,7 @@ class ActivitySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Activity
-        fields = ('id', 'title', 'datetime', 'time', 'city_id',
+        fields = ('id', 'title', 'date', 'time', 'city_id',
                   'activity_stopover', 'address', 'category',
                   'sub_category', 'url', 'phone', 'img_url',
                   'small_rate_img_url', 'large_rate_img_url', 'average_rating',
@@ -37,18 +37,18 @@ class CitySerializer(serializers.ModelSerializer):
 
 
 class TripSerializer(serializers.ModelSerializer):
-    origin_datetime = serializers.DateTimeField(format="%m/%d/%Y",
-                                                input_formats=['iso-8601', "%m/%d/%Y",
-                                                               '%a %b %d %H:%M:%S GMT%z (%Z)'])
-    destination_datetime = serializers.DateTimeField(format="%m/%d/%Y",
-                                                     input_formats=['iso-8601', "%m/%d/%Y",
-                                                                    '%a %b %d %H:%M:%S GMT%z (%Z)'])
+    origin_date = serializers.DateField(format="%m/%d/%Y",
+                                        input_formats=['iso-8601', "%m/%d/%Y",
+                                                       '%a %b %d %H:%M:%S GMT%z (%Z)'])
+    destination_date = serializers.DateField(format="%m/%d/%Y",
+                                             input_formats=['iso-8601', "%m/%d/%Y",
+                                                            '%a %b %d %H:%M:%S GMT%z (%Z)'])
     cities = CitySerializer(many=True, read_only=True)
 
     class Meta:
         model = Trip
-        fields = ('id', 'title', 'origin', 'origin_datetime', 'origin_time',
+        fields = ('id', 'title', 'origin', 'origin_date', 'origin_time',
                   'origin_lat', 'origin_lon', 'destination',
-                  'destination_datetime', 'destination_time', 'destination_lat',
+                  'destination_date', 'destination_time', 'destination_lat',
                   'destination_lon', 'cities')
         depth = 2
