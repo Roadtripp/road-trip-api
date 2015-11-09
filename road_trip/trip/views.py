@@ -63,7 +63,8 @@ def list_gen(x, category):
             "average_rating": item["rating"],
             "num_ratings": item["num_reviews"],
             "date": item["date"],
-            "time": item["time"]
+            "time": item["time"],
+            "phone": item["phone"],
         }
         for item in x[category]
     ]
