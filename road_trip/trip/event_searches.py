@@ -206,8 +206,8 @@ def search_events(trip_id):
                     city_businesses.append(bus)
                     counter += 1
                     cities_events.append(city_businesses)
-                except:
-                    continue
+                 except:
+                     continue
     #print(cities_events)
     return cities_events
 
