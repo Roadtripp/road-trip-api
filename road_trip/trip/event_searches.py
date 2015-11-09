@@ -32,7 +32,7 @@ yelp_food_alias = {
 "filipino":"filipino",
 "fishandchips":"fishnchips",
 "foodstands":"foodstands",
-"fastropubs":"gastropubs",
+"gastropubs":"gastropubs",
 "glutenfree":"gluten_free",
 "italian":"italian",
 "mexican":"mexican",
