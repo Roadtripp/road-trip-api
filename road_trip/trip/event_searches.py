@@ -161,11 +161,13 @@ def search_events(trip_id):
          urls = [(url_activity, "activities"), (url_food, "food"), (url_hotel, "hotels")]
          city_businesses = []
          if len(interest_teams_list) != 0:
+             mid = []
              for x in interest_teams_list:
                  ret = search_seatgeek(trip_id, x[0].sub_category, "sports", city, x[1])
+                 mid.append(ret)
                  try:
                      for r in ret:
-                         if type(r) is not None:
+                         if type(r) is not None and r["date"] not in :
                              city_businesses.append(r)
                  except:
                      continue
