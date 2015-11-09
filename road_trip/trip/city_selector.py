@@ -27,15 +27,16 @@ class GoogleMapsDirections:
         counter=0
         for x in range(100):
             try:
-                waypoints.append((parsed_json["routes"][0]["legs"][0]["steps"][counter]["end_location"]["lat"], parsed_json["routes"][0]["legs"][0]["steps"][counter]["end_location"]["lng"]))
                 distance = re.findall(r'^[,0-9]*', parsed_json["routes"][0]["legs"][0]["steps"][counter]["distance"]["text"])
                 distance = int(distance[0].replace(',',''))
-                if distance > 100:
-                    start = (parsed_json["routes"][0]["legs"][0]["steps"][counter]["start_location"]["lat"], parsed_json["routes"][0]["legs"][0]["steps"][counter]["start_location"]["lng"])
-                    end = (parsed_json["routes"][0]["legs"][0]["steps"][counter]["end_location"]["lat"], parsed_json["routes"][0]["legs"][0]["steps"][counter]["end_location"]["lng"])
-                    new_waypoints = points_between(start[0], start[1], end[0], end[1], num=int(distance/50))
-                    for point in new_waypoints:
-                        waypoints.append(point)
+                if distance > 20:
+                    waypoints.append((parsed_json["routes"][0]["legs"][0]["steps"][counter]["end_location"]["lat"], parsed_json["routes"][0]["legs"][0]["steps"][counter]["end_location"]["lng"]))
+                    if distance > 100:
+                        start = (parsed_json["routes"][0]["legs"][0]["steps"][counter]["start_location"]["lat"], parsed_json["routes"][0]["legs"][0]["steps"][counter]["start_location"]["lng"])
+                        end = (parsed_json["routes"][0]["legs"][0]["steps"][counter]["end_location"]["lat"], parsed_json["routes"][0]["legs"][0]["steps"][counter]["end_location"]["lng"])
+                        new_waypoints = points_between(start[0], start[1], end[0], end[1], num=int(distance/50))
+                        for point in new_waypoints:
+                            waypoints.append(point)
                 counter+=1
             except:
                 break
@@ -148,7 +149,7 @@ def find_haversine(lat1,lon1,lat2,lon2):
     return distance
 
 
-def find_cities(origin, dest, radius=50):
+def find_cities(origin, dest, radius=30):
     route = GoogleMapsDirections(origin, dest)
     waypoints = route.format_waypoints()
     df = make_df()
