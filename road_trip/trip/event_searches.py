@@ -167,7 +167,7 @@ def search_events(trip_id):
                  mid.append(ret)
                  try:
                      for r in ret:
-                         if type(r) is not None and r["date"] not in :
+                         if type(r) is not None:
                              city_businesses.append(r)
                  except:
                      continue
