@@ -184,28 +184,30 @@ def search_events(trip_id):
              r = r.json()
              counter = 0
              for x in range(3):
-                bus = {
-                "date": "null",
-                "time": "null"
-                }
-                bus["name"] = r['businesses'][counter]['name']
-                bus["category"] = url[1]
-                bus["subcategory"] = r["businesses"][counter]["categories"]
-                bus["rating"] = r['businesses'][counter]['rating']
-                bus["url"] = r['businesses'][counter]['url']
-                bus["num_reviews"] = r['businesses'][counter]['review_count']
-                bus["rating_img_url_small"] = r['businesses'][counter]['rating_img_url_small']
-                bus["rating_img_url"] = r['businesses'][counter]['rating_img_url']
-                try:
-                    bus["phone"] = r['businesses'][counter]['display_phone']
-                except KeyError:
-                    bus["phone"] = "null"
-                bus["address"] = r['businesses'][counter]['location']["display_address"]
-                bus["city"]=city
-                city_businesses.append(bus)
-                counter += 1
-
-         cities_events.append(city_businesses)
+                 try:
+                    bus = {
+                    "date": "null",
+                    "time": "null"
+                    }
+                    bus["name"] = r['businesses'][counter]['name']
+                    bus["category"] = url[1]
+                    bus["subcategory"] = r["businesses"][counter]["categories"]
+                    bus["rating"] = r['businesses'][counter]['rating']
+                    bus["url"] = r['businesses'][counter]['url']
+                    bus["num_reviews"] = r['businesses'][counter]['review_count']
+                    bus["rating_img_url_small"] = r['businesses'][counter]['rating_img_url_small']
+                    bus["rating_img_url"] = r['businesses'][counter]['rating_img_url']
+                    try:
+                        bus["phone"] = r['businesses'][counter]['display_phone']
+                    except KeyError:
+                        bus["phone"] = "null"
+                    bus["address"] = r['businesses'][counter]['location']["display_address"]
+                    bus["city"]=city
+                    city_businesses.append(bus)
+                    counter += 1
+                    cities_events.append(city_businesses)
+                except:
+                    continue
     #print(cities_events)
     return cities_events
 
