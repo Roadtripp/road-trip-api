@@ -163,7 +163,7 @@ def search_events(trip_id):
          if len(interest_teams_list) != 0:
              mid = []
              for x in interest_teams_list:
-                 ret = search_seatgeek(trip_id, x[0].sub_category, "sports", city, x[1])
+                 ret = search_seatgeek(trip_id, x[0].sub_category, "sports", city, x[1], city_businesses)
                  mid.append(ret)
                  try:
                      for r in ret:
@@ -174,7 +174,7 @@ def search_events(trip_id):
 
          if len(interest_performers_list) != 0:
              for x in interest_performers_list:
-                 ret = search_seatgeek(trip_id, x[0].sub_category, "artist", city, x[1])
+                 ret = search_seatgeek(trip_id, x[0].sub_category, "artist", city, x[1], city_businesses)
                  try:
                      for r in ret:
                          if type(r) is not None:
@@ -214,7 +214,7 @@ def search_events(trip_id):
     return cities_events
 
 
-def search_seatgeek(trip_id, performer, category, city, performer_id):
+def search_seatgeek(trip_id, performer, category, city, performer_id, city_businesses):
     trip = Trip.objects.get(pk=trip_id)
     if type(city) is tuple:
         city_pd = city[0].title()
@@ -259,7 +259,11 @@ def search_seatgeek(trip_id, performer, category, city, performer_id):
                 "address" :[parsed_json["recommendations"][counter]["event"]["venue"]["address"], parsed_json["recommendations"][counter]["event"]["venue"]["extended_address"]],
                 #"lowest_price": parsed_json["recommendations"][counter]["event"]["stats"]["lowest_price"],
                 "city":city}
-            recs.append(rec_dict)
+            event_dates = []
+            for x in city_businesses:
+                event_dates.append((x["date"],x["time"],x["address"]))
+            if (rec_dict["date"], rec_dict["time"],rec_dict["address"]) not in event_dates:
+                recs.append(rec_dict)
             return recs
     except KeyError:
         pass
