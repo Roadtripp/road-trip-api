@@ -129,7 +129,7 @@ def selection_json(request, trip_pk):
                             sub_category=a['sub_categories'][0][0],
                             url=a['url'],
                             phone=a['phone'],
-                            img_url=a['img_url'],
+                            # img_url=a['img_url'],
                             small_rate_img_url=a['small_rate_img_url'],
                             average_rating=a['average_rating'],
                             num_ratings=a['num_ratings'],
