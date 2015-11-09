@@ -106,7 +106,7 @@ def suggestion_json(request, trip_pk):
 def selection_json(request, trip_pk):
     if request.method == 'POST':
         selections = json.loads(request.body.decode('utf-8'))
-        trip = get_object_or_404(Trip, pk=selections['id'])
+        trip = get_object_or_404(Trip, pk=trip_pk)
         for wp in selections['waypoints']:
             if wp['stopover']:
                 city = City.objects.create(
@@ -124,7 +124,7 @@ def selection_json(request, trip_pk):
                             time=a['time'],
                             address=a['address'],
                             category=a['category'],
-                            sub_category=a['sub_category'],
+                            sub_category=a['sub_categories'][0][0],
                             url=a['url'],
                             phone=a['phone'],
                             img_url=a['img_url'],
