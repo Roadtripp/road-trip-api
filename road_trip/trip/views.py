@@ -54,6 +54,7 @@ def list_gen(x, category):
         {
             "title": item["name"],
             "address": " ".join(item["address"]),
+            "category": item["category"],
             "sub_categories": item["subcategory"],
             "activity_stopover": False,
             "url": item["url"],
@@ -62,7 +63,8 @@ def list_gen(x, category):
             "average_rating": item["rating"],
             "num_ratings": item["num_reviews"],
             "date": item["date"],
-            "time": item["time"]
+            "time": item["time"],
+            "phone": item["phone"],
         }
         for item in x[category]
     ]
@@ -106,7 +108,7 @@ def suggestion_json(request, trip_pk):
 def selection_json(request, trip_pk):
     if request.method == 'POST':
         selections = json.loads(request.body.decode('utf-8'))
-        trip = get_object_or_404(Trip, pk=selections['id'])
+        trip = get_object_or_404(Trip, pk=trip_pk)
         for wp in selections['waypoints']:
             if wp['stopover']:
                 city = City.objects.create(
@@ -114,25 +116,25 @@ def selection_json(request, trip_pk):
                     trip=trip,
                     visited=wp['stopover']
                 )
-            acts = ["activities", "food", "sports", "artist", "hotels"]
-            for act in acts:
-                for a in wp[act]:
-                    if a['activity_stopover']:
-                        Activity.objects.create(
-                            title=a['title'],
-                            date=a['date'],
-                            time=a['time'],
-                            address=a['address'],
-                            category=a['category'],
-                            sub_category=a['sub_category'],
-                            url=a['url'],
-                            phone=a['phone'],
-                            img_url=a['img_url'],
-                            small_rate_img_url=a['small_rate_img_url'],
-                            average_rating=a['average_rating'],
-                            num_ratings=a['num_ratings'],
-                            city=city
-                        )
+                acts = ["activities", "food", "sports", "artist", "hotels"]
+                for act in acts:
+                    for a in wp[act]:
+                        if a['activity_stopover']:
+                            Activity.objects.create(
+                                title=a['title'],
+                                date=a['date'],
+                                time=a['time'],
+                                address=a['address'],
+                                category=a['category'],
+                                sub_category=a['sub_categories'][0][0],
+                                url=a['url'],
+                                phone=a['phone'],
+                                # img_url=a['img_url'],
+                                small_rate_img_url=a['small_rate_img_url'],
+                                average_rating=a['average_rating'],
+                                num_ratings=a['num_ratings'],
+                                city=city
+                            )
 
     return HttpResponse('', status=200)
 
