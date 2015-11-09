@@ -211,37 +211,52 @@ def search_seatgeek(trip_id, performer, category, city):
     parsed_json = r.json()
     recs = []
     counter = 0
-    try:
-        if len(parsed_json["recommendations"]) != 0:
-            time = re.findall(r'\T(.*)[:]', parsed_json["recommendations"][counter]["event"]["datetime_local"])
-            time = ''.join(time)
-            hours = time[0]+time[1]
-            if int(hours) > 12:
-                 hours = int(hours) - 12
-                 newtime = str(hours) + time[2] +time[3] +time[4] + "PM"
-            elif int(hours) == 12:
-                newtime = str(hours) + time[2] +time[3] +time[4] + "PM"
-            else:
-                newtime = time + "AM"
+    if len(parsed_json["recommendations"]) != 0:
+        time = re.findall(r'\T(.*)[:]', parsed_json["recommendations"][counter]["event"]["datetime_local"])
+        time = ''.join(time)
+        hours = time[0]+time[1]
+        if int(hours) > 12:
+             hours = int(hours) - 12
+             newtime = str(hours) + time[2] +time[3] +time[4] + "PM"
+        elif int(hours) == 12:
+            newtime = str(hours) + time[2] +time[3] +time[4] + "PM"
+        else:
+            newtime = time + "AM"
 
-            date = str((parsed_json["recommendations"][counter]["event"]["datetime_local"])).split("T")
-            date = date[0]
-            rec_dict = {
-                "name": parsed_json["recommendations"][counter]["event"]["title"],
-                "category": category,
-                "subcategory": performer,
-                "rating": "null",
-                "url":parsed_json["recommendations"][counter]["event"]["url"],
-                "num_reviews": "null",
-                "rating_img_url_small": "null",
-                "rating_img_url": "null",
-                "phone": "null",
-                "date":date,
-                "time": newtime,
-                "address" :[parsed_json["recommendations"][counter]["event"]["venue"]["address"], parsed_json["recommendations"][counter]["event"]["venue"]["extended_address"]],
-                #"lowest_price": parsed_json["recommendations"][counter]["event"]["stats"]["lowest_price"],
-                "city":city}
-            recs.append(rec_dict)
-            return recs
-    except KeyError:
-        pass
+        date = str((parsed_json["recommendations"][counter]["event"]["datetime_local"])).split("T")
+        date = date[0]
+        rec_dict = {
+            "name": parsed_json["recommendations"][counter]["event"]["title"],
+            "category": category,
+            "subcategory": performer,
+            "rating": "null",
+            "url":parsed_json["recommendations"][counter]["event"]["url"],
+            "num_reviews": "null",
+            "rating_img_url_small": "null",
+            "rating_img_url": "null",
+            "phone": "null",
+            "date":date,
+            "time": newtime,
+            "address" :[parsed_json["recommendations"][counter]["event"]["venue"]["address"], parsed_json["recommendations"][counter]["event"]["venue"]["extended_address"]],
+            #"lowest_price": parsed_json["recommendations"][counter]["event"]["stats"]["lowest_price"],
+            "city":city}
+        recs.append(rec_dict)
+        return recs
+    else:
+        rec_dict = {
+            "name": "null",
+            "category": category,
+            "subcategory": performer,
+            "rating": "null",
+            "url":"null",
+            "num_reviews": "null",
+            "rating_img_url_small": "null",
+            "rating_img_url": "null",
+            "phone": "null",
+            "date":"null",
+            "time": "null",
+            "address" :"null",
+            #"lowest_price": parsed_json["recommendations"][counter]["event"]["stats"]["lowest_price"],
+            "city":city}
+        recs.append(rec_dict)
+        return recs
