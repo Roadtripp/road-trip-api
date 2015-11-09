@@ -116,25 +116,25 @@ def selection_json(request, trip_pk):
                     trip=trip,
                     visited=wp['stopover']
                 )
-            acts = ["activities", "food", "sports", "artist", "hotels"]
-            for act in acts:
-                for a in wp[act]:
-                    if a['activity_stopover']:
-                        Activity.objects.create(
-                            title=a['title'],
-                            date=a['date'],
-                            time=a['time'],
-                            address=a['address'],
-                            category=a['category'],
-                            sub_category=a['sub_categories'][0][0],
-                            url=a['url'],
-                            phone=a['phone'],
-                            # img_url=a['img_url'],
-                            small_rate_img_url=a['small_rate_img_url'],
-                            average_rating=a['average_rating'],
-                            num_ratings=a['num_ratings'],
-                            city=city
-                        )
+                acts = ["activities", "food", "sports", "artist", "hotels"]
+                for act in acts:
+                    for a in wp[act]:
+                        if a['activity_stopover']:
+                            Activity.objects.create(
+                                title=a['title'],
+                                date=a['date'],
+                                time=a['time'],
+                                address=a['address'],
+                                category=a['category'],
+                                sub_category=a['sub_categories'][0][0],
+                                url=a['url'],
+                                phone=a['phone'],
+                                # img_url=a['img_url'],
+                                small_rate_img_url=a['small_rate_img_url'],
+                                average_rating=a['average_rating'],
+                                num_ratings=a['num_ratings'],
+                                city=city
+                            )
 
     return HttpResponse('', status=200)
 
