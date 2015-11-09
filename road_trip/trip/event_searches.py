@@ -136,7 +136,7 @@ def search_events(trip_id):
     if Interest.objects.filter(trip=trip, category="artist1").count() != 0:
         artist1 = Interest.objects.get(trip=trip, category="artist1")
         artist1_id = get_id(artist1.sub_category)
-        if artist_id1 is not None:
+        if artist1_id is not None:
             interest_performers_list.append((artist1, artist1_id))
         if Interest.objects.filter(trip=trip, category="artist2").count() != 0:
             artist2 = Interest.objects.get(trip=trip, category="artist2")
@@ -266,5 +266,9 @@ def get_id(performer):
     slug = performer.lower().replace(' ', '-')
     performer_data = requests.get("http://api.seatgeek.com/2/performers?slug={}".format(slug))
     performer_json = performer_data.json()
-    performer_id = performer_json["performers"][0]["id"]
-    return performer_id
+    try:
+        performer_id = performer_json["performers"][0]["id"]
+        return performer_id
+
+    except IndexError:
+        pass
