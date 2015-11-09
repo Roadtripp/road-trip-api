@@ -258,23 +258,7 @@ def search_seatgeek(trip_id, performer, category, city, performer_id):
             recs.append(rec_dict)
             return recs
     except KeyError:
-        rec_dict = {
-            "name": "null",
-            "category": category,
-            "subcategory": performer,
-            "rating": "null",
-            "url":"null",
-            "num_reviews": "null",
-            "rating_img_url_small": "null",
-            "rating_img_url": "null",
-            "phone": "null",
-            "date":"null",
-            "time": "null",
-            "address" :"null",
-            #"lowest_price": parsed_json["recommendations"][counter]["event"]["stats"]["lowest_price"],
-            "city":city}
-        recs.append(rec_dict)
-        return recs
+        pass
 
 def get_id(performer):
     slug = performer.lower().replace(' ', '-')
