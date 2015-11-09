@@ -2,9 +2,9 @@ from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, JsonResponse
 from rest_framework import viewsets
 # from rest_framework.response import Response
-from .models import Trip, City, Interest
+from .models import Trip, City, Interest, Activity
 from .city_selector import *
-from .serializers import TripSerializer, CitySerializer
+from .serializers import TripSerializer, CitySerializer, ActivitySerializer
 from django.views.decorators.csrf import csrf_exempt
 import json
 from .event_searches import search_events
@@ -31,6 +31,21 @@ class CityViewSet(viewsets.ModelViewSet):
     def get_serializer_context(self):
         context = super().get_serializer_context().copy()
         context["trip_pk"] = self.kwargs["trip_pk"]
+        return context
+
+
+class ActivityViewSet(viewsets.ModelViewSet):
+    queryset = Activity.objects.all()
+    serializer_class = ActivitySerializer
+
+    def get_queryset(self):
+        city_pk = self.kwargs["city_pk"]
+        ct = get_object_or_404(City, pk=city_pk)
+        return self.queryset.filter(city=ct)
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context().copy()
+        context["city_pk"] = self.kwargs["city_pk"]
         return context
 
 
@@ -94,11 +109,31 @@ def selection_json(request, trip_pk):
         trip = get_object_or_404(Trip, pk=selections['id'])
         for wp in selections['waypoints']:
             if wp['stopover']:
-                City.objects.create(
+                city = City.objects.create(
                     city_name=wp['location'],
                     trip=trip,
                     visited=wp['stopover']
                 )
+            acts = ["activities", "food", "sports", "artist", "hotels"]
+            for act in acts:
+                for a in wp[act]:
+                    if a['activity_stopover']:
+                        Activity.objects.create(
+                            title=a['title'],
+                            date=a['date'],
+                            time=a['time'],
+                            address=a['address'],
+                            category=a['category'],
+                            sub_category=a['sub_category'],
+                            url=a['url'],
+                            phone=a['phone'],
+                            img_url=a['img_url'],
+                            small_rate_img_url=a['small_rate_img_url'],
+                            average_rating=a['average_rating'],
+                            num_ratings=a['num_ratings'],
+                            city=city
+                        )
+
     return HttpResponse('', status=200)
 
 
