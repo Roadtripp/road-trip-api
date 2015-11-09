@@ -54,6 +54,7 @@ def list_gen(x, category):
         {
             "title": item["name"],
             "address": " ".join(item["address"]),
+            "category": item["category"],
             "sub_categories": item["subcategory"],
             "activity_stopover": False,
             "url": item["url"],
