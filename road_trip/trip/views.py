@@ -1,13 +1,17 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, JsonResponse
 from rest_framework import viewsets
-# from rest_framework.response import Response
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.authtoken.models import Token
+from rest_framework.response import Response
 from .models import Trip, City, Interest, Activity
 from .city_selector import *
 from .serializers import TripSerializer, CitySerializer, ActivitySerializer
 from django.views.decorators.csrf import csrf_exempt
 import json
 from .event_searches import search_events
+from django.contrib.auth.models import User
 
 
 
@@ -162,3 +166,21 @@ def interests_json(request, trip_pk):
             )
 
     return HttpResponse('', status=200)
+
+
+@csrf_exempt
+def user_create(request):
+    if request.method == 'POST':
+        user_info = json.loads(request.body.decode('utf-8'))
+        user = User.objects.create_user(user_info['username'],
+                                        user_info['email'],
+                                        user_info['password'])
+        user.save()
+        return HttpResponse('', status=200)
+
+
+@api_view(['POST'])
+@permission_classes((IsAuthenticated,))
+def logout(request):
+    Token.objects.get(user=request.user).delete()
+    return Response({'username': None})
