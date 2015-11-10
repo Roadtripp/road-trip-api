@@ -46,7 +46,7 @@ class TripSerializer(serializers.ModelSerializer):
     cities = serializers.SerializerMethodField('get_cities')
 
     def get_cities(self, obj):
-        qset = City.objects.filter(city__pk=obj.pk).order_by('-date')
+        qset = City.objects.filter(city__pk=obj.pk).order_by('-id')
         ser = CitySerializer(qset, many=True, read_only=True)
         return ser.data
 
