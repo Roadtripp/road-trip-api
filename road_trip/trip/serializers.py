@@ -43,12 +43,7 @@ class TripSerializer(serializers.ModelSerializer):
     destination_date = serializers.DateField(format="%m/%d/%Y",
                                              input_formats=['iso-8601', "%m/%d/%Y",
                                                             '%a %b %d %H:%M:%S GMT%z (%Z)'])
-    cities = serializers.SerializerMethodField('get_cities')
-
-    def get_cities(self, obj):
-        qset = City.objects.filter(city__pk=obj.pk).order_by('-id')
-        ser = CitySerializer(qset, many=True, read_only=True)
-        return ser.data
+    cities = CitySerializer(many=True, read_only=True)
 
     class Meta:
         model = Trip

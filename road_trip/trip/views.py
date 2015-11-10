@@ -26,7 +26,7 @@ class CityViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         trip_pk = self.kwargs["trip_pk"]
         tr = get_object_or_404(Trip, pk=trip_pk)
-        return self.queryset.filter(trip=tr)
+        return self.queryset.filter(trip=tr).order_by('id')
 
     def get_serializer_context(self):
         context = super().get_serializer_context().copy()
