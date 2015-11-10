@@ -16,7 +16,7 @@ Including another URLconf
 from django.conf.urls import include, url
 from django.contrib import admin
 from rest_framework_nested import routers
-from trip.views import TripViewSet, CityViewSet, ActivityViewSet, suggestion_json, selection_json, interests_json
+from trip.views import TripViewSet, CityViewSet, ActivityViewSet, suggestion_json, selection_json, interests_json, user_create, logout
 
 router = routers.DefaultRouter()
 router.register(r'trip', TripViewSet)
@@ -41,4 +41,9 @@ urlpatterns = [
     url(r'^api-auth/', include('rest_framework.urls',
                                namespace='rest_framework')),
     url(r'^docs/', include('rest_framework_swagger.urls')),
+    url(r'^api/login/', 'rest_framework.authtoken.views.obtain_auth_token'),
+    url(r'^api/register/', user_create),
+    url(r'^api/logout/', logout),
+
+
 ]
