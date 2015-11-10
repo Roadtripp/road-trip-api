@@ -1,5 +1,7 @@
 from rest_framework import serializers
 from .models import Trip, City, Activity
+from django.contrib.auth.models import User
+
 
 
 class ActivitySerializer(serializers.ModelSerializer):
@@ -44,6 +46,8 @@ class TripSerializer(serializers.ModelSerializer):
                                              input_formats=['iso-8601', "%m/%d/%Y",
                                                             '%a %b %d %H:%M:%S GMT%z (%Z)'])
     cities = CitySerializer(many=True, read_only=True)
+    user_id = serializers.PrimaryKeyRelatedField(many=False,
+                                                 read_only=True)
 
     class Meta:
         model = Trip
@@ -52,3 +56,11 @@ class TripSerializer(serializers.ModelSerializer):
                   'destination_date', 'destination_time', 'destination_lat',
                   'destination_lon', 'cities')
         depth = 2
+
+
+class UserSerializer(serializers.ModelSerializer):
+    trips = TripSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = User
+        fields = ('id', 'username', 'trips')

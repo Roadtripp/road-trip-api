@@ -16,12 +16,16 @@ Including another URLconf
 from django.conf.urls import include, url
 from django.contrib import admin
 from rest_framework_nested import routers
-from trip.views import TripViewSet, CityViewSet, ActivityViewSet, suggestion_json, selection_json, interests_json, user_create, logout
+from trip.views import TripViewSet, CityViewSet, ActivityViewSet, UserViewSet, suggestion_json, selection_json, interests_json, user_create, logout
+
 
 router = routers.DefaultRouter()
-router.register(r'trip', TripViewSet)
+router.register(r'user', UserViewSet)
 
-trip_router = routers.NestedSimpleRouter(router, r'trip', lookup='trip')
+user_router = routers.NestedSimpleRouter(router, r'user', lookup='user')
+user_router.register(r'trip', TripViewSet)
+
+trip_router = routers.NestedSimpleRouter(user_router, r'trip', lookup='trip')
 trip_router.register(r'city', CityViewSet)
 
 activity_router = routers.NestedSimpleRouter(trip_router, r'city', lookup='city')
@@ -35,6 +39,9 @@ urlpatterns = [
     url(r'api/trip/(?P<trip_pk>\d+)/suggestions/', suggestion_json),
     url(r'api/trip/(?P<trip_pk>\d+)/selections/', selection_json),
     url(r'api/trip/(?P<trip_pk>\d+)/interests/', interests_json),
+    url(r'api/user/(?P<user_pk>\d+)/trip/(?P<trip_pk>\d+)/suggestions/', suggestion_json),
+    url(r'api/user/(?P<user_pk>\d+)/trip/(?P<trip_pk>\d+)/selections/', selection_json),
+    url(r'api/user/(?P<user_pk>\d+)/trip/(?P<trip_pk>\d+)/interests/', interests_json),
     url(r'api/', include(router.urls)),
     url(r'api/', include(trip_router.urls)),
     url(r'api/', include(activity_router.urls)),

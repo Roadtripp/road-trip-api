@@ -7,7 +7,7 @@ from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from .models import Trip, City, Interest, Activity
 from .city_selector import *
-from .serializers import TripSerializer, CitySerializer, ActivitySerializer
+from .serializers import TripSerializer, CitySerializer, ActivitySerializer, UserSerializer
 from django.views.decorators.csrf import csrf_exempt
 import json
 from .event_searches import search_events
@@ -16,16 +16,23 @@ from django.contrib.auth.models import User
 
 
 # Create your views here.
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    # permission_classes = (IsAuthenticated,)
+
 
 
 class TripViewSet(viewsets.ModelViewSet):
     queryset = Trip.objects.all()
     serializer_class = TripSerializer
+    # permission_classes = (IsAuthenticated,)
 
 
 class CityViewSet(viewsets.ModelViewSet):
     queryset = City.objects.all()
     serializer_class = CitySerializer
+    # permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
         trip_pk = self.kwargs["trip_pk"]
@@ -41,6 +48,7 @@ class CityViewSet(viewsets.ModelViewSet):
 class ActivityViewSet(viewsets.ModelViewSet):
     queryset = Activity.objects.all()
     serializer_class = ActivitySerializer
+    # permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
         city_pk = self.kwargs["city_pk"]
@@ -74,6 +82,7 @@ def list_gen(x, category):
     ]
 
 
+# @permission_classes((IsAuthenticated,))
 def suggestion_json(request, trip_pk):
     trip = get_object_or_404(Trip, pk=trip_pk)
     data = search_events(trip_pk)
@@ -109,6 +118,7 @@ def suggestion_json(request, trip_pk):
 
 
 @csrf_exempt
+# @permission_classes((IsAuthenticated,))
 def selection_json(request, trip_pk):
     if request.method == 'POST':
         selections = json.loads(request.body.decode('utf-8'))
@@ -139,11 +149,11 @@ def selection_json(request, trip_pk):
                                 num_ratings=a['num_ratings'],
                                 city=city
                             )
-
     return HttpResponse('', status=200)
 
 
 @csrf_exempt
+# @permission_classes((IsAuthenticated,))
 def interests_json(request, trip_pk):
     if request.method == 'POST':
         interests = json.loads(request.body.decode('utf-8'))
