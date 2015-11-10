@@ -1,10 +1,11 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
 
 
 class Trip(models.Model):
-    title = models.CharField(max_length=255)
+    title = models.CharField(max_length=255, null=True, blank=True)
     origin = models.CharField(max_length=255)
     origin_date = models.DateField(null=True, blank=True)
     origin_time = models.TimeField(null=True, blank=True)
@@ -15,6 +16,7 @@ class Trip(models.Model):
     destination_time = models.TimeField(null=True, blank=True)
     destination_lat = models.FloatField(null=True, blank=True)
     destination_lon = models.FloatField(null=True, blank=True)
+    user = models.ForeignKey(User, null=True)
 
 
 class City(models.Model):
