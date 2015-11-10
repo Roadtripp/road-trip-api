@@ -104,6 +104,12 @@ def suggestion_json(request, trip_pk):
     return JsonResponse(j)
 
 
+def check_null(value):
+    if value == "null":
+        return None
+    return value
+
+
 @csrf_exempt
 def selection_json(request, trip_pk):
     if request.method == 'POST':
@@ -122,17 +128,17 @@ def selection_json(request, trip_pk):
                         if a['activity_stopover']:
                             Activity.objects.create(
                                 title=a['title'],
-                                date=a['date'],
-                                time=a['time'],
+                                date=check_null(a['date']),
+                                time=check_null(a['time']),
                                 address=a['address'],
                                 category=a['category'],
                                 sub_category=a['sub_categories'][0][0],
                                 url=a['url'],
-                                phone=a['phone'],
+                                phone=check_null(a['phone']),
                                 # img_url=a['img_url'],
                                 small_rate_img_url=a['small_rate_img_url'],
-                                average_rating=a['average_rating'],
-                                num_ratings=a['num_ratings'],
+                                average_rating=check_null(a['average_rating']),
+                                num_ratings=check_null(a['num_ratings']),
                                 city=city
                             )
 
