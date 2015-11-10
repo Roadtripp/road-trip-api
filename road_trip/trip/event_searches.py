@@ -114,40 +114,64 @@ def search_events(trip_id):
         ret = yelp_hotels_alias[item]
         yelp_hotels_list.append(ret)
 
-    interest_teams_list = []
-    if Interest.objects.filter(trip=trip, category="sports1").count() != 0:
-        sports1 = Interest.objects.get(trip=trip, category="sports1")
-        sports1_id = get_id(sports1.sub_category)
-        if sports1_id is not None:
-            interest_teams_list.append((sports1, sports1_id))
-        if Interest.objects.filter(trip=trip, category="sports2").count() != 0:
-            sports2 = Interest.objects.get(trip=trip, category="sports2")
-            sports2_id = get_id(sports2.sub_category)
-            if sports2_id is not None:
-                interest_teams_list.append((sports2, sports2_id))
-            if Interest.objects.filter(trip=trip, category="sports3").count() !=0:
-                sports3 = Interest.objects.get(trip=trip, category="sports3")
-                sports3_id = get_id(sports3.sub_category)
-                if sports3_id is not None:
-                    interest_teams_list.append((sports3, sports3_id))
+    # interest_teams_list = []
+    # if Interest.objects.filter(trip=trip, category=r'sport').count() != 0:
+    #     sports1 = Interest.objects.get(trip=trip, category="sports1")
+    #     sports1_id = get_id(sports1.sub_category)
+    #     if sports1_id is not None:
+    #         interest_teams_list.append((sports1, sports1_id))
+    #     if Interest.objects.filter(trip=trip, category="sports2").count() != 0:
+    #         sports2 = Interest.objects.get(trip=trip, category="sports2")
+    #         sports2_id = get_id(sports2.sub_category)
+    #         if sports2_id is not None:
+    #             interest_teams_list.append((sports2, sports2_id))
+    #         if Interest.objects.filter(trip=trip, category="sports3").count() !=0:
+    #             sports3 = Interest.objects.get(trip=trip, category="sports3")
+    #             sports3_id = get_id(sports3.sub_category)
+    #             if sports3_id is not None:
+    #                 interest_teams_list.append((sports3, sports3_id))
+
+    interest_sports_list = []
+    if Interest.objects.filter(trip=trip, category="sports").count() != 0:
+        sports = Interest.objects.filter(trip=trip, category="sports").all()
+        for x in sports:
+            x_id = get_id(x.sub_category, x.category)
+            if x_id is not None:
+                interest_sports_list.append((x, x_id))
 
 
-    interest_performers_list = []
-    if Interest.objects.filter(trip=trip, category="artist1").count() != 0:
-        artist1 = Interest.objects.get(trip=trip, category="artist1")
-        artist1_id = get_id(artist1.sub_category)
-        if artist1_id is not None:
-            interest_performers_list.append((artist1, artist1_id))
-        if Interest.objects.filter(trip=trip, category="artist2").count() != 0:
-            artist2 = Interest.objects.get(trip=trip, category="artist2")
-            artist2_id = get_id(artist2.sub_category)
-            if artist2_id is not None:
-                interest_performers_list.append((artist2, artist2_id))
-            if Interest.objects.filter(trip=trip, category="artist3").count() != 0:
-                artist3 = Interest.objects.get(trip=trip, category="artist3")
-                artist3_id = get_id(artist3.sub_category)
-                if artist3_id is not None:
-                    interest_performers_list.append((artist3, artist3_id))
+    interest_artist_list = []
+    if Interest.objects.filter(trip=trip, category="artist").count() != 0:
+        sports = Interest.objects.filter(trip=trip, category="artist").all()
+        for x in sports:
+            x_id = get_id(x.sub_category)
+            if x_id is not None:
+                interest_artist_list.append((x, x_id))
+
+
+
+
+
+
+
+
+
+    # interest_performers_list = []
+    # if Interest.objects.filter(trip=trip, category="artist1").count() != 0:
+    #     artist1 = Interest.objects.get(trip=trip, category="artist1")
+    #     artist1_id = get_id(artist1.sub_category)
+    #     if artist1_id is not None:
+    #         interest_performers_list.append((artist1, artist1_id))
+    #     if Interest.objects.filter(trip=trip, category="artist2").count() != 0:
+    #         artist2 = Interest.objects.get(trip=trip, category="artist2")
+    #         artist2_id = get_id(artist2.sub_category)
+    #         if artist2_id is not None:
+    #             interest_performers_list.append((artist2, artist2_id))
+    #         if Interest.objects.filter(trip=trip, category="artist3").count() != 0:
+    #             artist3 = Interest.objects.get(trip=trip, category="artist3")
+    #             artist3_id = get_id(artist3.sub_category)
+    #             if artist3_id is not None:
+    #                 interest_performers_list.append((artist3, artist3_id))
 
 
     yelp_activity_list = ','.join(yelp_activity_list)
@@ -162,8 +186,8 @@ def search_events(trip_id):
          city_businesses = []
          if len(interest_teams_list) != 0:
              mid = []
-             for x in interest_teams_list:
-                 ret = search_seatgeek(trip_id, x[0].sub_category, "sports", city, x[1], city_businesses)
+             for x in interest_sports_list:
+                 ret = search_seatgeek(trip_id, x[0].sub_category, "sports", city, x[1], city_businesses, x[1][1])
                  mid.append(ret)
                  try:
                      for r in ret:
@@ -172,15 +196,16 @@ def search_events(trip_id):
                  except:
                      continue
 
-         if len(interest_performers_list) != 0:
+         if len(interest_artist_list) != 0:
              for x in interest_performers_list:
-                 ret = search_seatgeek(trip_id, x[0].sub_category, "artist", city, x[1], city_businesses)
+                 ret = search_seatgeek(trip_id, x[0].sub_category, "artist", city, x[1], city_businesses, x[1][1])
                  try:
                      for r in ret:
                          if type(r) is not None:
                              city_businesses.append(r)
                  except:
                      continue
+
          for url in urls:
              r = yelp.get(url[0])
              r = r.json()
@@ -214,7 +239,7 @@ def search_events(trip_id):
     return cities_events
 
 
-def search_seatgeek(trip_id, performer, category, city, performer_id, city_businesses):
+def search_seatgeek(trip_id, performer, category, city, performer_id, city_businesses, genre):
     trip = Trip.objects.get(pk=trip_id)
     if type(city) is tuple:
         city_pd = city[0].title()
@@ -227,6 +252,7 @@ def search_seatgeek(trip_id, performer, category, city, performer_id, city_busin
 
     r = requests.get('http://api.seatgeek.com/2/recommendations?performers.id={id}&datetime_local.gte={start}&datetime_local.lt={end}&range=50mi&lat={lat}&lon={lon}&client_id={key}'.format(id=performer_id, start=str(trip.origin_date), end = str(trip.destination_date),lat = lat, lon = lon, key=SEAT_GEEK))
     parsed_json = r.json()
+    print(parsed_json)
     recs = []
     counter = 0
     try:
@@ -263,18 +289,28 @@ def search_seatgeek(trip_id, performer, category, city, performer_id, city_busin
             for x in city_businesses:
                 event_dates.append((x["date"],x["time"],x["address"]))
             if (rec_dict["date"], rec_dict["time"],rec_dict["address"]) not in event_dates:
+
                 recs.append(rec_dict)
             return recs
     except KeyError:
         pass
 
-def get_id(performer):
+
+
+def get_id(performer, cat):
     slug = performer.lower().replace(' ', '-')
     performer_data = requests.get("http://api.seatgeek.com/2/performers?slug={}".format(slug))
     performer_json = performer_data.json()
+    print(json.dumps(performer_json, indent=4))
     try:
-        performer_id = performer_json["performers"][0]["id"]
-        return performer_id
-
+        if cat == "artist":
+            performer_id = performer_json["performers"][0]["id"]
+            genre = performer_json["genres"][0]["name"]
+            return (performer_id, genre)
+        elif cat == "sports":
+            performer_id = performer_json["performers"][0]["id"]
+            sport = performer_json["performers"][0]["taxonomies"][1]["name"]
+            print(sport)
+            return (performer_id, sport)
     except IndexError:
         pass
