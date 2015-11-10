@@ -2,18 +2,20 @@
 from __future__ import unicode_literals
 
 from django.db import models, migrations
+from django.conf import settings
 
 
 class Migration(migrations.Migration):
 
     dependencies = [
+        migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.CreateModel(
             name='Activity',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', primary_key=True, serialize=False, auto_created=True)),
+                ('id', models.AutoField(serialize=False, primary_key=True, auto_created=True, verbose_name='ID')),
                 ('title', models.CharField(max_length=255)),
                 ('date', models.DateField(null=True, blank=True)),
                 ('time', models.TimeField(null=True, blank=True)),
@@ -33,7 +35,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='City',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', primary_key=True, serialize=False, auto_created=True)),
+                ('id', models.AutoField(serialize=False, primary_key=True, auto_created=True, verbose_name='ID')),
                 ('city_name', models.CharField(max_length=255)),
                 ('lat', models.FloatField(null=True, blank=True)),
                 ('lon', models.FloatField(null=True, blank=True)),
@@ -43,7 +45,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Interest',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', primary_key=True, serialize=False, auto_created=True)),
+                ('id', models.AutoField(serialize=False, primary_key=True, auto_created=True, verbose_name='ID')),
                 ('category', models.CharField(max_length=255)),
                 ('sub_category', models.CharField(max_length=255)),
             ],
@@ -51,8 +53,8 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Trip',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', primary_key=True, serialize=False, auto_created=True)),
-                ('title', models.CharField(max_length=255)),
+                ('id', models.AutoField(serialize=False, primary_key=True, auto_created=True, verbose_name='ID')),
+                ('title', models.CharField(null=True, blank=True, max_length=255)),
                 ('origin', models.CharField(max_length=255)),
                 ('origin_date', models.DateField(null=True, blank=True)),
                 ('origin_time', models.TimeField(null=True, blank=True)),
@@ -63,6 +65,7 @@ class Migration(migrations.Migration):
                 ('destination_time', models.TimeField(null=True, blank=True)),
                 ('destination_lat', models.FloatField(null=True, blank=True)),
                 ('destination_lon', models.FloatField(null=True, blank=True)),
+                ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
             ],
         ),
         migrations.AddField(
