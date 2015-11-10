@@ -161,10 +161,10 @@ def interests_json(request, trip_pk):
                     trip=get_trip
                 )
         for cat in sg_cats:
-            for sub_cat in interests[cat[0]][cat[1]]
+            for sub_cat in interests[cat[0]][cat[1]]:
                 Interest.objects.create(
                     category=cat,
-                    sub_category=interests[sub_cat],
+                    sub_category=interests[cat[0]][cat[1]][sub_cat],
                     trip=get_trip
                 )
 
