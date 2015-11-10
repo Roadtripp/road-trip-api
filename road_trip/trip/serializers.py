@@ -23,12 +23,12 @@ class ActivitySerializer(serializers.ModelSerializer):
 class CitySerializer(serializers.ModelSerializer):
     trip_id = serializers.PrimaryKeyRelatedField(many=False,
                                                  read_only=True)
-    activities = ActivitySerializer(many=True, read_only=True)
+    activity_set = ActivitySerializer(many=True, read_only=True)
 
     class Meta:
         model = City
         fields = ('id', 'city_name', 'lat', 'lon', 'trip_id', 'visited',
-                  'activities')
+                  'activity_set')
 
     def create(self, validated_data):
         validated_data['trip_id'] = self.context['trip_pk']
