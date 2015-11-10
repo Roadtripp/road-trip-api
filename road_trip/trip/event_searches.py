@@ -132,8 +132,8 @@ def search_events(trip_id):
     #                 interest_teams_list.append((sports3, sports3_id))
 
     interest_sports_list = []
-    if Interest.objects.filter(trip=trip, category="sports").count() != 0:
-        sports = Interest.objects.filter(trip=trip, category="sports").all()
+    if Interest.objects.filter(trip=trip, category="sport").count() != 0:
+        sports = Interest.objects.filter(trip=trip, category="sport").all()
         for x in sports:
             x_id = get_id(x.sub_category, x.category)
             if x_id is not None:
@@ -142,8 +142,8 @@ def search_events(trip_id):
 
     interest_artist_list = []
     if Interest.objects.filter(trip=trip, category="artist").count() != 0:
-        sports = Interest.objects.filter(trip=trip, category="artist").all()
-        for x in sports:
+        artist = Interest.objects.filter(trip=trip, category="artist").all()
+        for x in artist:
             x_id = get_id(x.sub_category)
             if x_id is not None:
                 interest_artist_list.append((x, x_id))
@@ -184,10 +184,10 @@ def search_events(trip_id):
          url_hotel = 'https://api.yelp.com/v2/search/?location={}&sort=2&category_filter={}'.format(city[0], yelp_hotels_list)
          urls = [(url_activity, "activities"), (url_food, "food"), (url_hotel, "hotels")]
          city_businesses = []
-         if len(interest_teams_list) != 0:
+         if len(interest_sports_list) != 0:
              mid = []
              for x in interest_sports_list:
-                 ret = search_seatgeek(trip_id, x[0].sub_category, "sports", city, x[1], city_businesses, x[1][1])
+                 ret = search_seatgeek(trip_id, x[0].sub_category, "sport", city, x[1], city_businesses, x[1][1])
                  mid.append(ret)
                  try:
                      for r in ret:
@@ -307,7 +307,7 @@ def get_id(performer, cat):
             performer_id = performer_json["performers"][0]["id"]
             genre = performer_json["genres"][0]["name"]
             return (performer_id, genre)
-        elif cat == "sports":
+        elif cat == "sport":
             performer_id = performer_json["performers"][0]["id"]
             sport = performer_json["performers"][0]["taxonomies"][1]["name"]
             print(sport)
