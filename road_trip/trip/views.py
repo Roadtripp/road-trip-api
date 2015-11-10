@@ -184,3 +184,14 @@ def user_create(request):
 def logout(request):
     Token.objects.get(user=request.user).delete()
     return Response({'username': None})
+
+
+@api_view(['POST'])
+@permission_classes((IsAuthenticated,))
+def trip_save(request, trip_pk):
+    get_trip = get_object_or_404(Trip, pk=trip_pk)
+    get_trip.user = request.user
+    req = json.loads(request.body.decode('utf-8'))
+    get_trip.title = req['title']
+    get_trip.save()
+    return HttpResponse('', status=200)
