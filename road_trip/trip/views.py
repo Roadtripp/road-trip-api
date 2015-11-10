@@ -14,10 +14,7 @@ from .event_searches import search_events
 from django.contrib.auth.models import User
 
 
-
 # Create your views here.
-
-
 class TripViewSet(viewsets.ModelViewSet):
     queryset = Trip.objects.all()
     serializer_class = TripSerializer
@@ -190,3 +187,19 @@ def user_create(request):
 def logout(request):
     Token.objects.get(user=request.user).delete()
     return Response({'username': None})
+
+
+@api_view(['POST'])
+@permission_classes((IsAuthenticated,))
+def trip_save(request, trip_pk):
+    get_trip = get_object_or_404(Trip, pk=trip_pk)
+    get_trip.user = request.user
+    req = json.loads(request.body.decode('utf-8'))
+    if req['title'] == None:
+        get_trip.title = "{} to {} ({})".format(get_trip.origin,
+                                                get_trip.destination,
+                                                get_trip.origin_date)
+    else:
+        get_trip.title = req['title']
+    get_trip.save()
+    return HttpResponse('', status=200)
