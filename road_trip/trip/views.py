@@ -66,6 +66,10 @@ def list_gen(x, category):
             "date": item["date"],
             "time": item["time"],
             "phone": item["phone"],
+            "lowest_price": item["lowest_price"],
+            "average_price": item["average_price"],
+            "highest_price": item["highest_price"],
+            "img_url": item["img_url"],
         }
         for item in x[category]
     ]
