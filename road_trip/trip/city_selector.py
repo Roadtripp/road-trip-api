@@ -81,7 +81,7 @@ class GoogleMapsDirections:
 def make_df():
     #makes a Pandas dataframe from the cities csv file that contains cities and their
     #coordinates
-    df = pd.read_csv("road_trip/trip/new_largest_cities.csv", encoding="latin-1")
+    df = pd.read_csv("road_trip/trip/best_us_cities.csv", encoding="latin-1")
     newdf = df[['City', 'State', 'Location']]
     newdf = newdf.dropna()
     newdf['latitude']=newdf['Location'].str.extract('(\d\d.\d\d\d\d)')
