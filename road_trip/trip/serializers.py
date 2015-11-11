@@ -39,10 +39,10 @@ class CitySerializer(serializers.ModelSerializer):
 class TripSerializer(serializers.ModelSerializer):
     origin_date = serializers.DateField(format="%m/%d/%Y",
                                         input_formats=['iso-8601', "%m/%d/%Y",
-                                                       '%a %b %d %H:%M:%S GMT%z (%Z)'])
+                                                       '%a %b %d %Y %H:%M:%S %Z %z'])
     destination_date = serializers.DateField(format="%m/%d/%Y",
                                              input_formats=['iso-8601', "%m/%d/%Y",
-                                                            '%a %b %d %H:%M:%S GMT%z (%Z)'])
+                                                            '%a %b %d %Y %H:%M:%S %Z %z'])
     cities = CitySerializer(many=True, read_only=True)
 
     class Meta:
