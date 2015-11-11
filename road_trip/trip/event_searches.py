@@ -183,6 +183,7 @@ def search_events(trip_id):
              counter = 0
              for x in range(3):
                  try:
+                    print(r['businesses'][counter])
                     bus = {
                     "date": "null",
                     "time": "null"
@@ -201,6 +202,10 @@ def search_events(trip_id):
                         bus["phone"] = "null"
                     bus["address"] = r['businesses'][counter]['location']["display_address"]
                     bus["city"]=city
+                    bus["lowest_price"]="null"
+                    bus["average_price"]="null"
+                    bus["highest_price"]="null"
+                    bus["img_url"]=r["businesses"][counter]["img_url"]
                     city_businesses.append(bus)
                     counter += 1
                  except:
@@ -227,7 +232,7 @@ def search_seatgeek(trip_id, performer, category, city, performer_id, city_busin
     try:
         if len(parsed_json["recommendations"]) != 0:
             for x in parsed_json["recommendations"]:
-                if float(parsed_json["recommendations"][counter]["event"]["score"]) > .50:
+                if float(parsed_json["recommendations"][counter]["event"]["score"]) > .70:
                     time = re.findall(r'\T(.*)[:]', parsed_json["recommendations"][counter]["event"]["datetime_local"])
                     time = ''.join(time)
                     hours = time[0]+time[1]
@@ -254,7 +259,10 @@ def search_seatgeek(trip_id, performer, category, city, performer_id, city_busin
                         "date":date,
                         "time": newtime,
                         "address" :[parsed_json["recommendations"][counter]["event"]["venue"]["address"], parsed_json["recommendations"][counter]["event"]["venue"]["extended_address"]],
-                        #"lowest_price": parsed_json["recommendations"][counter]["event"]["stats"]["lowest_price"],
+                        "lowest_price": parsed_json["recommendations"][counter]["event"]["stats"]["lowest_price"],
+                        "average_price": parsed_json["recommendations"][counter]["event"]["stats"]["average_price"],
+                        "highest_price": parsed_json["recommendations"][counter]["event"]["stats"]["highest_price"],
+                        #"img_url":parsed_json["recommendations"][counter]["event"][]["image_url"],
                         "city":city}
                     event_dates = []
                     counter += 1
