@@ -220,3 +220,9 @@ def get_trips(request):
                                    for x in Trip.objects
                                    .filter(user=request.user)
                                    .all()]})
+
+
+@api_view(['GET'])
+@permission_classes((IsAuthenticated,))
+def who_am_i(request):
+    return HttpResponse(request.user.username)

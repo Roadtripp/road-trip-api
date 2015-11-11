@@ -18,7 +18,7 @@ from django.contrib import admin
 from rest_framework_nested import routers
 from trip.views import TripViewSet, CityViewSet, ActivityViewSet, \
                        suggestion_json, selection_json, interests_json, \
-                       user_create, logout, trip_save, get_trips
+                       user_create, logout, trip_save, get_trips, who_am_i
 
 router = routers.DefaultRouter()
 router.register(r'trip', TripViewSet)
@@ -48,6 +48,6 @@ urlpatterns = [
     url(r'^api/login/', 'rest_framework.authtoken.views.obtain_auth_token'),
     url(r'^api/register/', user_create),
     url(r'^api/logout/', logout),
-
+    url(r'^api/whoami/', who_am_i)
 
 ]
