@@ -143,6 +143,7 @@ def search_events(trip_id):
          url_hotel = 'https://api.yelp.com/v2/search/?location={}&sort=2&category_filter={}'.format(city[0], yelp_hotels_list)
          urls = [(url_activity, "activities"), (url_food, "food"), (url_hotel, "hotels")]
 
+
          city_businesses = []
          if len(interest_sports_list) != 0:
              for x in interest_sports_list:
@@ -154,6 +155,7 @@ def search_events(trip_id):
                  except:
                      continue
 
+
          if len(interest_artist_list) != 0:
              for x in interest_artist_list:
                  ret = search_seatgeek(trip_id, x[0].sub_category, "artist", city, x[1][0], city_businesses, x[1][1])
@@ -163,6 +165,7 @@ def search_events(trip_id):
                              city_businesses.append(r)
                  except:
                      continue
+
 
          for url in urls:
              r = yelp.get(url[0])
