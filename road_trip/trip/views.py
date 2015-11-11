@@ -202,7 +202,7 @@ def trip_save(request, trip_pk):
     else:
         get_trip.title = req['title']
     get_trip.save()
-    return HttpResponse('', status=200)
+    return JsonResponse({"username": request.user.username}, status=200)
 
 
 @api_view(['GET'])
