@@ -42,6 +42,7 @@ yelp_food_alias = {
 "sandwiches":"sandwiches",
 "seafood":"seafood",
 "steakhouses":"steak",
+"restaurants":"restaurants",
 "thai":"thai",
 "americantraditional":"tradamerican",
 "vegan":"vegan"
