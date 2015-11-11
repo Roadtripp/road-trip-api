@@ -230,8 +230,9 @@ def search_seatgeek(trip_id, performer, category, city, performer_id, city_busin
     counter = 0
     try:
         if len(parsed_json["recommendations"]) != 0:
+
             for x in parsed_json["recommendations"]:
-                if float(parsed_json["recommendations"][counter]["event"]["score"]) > .70:
+                if float(parsed_json["recommendations"][counter]["event"]["score"]) > .40:
                     time = re.findall(r'\T(.*)[:]', parsed_json["recommendations"][counter]["event"]["datetime_local"])
                     time = ''.join(time)
                     hours = time[0]+time[1]
@@ -274,7 +275,6 @@ def search_seatgeek(trip_id, performer, category, city, performer_id, city_busin
             return recs
     except KeyError:
         pass
-
 
 def get_id(performer, cat):
     slug = performer.lower().replace(' ', '-')
