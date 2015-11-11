@@ -111,8 +111,8 @@ def search_events(trip_id):
     interest_hotels_list = [x.sub_category for x in interest_hotels_list]
     yelp_hotels_list = []
     for item in interest_hotels_list:
-            ret = yelp_hotels_alias[item]
-            yelp_hotels_list.append(ret)
+        ret = yelp_hotels_alias[item]
+        yelp_hotels_list.append(ret)
 
 
     interest_sports_list = []
@@ -126,8 +126,8 @@ def search_events(trip_id):
 
     interest_artist_list = []
     if Interest.objects.filter(trip=trip, category="artist").count() != 0:
-        artists = Interest.objects.filter(trip=trip, category="artist").all()
-        for x in artists:
+        artist = Interest.objects.filter(trip=trip, category="artist").all()
+        for x in artist:
             x_id = get_id(x.sub_category, x.category)
             if x_id is not None:
                 interest_artist_list.append((x, x_id))
@@ -289,5 +289,5 @@ def get_id(performer, cat):
             performer_id = performer_json["performers"][0]["id"]
             sport = performer_json["performers"][0]["taxonomies"][1]["name"]
             return (performer_id, sport)
-    except IndexError:
+    except:
         pass

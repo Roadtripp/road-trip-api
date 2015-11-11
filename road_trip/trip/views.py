@@ -80,7 +80,7 @@ def suggestion_json(request, trip_pk):
     data = search_events(trip_pk)
     data = [{"all_activities": city} for city in data]
 
-    c = ["activities", "food", "sports", "artist", "hotels"]
+    c = ["activities", "food", "sport", "artist", "hotels"]
     for city in data:
         for category in c:
             city[category] = []
@@ -98,7 +98,7 @@ def suggestion_json(request, trip_pk):
                     "stopover": False,
                     "activities": list_gen(x, "activities"),
                     "hotels": list_gen(x, "hotels"),
-                    "sports": list_gen(x, "sports"),
+                    "sports": list_gen(x, "sport"),
                     "food": list_gen(x, "food"),
                     "artist": list_gen(x, "artist")
                 }
@@ -127,7 +127,7 @@ def selection_json(request, trip_pk):
                     trip=trip,
                     visited=wp['stopover']
                 )
-                acts = ["activities", "food", "sports", "artist", "hotels"]
+                acts = ["activities", "food", "sport", "artist", "hotels"]
                 for act in acts:
                     for a in wp[act]:
                         if a['activity_stopover']:
@@ -156,8 +156,7 @@ def interests_json(request, trip_pk):
         interests = json.loads(request.body.decode('utf-8'))
         get_trip = get_object_or_404(Trip, pk=trip_pk)
         yelp_cats = ['activities', 'food', 'hotels']
-        sg_cats = ['artist1', 'artist2', 'artist3',
-                   'sports1', 'sports2', 'sports3']
+        sg_cats = [('sport', 'sport1'), ('artist', 'artist1')]
         for cat in yelp_cats:
             for sub_cat in interests[cat].keys():
                 Interest.objects.create(
@@ -166,11 +165,12 @@ def interests_json(request, trip_pk):
                     trip=get_trip
                 )
         for cat in sg_cats:
-            Interest.objects.create(
-                category=cat,
-                sub_category=interests[cat],
-                trip=get_trip
-            )
+            for sub_cat in interests[cat[0]][cat[1]]:
+                Interest.objects.create(
+                    category=cat[0],
+                    sub_category=interests[cat[0]][cat[1]][sub_cat],
+                    trip=get_trip
+                )
 
     return HttpResponse('', status=200)
 
@@ -207,3 +207,19 @@ def trip_save(request, trip_pk):
         get_trip.title = req['title']
     get_trip.save()
     return HttpResponse('', status=200)
+
+
+@api_view(['GET'])
+@permission_classes((IsAuthenticated,))
+def get_trips(request):
+    return JsonResponse({"trips": [{
+                                        "id": x.pk,
+                                        "title": x.title,
+                                        "origin": x.origin,
+                                        "destination": x.destination,
+                                        "origin_date": x.origin_date,
+                                        "destination_date": x.destination_date,
+                                   }
+                                   for x in Trip.objects
+                                                .filter(user=request.user)
+                                                .all()]})
