@@ -272,7 +272,8 @@ def search_seatgeek(trip_id, performer, category, city, performer_id, city_busin
                 else:
                     counter += 1
             return recs
-    except:
+    except KeyError:
+        print(parsed_json["recommendations"])
         pass
 
 
