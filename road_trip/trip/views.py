@@ -155,18 +155,24 @@ def interests_json(request, trip_pk):
         sg_cats = [('sport', 'sport1'), ('artist', 'artist1')]
         for cat in yelp_cats:
             for sub_cat in interests[cat].keys():
-                Interest.objects.create(
-                    category=cat,
-                    sub_category=sub_cat,
-                    trip=get_trip
-                )
+                if len(Interest.objects.filter(
+                        trip=get_trip, sub_category=sub_cat).all()) == 0:
+                    Interest.objects.create(
+                        category=cat,
+                        sub_category=sub_cat,
+                        trip=get_trip
+                    )
         for cat in sg_cats:
             for sub_cat in interests[cat[0]][cat[1]]:
-                Interest.objects.create(
-                    category=cat[0],
-                    sub_category=interests[cat[0]][cat[1]][sub_cat],
-                    trip=get_trip
-                )
+                if len(Interest.objects.filter(
+                        trip=get_trip,
+                        sub_category=interests[cat[0]][cat[1]][sub_cat])
+                        .all()) == 0:
+                    Interest.objects.create(
+                        category=cat[0],
+                        sub_category=interests[cat[0]][cat[1]][sub_cat],
+                        trip=get_trip
+                    )
 
     return HttpResponse('', status=200)
 
