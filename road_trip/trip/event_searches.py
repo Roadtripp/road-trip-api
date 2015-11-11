@@ -126,9 +126,9 @@ def search_events(trip_id):
 
     interest_artist_list = []
     if Interest.objects.filter(trip=trip, category="artist").count() != 0:
-        sports = Interest.objects.filter(trip=trip, category="artist").all()
-        for x in sports:
-            x_id = get_id(x.sub_category)
+        artists = Interest.objects.filter(trip=trip, category="artist").all()
+        for x in artists:
+            x_id = get_id(x.sub_category, x.category)
             if x_id is not None:
                 interest_artist_list.append((x, x_id))
 
@@ -144,10 +144,8 @@ def search_events(trip_id):
          urls = [(url_activity, "activities"), (url_food, "food"), (url_hotel, "hotels")]
          city_businesses = []
          if len(interest_sports_list) != 0:
-             mid = []
              for x in interest_sports_list:
-                 ret = search_seatgeek(trip_id, x[0].sub_category, "sports", city, x[1], city_businesses, x[1][1])
-                 mid.append(ret)
+                 ret = search_seatgeek(trip_id, x[0].sub_category, "sports", city, x[1][0], city_businesses, x[1][1])
                  try:
                      for r in ret:
                          if type(r) is not None:
@@ -156,8 +154,8 @@ def search_events(trip_id):
                      continue
 
          if len(interest_artist_list) != 0:
-             for x in interest_performers_list:
-                 ret = search_seatgeek(trip_id, x[0].sub_category, "artist", city, x[1], city_businesses, x[1][1])
+             for x in interest_artist_list:
+                 ret = search_seatgeek(trip_id, x[0].sub_category, "artist", city, x[1][0], city_businesses, x[1][1])
                  try:
                      for r in ret:
                          if type(r) is not None:
@@ -211,48 +209,50 @@ def search_seatgeek(trip_id, performer, category, city, performer_id, city_busin
 
     r = requests.get('http://api.seatgeek.com/2/recommendations?performers.id={id}&datetime_local.gte={start}&datetime_local.lt={end}&range=50mi&lat={lat}&lon={lon}&client_id={key}'.format(id=performer_id, start=str(trip.origin_date), end = str(trip.destination_date),lat = lat, lon = lon, key=SEAT_GEEK))
     parsed_json = r.json()
-    print(parsed_json)
     recs = []
     counter = 0
-    try:
-        if len(parsed_json["recommendations"]) != 0:
-            time = re.findall(r'\T(.*)[:]', parsed_json["recommendations"][counter]["event"]["datetime_local"])
-            time = ''.join(time)
-            hours = time[0]+time[1]
-            if int(hours) > 12:
-                 hours = int(hours) - 12
-                 newtime = str(hours) + time[2] +time[3] +time[4] + "PM"
-            elif int(hours) == 12:
-                newtime = str(hours) + time[2] +time[3] +time[4] + "PM"
+    if len(parsed_json["recommendations"]) != 0:
+        for x in parsed_json["recommendations"]:
+            if category == "sport":
+                print(parsed_json["recommendations"])
+            if float(parsed_json["recommendations"][counter]["event"]["score"]) > .50:
+                time = re.findall(r'\T(.*)[:]', parsed_json["recommendations"][counter]["event"]["datetime_local"])
+                time = ''.join(time)
+                hours = time[0]+time[1]
+                if int(hours) > 12:
+                     hours = int(hours) - 12
+                     newtime = str(hours) + time[2] +time[3] +time[4] + "PM"
+                elif int(hours) == 12:
+                    newtime = str(hours) + time[2] +time[3] +time[4] + "PM"
+                else:
+                    newtime = time + "AM"
+
+                date = str((parsed_json["recommendations"][counter]["event"]["datetime_local"])).split("T")
+                date = date[0]
+                rec_dict = {
+                    "name": parsed_json["recommendations"][counter]["event"]["title"],
+                    "category": category,
+                    "subcategory": performer,
+                    "rating": "null",
+                    "url":parsed_json["recommendations"][counter]["event"]["url"],
+                    "num_reviews": "null",
+                    "rating_img_url_small": "null",
+                    "rating_img_url": "null",
+                    "phone": "null",
+                    "date":date,
+                    "time": newtime,
+                    "address" :[parsed_json["recommendations"][counter]["event"]["venue"]["address"], parsed_json["recommendations"][counter]["event"]["venue"]["extended_address"]],
+                    #"lowest_price": parsed_json["recommendations"][counter]["event"]["stats"]["lowest_price"],
+                    "city":city}
+                event_dates = []
+                counter += 1
+                for x in city_businesses:
+                    event_dates.append((x["date"],x["time"],x["address"]))
+                if (rec_dict["date"], rec_dict["time"],rec_dict["address"]) not in event_dates:
+                    recs.append(rec_dict)
             else:
-                newtime = time + "AM"
-
-            date = str((parsed_json["recommendations"][counter]["event"]["datetime_local"])).split("T")
-            date = date[0]
-            rec_dict = {
-                "name": parsed_json["recommendations"][counter]["event"]["title"],
-                "category": category,
-                "subcategory": performer,
-                "rating": "null",
-                "url":parsed_json["recommendations"][counter]["event"]["url"],
-                "num_reviews": "null",
-                "rating_img_url_small": "null",
-                "rating_img_url": "null",
-                "phone": "null",
-                "date":date,
-                "time": newtime,
-                "address" :[parsed_json["recommendations"][counter]["event"]["venue"]["address"], parsed_json["recommendations"][counter]["event"]["venue"]["extended_address"]],
-                #"lowest_price": parsed_json["recommendations"][counter]["event"]["stats"]["lowest_price"],
-                "city":city}
-            event_dates = []
-            for x in city_businesses:
-                event_dates.append((x["date"],x["time"],x["address"]))
-            if (rec_dict["date"], rec_dict["time"],rec_dict["address"]) not in event_dates:
-
-                recs.append(rec_dict)
-            return recs
-    except KeyError:
-        pass
+                counter += 1
+        return recs
 
 
 
@@ -260,11 +260,10 @@ def get_id(performer, cat):
     slug = performer.lower().replace(' ', '-')
     performer_data = requests.get("http://api.seatgeek.com/2/performers?slug={}".format(slug))
     performer_json = performer_data.json()
-    print(json.dumps(performer_json, indent=4))
     try:
         if cat == "artist":
             performer_id = performer_json["performers"][0]["id"]
-            genre = performer_json["genres"][0]["name"]
+            genre = performer_json["performers"][0]["genres"][0]["name"]
             return (performer_id, genre)
         elif cat == "sports":
             performer_id = performer_json["performers"][0]["id"]
