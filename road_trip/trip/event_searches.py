@@ -159,10 +159,10 @@ def search_events(trip_id):
                  ret = search_seatgeek(trip_id, x[0].sub_category, "sport", city, x[1][0], city_businesses, x[1][1])
                  try:
                      for r in ret:
-                         if type(r) is not None:
-                             city_businesses.append(r)
+                        if type(r) is not None:
+                            city_businesses.append(r)
                  except:
-                     continue
+                    pass
 
 
          if len(interest_artist_list) != 0:
@@ -170,11 +170,10 @@ def search_events(trip_id):
                  ret = search_seatgeek(trip_id, x[0].sub_category, "artist", city, x[1][0], city_businesses, x[1][1])
                  try:
                      for r in ret:
-                         if type(r) is not None:
-                             city_businesses.append(r)
+                        if type(r) is not None:
+                            city_businesses.append(r)
                  except:
-                     continue
-
+                    pass
 
          for url in urls:
              if url[0] != 0:
@@ -227,7 +226,7 @@ def search_seatgeek(trip_id, performer, category, city, performer_id, city_busin
     try:
         if len(parsed_json["recommendations"]) != 0:
             for x in parsed_json["recommendations"]:
-                if float(parsed_json["recommendations"][counter]["event"]["score"]) > .50:
+                if float(parsed_json["recommendations"][counter]["event"]["score"]) > .60:
                     time = re.findall(r'\T(.*)[:]', parsed_json["recommendations"][counter]["event"]["datetime_local"])
                     time = ''.join(time)
                     hours = time[0]+time[1]
@@ -265,7 +264,7 @@ def search_seatgeek(trip_id, performer, category, city, performer_id, city_busin
                 else:
                     counter += 1
             return recs
-    except IndexError:
+    except:
         pass
 
 

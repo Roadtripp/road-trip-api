@@ -29,9 +29,9 @@ class GoogleMapsDirections:
             try:
                 distance = re.findall(r'^[,0-9]*', parsed_json["routes"][0]["legs"][0]["steps"][counter]["distance"]["text"])
                 distance = int(distance[0].replace(',',''))
-                if distance > 20:
+                if distance > 30:
                     waypoints.append((parsed_json["routes"][0]["legs"][0]["steps"][counter]["end_location"]["lat"], parsed_json["routes"][0]["legs"][0]["steps"][counter]["end_location"]["lng"]))
-                    if distance > 100:
+                    if distance > 250:
                         start = (parsed_json["routes"][0]["legs"][0]["steps"][counter]["start_location"]["lat"], parsed_json["routes"][0]["legs"][0]["steps"][counter]["start_location"]["lng"])
                         end = (parsed_json["routes"][0]["legs"][0]["steps"][counter]["end_location"]["lat"], parsed_json["routes"][0]["legs"][0]["steps"][counter]["end_location"]["lng"])
                         new_waypoints = points_between(start[0], start[1], end[0], end[1], num=int(distance/50))
@@ -149,17 +149,19 @@ def find_haversine(lat1,lon1,lat2,lon2):
     return distance
 
 
-def find_cities(origin, dest, radius=30):
+def find_cities(origin, dest, radius=50):
     route = GoogleMapsDirections(origin, dest)
     waypoints = route.format_waypoints()
     df = make_df()
     cities = []
     for point in waypoints:
         for index, row in df.iterrows():
-            dist = find_haversine(lat1=point[0],lon1=point[1],lat2=row['latitude'],lon2=row['longitude'])
-            if dist <= radius:
-                if (row['City'], row['State']) not in cities:
-                    if row['City'].lower() != origin.split(",")[0].lower():
-                        cities.append((row['City'], row['State']))
+            if point[0] > row["latitude"] - 2 and point[0] < row["latitude"] + 2:
+                if point[1] > row["longitude"] -2 and point[1] < row["longitude"] + 2:
+                    dist = find_haversine(lat1=point[0],lon1=point[1],lat2=row['latitude'],lon2=row['longitude'])
+                    if dist <= radius:
+                        if (row['City'], row['State']) not in cities:
+                            if row['City'].lower() != origin.split(",")[0].lower():
+                                cities.append((row['City'], row['State']))
 
     return cities
