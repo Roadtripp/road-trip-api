@@ -264,16 +264,14 @@ def get_id(performer, cat):
     slug = performer.lower().replace(' ', '-')
     performer_data = requests.get("http://api.seatgeek.com/2/performers?slug={}".format(slug))
     performer_json = performer_data.json()
-    print(json.dumps(performer_json, indent=4))
     try:
         if cat == "artist":
             performer_id = performer_json["performers"][0]["id"]
-            genre = performer_json["genres"][0]["name"]
+            genre = performer_json["performers"][0]["genres"][0]["name"]
             return (performer_id, genre)
         elif cat == "sport":
             performer_id = performer_json["performers"][0]["id"]
             sport = performer_json["performers"][0]["taxonomies"][1]["name"]
-            print(sport)
             return (performer_id, sport)
     except:
         pass
