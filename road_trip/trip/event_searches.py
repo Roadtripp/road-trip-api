@@ -111,8 +111,8 @@ def search_events(trip_id):
     interest_hotels_list = [x.sub_category for x in interest_hotels_list]
     yelp_hotels_list = []
     for item in interest_hotels_list:
-        ret = yelp_hotels_alias[item]
-        yelp_hotels_list.append(ret)
+            ret = yelp_hotels_alias[item]
+            yelp_hotels_list.append(ret)
 
 
     interest_sports_list = []
@@ -138,9 +138,18 @@ def search_events(trip_id):
     yelp_hotels_list = ','.join(yelp_hotels_list)
     cities_events = []
     for city in city_list:
-         url_activity = 'https://api.yelp.com/v2/search/?location={}&sort=2&category_filter={}'.format(city[0], yelp_activity_list)
-         url_food = 'https://api.yelp.com/v2/search/?location={}&sort=2&category_filter={}'.format(city[0], yelp_food_list)
-         url_hotel = 'https://api.yelp.com/v2/search/?location={}&sort=2&category_filter={}'.format(city[0], yelp_hotels_list)
+         if len(yelp_activity_list) != 0:
+            url_activity = 'https://api.yelp.com/v2/search/?location={}&sort=2&category_filter={}'.format(city[0], yelp_activity_list)
+         else:
+            url_activity = 0
+         if len(yelp_food_list) != 0:
+            url_food = 'https://api.yelp.com/v2/search/?location={}&sort=2&category_filter={}'.format(city[0], yelp_food_list)
+         else:
+            url_food = 0
+         if len(yelp_hotels_list) != 0:
+            url_hotel = 'https://api.yelp.com/v2/search/?location={}&sort=2&category_filter={}'.format(city[0], yelp_hotels_list)
+         else:
+            url_hotel = 0
          urls = [(url_activity, "activities"), (url_food, "food"), (url_hotel, "hotels")]
 
 
@@ -168,8 +177,9 @@ def search_events(trip_id):
 
 
          for url in urls:
-             r = yelp.get(url[0])
-             r = r.json()
+             if url[0] != 0:
+                 r = yelp.get(url[0])
+                 r = r.json()
              counter = 0
              for x in range(3):
                  try:
