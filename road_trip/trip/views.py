@@ -76,7 +76,7 @@ def suggestion_json(request, trip_pk):
     data = search_events(trip_pk)
     data = [{"all_activities": city} for city in data]
 
-    c = ["activities", "food", "sports", "artist", "hotels"]
+    c = ["activities", "food", "sport", "artist", "hotels"]
     for city in data:
         for category in c:
             city[category] = []
@@ -94,7 +94,7 @@ def suggestion_json(request, trip_pk):
                     "stopover": False,
                     "activities": list_gen(x, "activities"),
                     "hotels": list_gen(x, "hotels"),
-                    "sports": list_gen(x, "sports"),
+                    "sports": list_gen(x, "sport"),
                     "food": list_gen(x, "food"),
                     "artist": list_gen(x, "artist")
                 }
@@ -123,7 +123,7 @@ def selection_json(request, trip_pk):
                     trip=trip,
                     visited=wp['stopover']
                 )
-                acts = ["activities", "food", "sports", "artist", "hotels"]
+                acts = ["activities", "food", "sport", "artist", "hotels"]
                 for act in acts:
                     for a in wp[act]:
                         if a['activity_stopover']:
@@ -163,7 +163,7 @@ def interests_json(request, trip_pk):
         for cat in sg_cats:
             for sub_cat in interests[cat[0]][cat[1]]:
                 Interest.objects.create(
-                    category=cat,
+                    category=cat[0],
                     sub_category=interests[cat[0]][cat[1]][sub_cat],
                     trip=get_trip
                 )

@@ -153,27 +153,6 @@ def search_events(trip_id):
 
 
 
-
-
-
-    # interest_performers_list = []
-    # if Interest.objects.filter(trip=trip, category="artist1").count() != 0:
-    #     artist1 = Interest.objects.get(trip=trip, category="artist1")
-    #     artist1_id = get_id(artist1.sub_category)
-    #     if artist1_id is not None:
-    #         interest_performers_list.append((artist1, artist1_id))
-    #     if Interest.objects.filter(trip=trip, category="artist2").count() != 0:
-    #         artist2 = Interest.objects.get(trip=trip, category="artist2")
-    #         artist2_id = get_id(artist2.sub_category)
-    #         if artist2_id is not None:
-    #             interest_performers_list.append((artist2, artist2_id))
-    #         if Interest.objects.filter(trip=trip, category="artist3").count() != 0:
-    #             artist3 = Interest.objects.get(trip=trip, category="artist3")
-    #             artist3_id = get_id(artist3.sub_category)
-    #             if artist3_id is not None:
-    #                 interest_performers_list.append((artist3, artist3_id))
-
-
     yelp_activity_list = ','.join(yelp_activity_list)
     yelp_food_list = ','.join(yelp_food_list)
     yelp_hotels_list = ','.join(yelp_hotels_list)
