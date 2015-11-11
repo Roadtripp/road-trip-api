@@ -133,10 +133,6 @@ def search_events(trip_id):
                 interest_artist_list.append((x, x_id))
 
 
-
-
-
-
     yelp_activity_list = ','.join(yelp_activity_list)
     yelp_food_list = ','.join(yelp_food_list)
     yelp_hotels_list = ','.join(yelp_hotels_list)
@@ -150,7 +146,7 @@ def search_events(trip_id):
          if len(interest_sports_list) != 0:
              mid = []
              for x in interest_sports_list:
-                 ret = search_seatgeek(trip_id, x[0].sub_category, "sport", city, x[1], city_businesses, x[1][1])
+                 ret = search_seatgeek(trip_id, x[0].sub_category, "sport", city, x[1][0], city_businesses, x[1][1])
                  mid.append(ret)
                  try:
                      for r in ret:
@@ -160,8 +156,8 @@ def search_events(trip_id):
                      continue
 
          if len(interest_artist_list) != 0:
-             for x in interest_performers_list:
-                 ret = search_seatgeek(trip_id, x[0].sub_category, "artist", city, x[1], city_businesses, x[1][1])
+             for x in interest_artist_list:
+                 ret = search_seatgeek(trip_id, x[0].sub_category, "artist", city, x[1][0], city_businesses, x[1][1])
                  try:
                      for r in ret:
                          if type(r) is not None:
@@ -215,7 +211,6 @@ def search_seatgeek(trip_id, performer, category, city, performer_id, city_busin
 
     r = requests.get('http://api.seatgeek.com/2/recommendations?performers.id={id}&datetime_local.gte={start}&datetime_local.lt={end}&range=50mi&lat={lat}&lon={lon}&client_id={key}'.format(id=performer_id, start=str(trip.origin_date), end = str(trip.destination_date),lat = lat, lon = lon, key=SEAT_GEEK))
     parsed_json = r.json()
-    print(parsed_json)
     recs = []
     counter = 0
     try:
@@ -264,16 +259,14 @@ def get_id(performer, cat):
     slug = performer.lower().replace(' ', '-')
     performer_data = requests.get("http://api.seatgeek.com/2/performers?slug={}".format(slug))
     performer_json = performer_data.json()
-    print(json.dumps(performer_json, indent=4))
     try:
         if cat == "artist":
             performer_id = performer_json["performers"][0]["id"]
-            genre = performer_json["genres"][0]["name"]
+            genre = performer_json["performers"][0]["genres"][0]["name"]
             return (performer_id, genre)
         elif cat == "sport":
             performer_id = performer_json["performers"][0]["id"]
             sport = performer_json["performers"][0]["taxonomies"][1]["name"]
-            print(sport)
             return (performer_id, sport)
-    except IndexError:
+    except:
         pass
