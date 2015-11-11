@@ -114,26 +114,10 @@ def search_events(trip_id):
         ret = yelp_hotels_alias[item]
         yelp_hotels_list.append(ret)
 
-    # interest_teams_list = []
-    # if Interest.objects.filter(trip=trip, category=r'sport').count() != 0:
-    #     sports1 = Interest.objects.get(trip=trip, category="sports1")
-    #     sports1_id = get_id(sports1.sub_category)
-    #     if sports1_id is not None:
-    #         interest_teams_list.append((sports1, sports1_id))
-    #     if Interest.objects.filter(trip=trip, category="sports2").count() != 0:
-    #         sports2 = Interest.objects.get(trip=trip, category="sports2")
-    #         sports2_id = get_id(sports2.sub_category)
-    #         if sports2_id is not None:
-    #             interest_teams_list.append((sports2, sports2_id))
-    #         if Interest.objects.filter(trip=trip, category="sports3").count() !=0:
-    #             sports3 = Interest.objects.get(trip=trip, category="sports3")
-    #             sports3_id = get_id(sports3.sub_category)
-    #             if sports3_id is not None:
-    #                 interest_teams_list.append((sports3, sports3_id))
 
     interest_sports_list = []
-    if Interest.objects.filter(trip=trip, category="sports").count() != 0:
-        sports = Interest.objects.filter(trip=trip, category="sports").all()
+    if Interest.objects.filter(trip=trip, category="sport").count() != 0:
+        sports = Interest.objects.filter(trip=trip, category="sport").all()
         for x in sports:
             x_id = get_id(x.sub_category, x.category)
             if x_id is not None:
@@ -149,31 +133,6 @@ def search_events(trip_id):
                 interest_artist_list.append((x, x_id))
 
 
-
-
-
-
-
-
-
-    # interest_performers_list = []
-    # if Interest.objects.filter(trip=trip, category="artist1").count() != 0:
-    #     artist1 = Interest.objects.get(trip=trip, category="artist1")
-    #     artist1_id = get_id(artist1.sub_category)
-    #     if artist1_id is not None:
-    #         interest_performers_list.append((artist1, artist1_id))
-    #     if Interest.objects.filter(trip=trip, category="artist2").count() != 0:
-    #         artist2 = Interest.objects.get(trip=trip, category="artist2")
-    #         artist2_id = get_id(artist2.sub_category)
-    #         if artist2_id is not None:
-    #             interest_performers_list.append((artist2, artist2_id))
-    #         if Interest.objects.filter(trip=trip, category="artist3").count() != 0:
-    #             artist3 = Interest.objects.get(trip=trip, category="artist3")
-    #             artist3_id = get_id(artist3.sub_category)
-    #             if artist3_id is not None:
-    #                 interest_performers_list.append((artist3, artist3_id))
-
-
     yelp_activity_list = ','.join(yelp_activity_list)
     yelp_food_list = ','.join(yelp_food_list)
     yelp_hotels_list = ','.join(yelp_hotels_list)
@@ -184,7 +143,7 @@ def search_events(trip_id):
          url_hotel = 'https://api.yelp.com/v2/search/?location={}&sort=2&category_filter={}'.format(city[0], yelp_hotels_list)
          urls = [(url_activity, "activities"), (url_food, "food"), (url_hotel, "hotels")]
          city_businesses = []
-         if len(interest_teams_list) != 0:
+         if len(interest_sports_list) != 0:
              mid = []
              for x in interest_sports_list:
                  ret = search_seatgeek(trip_id, x[0].sub_category, "sports", city, x[1], city_businesses, x[1][1])
