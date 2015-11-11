@@ -98,7 +98,7 @@ def suggestion_json(request, trip_pk):
                     "stopover": False,
                     "activities": list_gen(x, "activities"),
                     "hotels": list_gen(x, "hotels"),
-                    "sports": list_gen(x, "sport"),
+                    "sport": list_gen(x, "sport"),
                     "food": list_gen(x, "food"),
                     "artist": list_gen(x, "artist")
                 }
