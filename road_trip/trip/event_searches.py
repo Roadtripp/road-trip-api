@@ -272,7 +272,7 @@ def search_seatgeek(trip_id, performer, category, city, performer_id, city_busin
                 else:
                     counter += 1
             return recs
-    except IndexError:
+    except:
         pass
 
 
