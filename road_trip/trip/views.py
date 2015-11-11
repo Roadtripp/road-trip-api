@@ -145,9 +145,9 @@ def selection_json(request, trip_pk):
                                 average_rating=check_null(a['average_rating']),
                                 num_ratings=check_null(a['num_ratings']),
                                 city=city,
-                                lowest_price= a["lowest_price"],
-                                average_price= a["average_price"],
-                                highest_price= a["highest_price"],
+                                lowest_price= check_null(a["lowest_price"]),
+                                average_price= check_null(a["average_price"]),
+                                highest_price= check_null(a["highest_price"]),
                             )
 
     return HttpResponse('', status=200)
