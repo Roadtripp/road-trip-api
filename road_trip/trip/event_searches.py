@@ -275,5 +275,5 @@ def get_id(performer, cat):
             sport = performer_json["performers"][0]["taxonomies"][1]["name"]
             print(sport)
             return (performer_id, sport)
-    except IndexError:
+    except:
         pass
