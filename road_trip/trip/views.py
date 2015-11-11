@@ -98,7 +98,7 @@ def suggestion_json(request, trip_pk):
                     "stopover": False,
                     "activities": list_gen(x, "activities"),
                     "hotels": list_gen(x, "hotels"),
-                    "sports": list_gen(x, "sport"),
+                    "sport": list_gen(x, "sport"),
                     "food": list_gen(x, "food"),
                     "artist": list_gen(x, "artist")
                 }
@@ -140,14 +140,14 @@ def selection_json(request, trip_pk):
                                 sub_category=a['sub_categories'][0][0],
                                 url=a['url'],
                                 phone=check_null(a['phone']),
-                                img_url=a['img_url'],
+                                img_url=check_null(a['img_url']),
                                 small_rate_img_url=a['small_rate_img_url'],
                                 average_rating=check_null(a['average_rating']),
                                 num_ratings=check_null(a['num_ratings']),
                                 city=city,
-                                lowest_price= a["lowest_price"],
-                                average_price= a["average_price"],
-                                highest_price= a["highest_price"],
+                                lowest_price= check_null(a["lowest_price"]),
+                                average_price= check_null(a["average_price"]),
+                                highest_price= check_null(a["highest_price"]),
                             )
 
     return HttpResponse('', status=200)
