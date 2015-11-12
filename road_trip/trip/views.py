@@ -125,23 +125,26 @@ def selection_json(request, trip_pk):
                 )
                 acts = ["activities", "food", "sport", "artist", "hotels"]
                 for act in acts:
-                    for a in wp[act]:
-                        if a['activity_stopover']:
-                            Activity.objects.create(
-                                title=a['title'],
-                                date=check_null(a['date']),
-                                time=check_null(a['time']),
-                                address=a['address'],
-                                category=a['category'],
-                                sub_category=a['sub_categories'][0][0],
-                                url=a['url'],
-                                phone=check_null(a['phone']),
-                                # img_url=a['img_url'],
-                                small_rate_img_url=a['small_rate_img_url'],
-                                average_rating=check_null(a['average_rating']),
-                                num_ratings=check_null(a['num_ratings']),
-                                city=city
-                            )
+                    try:
+                        for a in wp[act]:
+                            if a['activity_stopover']:
+                                Activity.objects.create(
+                                    title=a['title'],
+                                    date=check_null(a['date']),
+                                    time=check_null(a['time']),
+                                    address=a['address'],
+                                    category=a['category'],
+                                    sub_category=a['sub_categories'][0][0],
+                                    url=a['url'],
+                                    phone=check_null(a['phone']),
+                                    # img_url=a['img_url'],
+                                    small_rate_img_url=a['small_rate_img_url'],
+                                    average_rating=check_null(a['average_rating']),
+                                    num_ratings=check_null(a['num_ratings']),
+                                    city=city
+                                )
+                    except KeyError:
+                        continue
 
     return HttpResponse('', status=200)
 
@@ -154,15 +157,18 @@ def interests_json(request, trip_pk):
         yelp_cats = ['activities', 'food', 'hotels']
         sg_cats = [('sport', 'sport1'), ('artist', 'artist1')]
         for cat in yelp_cats:
-            for sub_cat in interests[cat].keys():
-                if len(Interest.objects.filter(trip=get_trip,
-                                               sub_category=sub_cat
-                                               ).all()) == 0:
-                    Interest.objects.create(
-                        category=cat,
-                        sub_category=sub_cat,
-                        trip=get_trip
-                    )
+            try:
+                for sub_cat in interests[cat].keys():
+                    if len(Interest.objects.filter(trip=get_trip,
+                                                   sub_category=sub_cat
+                                                   ).all()) == 0:
+                        Interest.objects.create(
+                            category=cat,
+                            sub_category=sub_cat,
+                            trip=get_trip
+                        )
+            except KeyError:
+                continue
         for cat in sg_cats:
             try:
                 for sub_cat in interests[cat[0]][cat[1]]:
