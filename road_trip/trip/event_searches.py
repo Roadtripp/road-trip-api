@@ -6,6 +6,8 @@ from .city_selector import *
 from .models import Trip
 from .models import Interest
 import re
+import requests_cache
+
 
 #OAuth credential placeholders that must be filled in by users.
 CONSUMER_KEY = os.environ["YELP_CONSUMER"]
@@ -13,6 +15,8 @@ CONSUMER_SECRET = os.environ["YELP_CONSUMER_SECRET"]
 TOKEN = os.environ["YELP_TOKEN"]
 TOKEN_SECRET = os.environ["YELP_TOKEN_SECRET"]
 SEAT_GEEK = os.environ["SEAT_GEEK_KEY"]
+
+requests_cache.install_cache(backend="sqlite", expire_after=36000)
 
 
 yelp = OAuth1Session(CONSUMER_KEY,
@@ -142,15 +146,15 @@ def search_events(trip_id):
          if len(yelp_activity_list) != 0:
             url_activity = 'https://api.yelp.com/v2/search/?location={}&sort=2&category_filter={}'.format(city[0], yelp_activity_list)
          else:
-            url_activity = 0
+            url_activity = 'https://api.yelp.com/v2/search/?location={}&sort=2&category_filter={}'.format(city[0], "active")
          if len(yelp_food_list) != 0:
             url_food = 'https://api.yelp.com/v2/search/?location={}&sort=2&category_filter={}'.format(city[0], yelp_food_list)
          else:
-            url_food = 0
+            url_food = 'https://api.yelp.com/v2/search/?location={}&sort=2&category_filter={}'.format(city[0], "restaurants")
          if len(yelp_hotels_list) != 0:
             url_hotel = 'https://api.yelp.com/v2/search/?location={}&sort=2&category_filter={}'.format(city[0], yelp_hotels_list)
          else:
-            url_hotel = 0
+            url_hotel = 'https://api.yelp.com/v2/search/?location={}&sort=2&category_filter={}'.format(city[0], "hotels")
          urls = [(url_activity, "activities"), (url_food, "food"), (url_hotel, "hotels")]
 
 
@@ -178,11 +182,10 @@ def search_events(trip_id):
 
 
          for url in urls:
-             if url[0] != 0:
-                 r = yelp.get(url[0])
-                 r = r.json()
-             counter = 0
-             for x in range(3):
+            r = yelp.get(url[0])
+            r = r.json()
+            counter = 0
+            for x in range(3):
                  try:
                     bus = {
                     "date": "null",
