@@ -188,7 +188,6 @@ def interests_json(request, trip_pk):  # TODO: refactor
                         )
             except KeyError:
                 continue
-
     return HttpResponse('', status=200)
 
 
