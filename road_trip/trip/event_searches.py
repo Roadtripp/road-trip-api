@@ -121,21 +121,23 @@ def search_events(trip_id):
 
 
     interest_sports_list = []
-    if Interest.objects.filter(trip=trip, category="sport").count() != 0:
-        sports = Interest.objects.filter(trip=trip, category="sport").all()
-        for x in sports:
-            x_id = get_id(x.sub_category, x.category)
-            if x_id is not None:
-                interest_sports_list.append((x, x_id))
+    if trip.origin_date is not None and trip.destination_date is not None:
+        if Interest.objects.filter(trip=trip, category="sport").count() != 0:
+            sports = Interest.objects.filter(trip=trip, category="sport").all()
+            for x in sports:
+                x_id = get_id(x.sub_category, x.category)
+                if x_id is not None:
+                    interest_sports_list.append((x, x_id))
 
 
     interest_artist_list = []
-    if Interest.objects.filter(trip=trip, category="artist").count() != 0:
-        artist = Interest.objects.filter(trip=trip, category="artist").all()
-        for x in artist:
-            x_id = get_id(x.sub_category, x.category)
-            if x_id is not None:
-                interest_artist_list.append((x, x_id))
+    if trip.origin_date is not None and trip.destination_date is not None:
+        if Interest.objects.filter(trip=trip, category="artist").count() != 0:
+            artist = Interest.objects.filter(trip=trip, category="artist").all()
+            for x in artist:
+                x_id = get_id(x.sub_category, x.category)
+                if x_id is not None:
+                    interest_artist_list.append((x, x_id))
 
 
     yelp_activity_list = ','.join(yelp_activity_list)
@@ -160,25 +162,27 @@ def search_events(trip_id):
 
          city_businesses = []
          if len(interest_sports_list) != 0:
-             for x in interest_sports_list:
-                 ret = search_seatgeek(trip_id, x[0].sub_category, "sport", city, x[1][0], city_businesses, x[1][1])
-                 try:
-                     for r in ret:
-                         if type(r) is not None:
-                             city_businesses.append(r)
-                 except:
-                     continue
+             if trip.origin_date is not None and trip.destination_date is not None:
+                 for x in interest_sports_list:
+                     ret = search_seatgeek(trip_id, x[0].sub_category, "sport", city, x[1][0], city_businesses, x[1][1])
+                     try:
+                         for r in ret:
+                             if type(r) is not None:
+                                 city_businesses.append(r)
+                     except:
+                         continue
 
 
          if len(interest_artist_list) != 0:
-             for x in interest_artist_list:
-                 ret = search_seatgeek(trip_id, x[0].sub_category, "artist", city, x[1][0], city_businesses, x[1][1])
-                 try:
-                     for r in ret:
-                         if type(r) is not None:
-                             city_businesses.append(r)
-                 except:
-                     continue
+            if trip.origin_date is not None and trip.destination_date is not None:
+                for x in interest_artist_list:
+                     ret = search_seatgeek(trip_id, x[0].sub_category, "artist", city, x[1][0], city_businesses, x[1][1])
+                     try:
+                         for r in ret:
+                             if type(r) is not None:
+                                 city_businesses.append(r)
+                     except:
+                         continue
 
 
          for url in urls:
