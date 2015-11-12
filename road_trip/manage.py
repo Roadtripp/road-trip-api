@@ -1,6 +1,10 @@
 #!/usr/bin/env python
 import os
 import sys
+import requests
+import requests_cache
+
+requests_cache.install_cache(backend='memory', expire_after=36000000)
 
 if __name__ == "__main__":
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "road_trip.settings")
