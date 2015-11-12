@@ -66,6 +66,10 @@ def list_gen(x, category):
             "date": item["date"],
             "time": item["time"],
             "phone": item["phone"],
+            "lowest_price": item["lowest_price"],
+            "average_price": item["average_price"],
+            "highest_price": item["highest_price"],
+            "img_url": item["img_url"],
         }
         for item in x[category]
     ]
@@ -94,7 +98,7 @@ def suggestion_json(request, trip_pk):
                     "stopover": False,
                     "activities": list_gen(x, "activities"),
                     "hotels": list_gen(x, "hotels"),
-                    "sports": list_gen(x, "sport"),
+                    "sport": list_gen(x, "sport"),
                     "food": list_gen(x, "food"),
                     "artist": list_gen(x, "artist")
                 }
@@ -148,7 +152,6 @@ def selection_json(request, trip_pk):
                                     )
                     except KeyError:
                         continue
-
     return HttpResponse('', status=200)
 
 
@@ -220,20 +223,27 @@ def trip_save(request, trip_pk):
     else:
         get_trip.title = req['title']
     get_trip.save()
-    return HttpResponse('', status=200)
+    return JsonResponse({"username": request.user.username}, status=200)
 
 
 @api_view(['GET'])
 @permission_classes((IsAuthenticated,))
 def get_trips(request):
-    return JsonResponse({"trips": [{
-                                        "id": x.pk,
-                                        "title": x.title,
-                                        "origin": x.origin,
-                                        "destination": x.destination,
-                                        "origin_date": x.origin_date,
-                                        "destination_date": x.destination_date,
-                                   }
+    return JsonResponse({"username": request.user.username,
+                         "trips": [{
+                                    "id": x.pk,
+                                    "title": x.title,
+                                    "origin": x.origin,
+                                    "destination": x.destination,
+                                    "origin_date": x.origin_date,
+                                    "destination_date": x.destination_date,
+                                    }
                                    for x in Trip.objects
-                                                .filter(user=request.user)
-                                                .all()]})
+                                   .filter(user=request.user)
+                                   .all()]})
+
+
+@api_view(['GET'])
+@permission_classes((IsAuthenticated,))
+def who_am_i(request):
+    return HttpResponse(request.user.username)
