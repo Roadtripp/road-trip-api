@@ -137,10 +137,6 @@ def search_events(trip_id):
     yelp_activity_list = ','.join(yelp_activity_list)
     yelp_food_list = ','.join(yelp_food_list)
     yelp_hotels_list = ','.join(yelp_hotels_list)
-    print(len(yelp_activity_list))
-    print(yelp_activity_list)
-    print(len(yelp_food_list))
-    print(len(yelp_hotels_list))
     cities_events = []
     for city in city_list:
          if len(yelp_activity_list) != 0:
