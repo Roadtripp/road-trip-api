@@ -118,31 +118,34 @@ def selection_json(request, trip_pk):
         trip = get_object_or_404(Trip, pk=trip_pk)
         for wp in selections['waypoints']:
             if wp['stopover']:
-                city = City.objects.create(
-                    city_name=wp['location'],
-                    trip=trip,
-                    visited=wp['stopover']
-                )
+                if len(City.objects.filter(trip=trip, city_name=wp['location']).all()) == 0:
+                    city = City.objects.create(
+                        city_name=wp['location'],
+                        trip=trip,
+                        visited=wp['stopover']
+                    )
                 acts = ["activities", "food", "sport", "artist", "hotels"]
                 for act in acts:
                     try:
                         for a in wp[act]:
                             if a['activity_stopover']:
-                                Activity.objects.create(
-                                    title=a['title'],
-                                    date=check_null(a['date']),
-                                    time=check_null(a['time']),
-                                    address=a['address'],
-                                    category=a['category'],
-                                    sub_category=a['sub_categories'][0][0],
-                                    url=a['url'],
-                                    phone=check_null(a['phone']),
-                                    # img_url=a['img_url'],
-                                    small_rate_img_url=a['small_rate_img_url'],
-                                    average_rating=check_null(a['average_rating']),
-                                    num_ratings=check_null(a['num_ratings']),
-                                    city=city
-                                )
+                                city = City.objects.get(trip=trip, city_name=wp['location'])
+                                if len(Activity.objects.filter(city=city, title=a['title'])) == 0:
+                                    Activity.objects.create(
+                                        title=a['title'],
+                                        date=check_null(a['date']),
+                                        time=check_null(a['time']),
+                                        address=a['address'],
+                                        category=a['category'],
+                                        sub_category=a['sub_categories'][0][0],
+                                        url=a['url'],
+                                        phone=check_null(a['phone']),
+                                        # img_url=a['img_url'],
+                                        small_rate_img_url=a['small_rate_img_url'],
+                                        average_rating=check_null(a['average_rating']),
+                                        num_ratings=check_null(a['num_ratings']),
+                                        city=city
+                                    )
                     except KeyError:
                         continue
 
@@ -150,7 +153,7 @@ def selection_json(request, trip_pk):
 
 
 @csrf_exempt
-def interests_json(request, trip_pk):
+def interests_json(request, trip_pk):  # TODO: refactor
     if request.method == 'POST':
         interests = json.loads(request.body.decode('utf-8'))
         get_trip = get_object_or_404(Trip, pk=trip_pk)
