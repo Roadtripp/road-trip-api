@@ -149,7 +149,7 @@ def find_haversine(lat1,lon1,lat2,lon2):
     return distance
 
 
-def find_cities(origin, dest, radius=30):
+def find_cities(origin, dest, radius=50):
     route = GoogleMapsDirections(origin, dest)
     waypoints = route.format_waypoints()
     df = make_df()
