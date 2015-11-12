@@ -16,7 +16,7 @@ TOKEN = os.environ["YELP_TOKEN"]
 TOKEN_SECRET = os.environ["YELP_TOKEN_SECRET"]
 SEAT_GEEK = os.environ["SEAT_GEEK_KEY"]
 
-requests_cache.install_cache(backend="memory", expire_after=3600000)
+requests_cache.install_cache(backend="memory", expire_after=36000)
 
 
 yelp = OAuth1Session(CONSUMER_KEY,
