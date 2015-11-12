@@ -66,6 +66,10 @@ def list_gen(x, category):
             "date": item["date"],
             "time": item["time"],
             "phone": item["phone"],
+            "lowest_price": item["lowest_price"],
+            "average_price": item["average_price"],
+            "highest_price": item["highest_price"],
+            "img_url": item["img_url"],
         }
         for item in x[category]
     ]
@@ -94,7 +98,7 @@ def suggestion_json(request, trip_pk):
                     "stopover": False,
                     "activities": list_gen(x, "activities"),
                     "hotels": list_gen(x, "hotels"),
-                    "sports": list_gen(x, "sport"),
+                    "sport": list_gen(x, "sport"),
                     "food": list_gen(x, "food"),
                     "artist": list_gen(x, "artist")
                 }
@@ -118,62 +122,72 @@ def selection_json(request, trip_pk):
         trip = get_object_or_404(Trip, pk=trip_pk)
         for wp in selections['waypoints']:
             if wp['stopover']:
-                city = City.objects.create(
-                    city_name=wp['location'],
-                    trip=trip,
-                    visited=wp['stopover']
-                )
+                if len(City.objects.filter(trip=trip, city_name=wp['location']).all()) == 0:
+                    city = City.objects.create(
+                        city_name=wp['location'],
+                        trip=trip,
+                        visited=wp['stopover']
+                    )
                 acts = ["activities", "food", "sport", "artist", "hotels"]
                 for act in acts:
-                    for a in wp[act]:
-                        if a['activity_stopover']:
-                            Activity.objects.create(
-                                title=a['title'],
-                                date=check_null(a['date']),
-                                time=check_null(a['time']),
-                                address=a['address'],
-                                category=a['category'],
-                                sub_category=a['sub_categories'][0][0],
-                                url=a['url'],
-                                phone=check_null(a['phone']),
-                                # img_url=a['img_url'],
-                                small_rate_img_url=a['small_rate_img_url'],
-                                average_rating=check_null(a['average_rating']),
-                                num_ratings=check_null(a['num_ratings']),
-                                city=city
-                            )
-
+                    try:
+                        for a in wp[act]:
+                            if a['activity_stopover']:
+                                city = City.objects.get(trip=trip, city_name=wp['location'])
+                                if len(Activity.objects.filter(city=city, title=a['title'])) == 0:
+                                    Activity.objects.create(
+                                        title=a['title'],
+                                        date=check_null(a['date']),
+                                        time=check_null(a['time']),
+                                        address=a['address'],
+                                        category=a['category'],
+                                        sub_category=a['sub_categories'][0][0],
+                                        url=a['url'],
+                                        phone=check_null(a['phone']),
+                                        # img_url=a['img_url'],
+                                        small_rate_img_url=a['small_rate_img_url'],
+                                        average_rating=check_null(a['average_rating']),
+                                        num_ratings=check_null(a['num_ratings']),
+                                        city=city
+                                    )
+                    except KeyError:
+                        continue
     return HttpResponse('', status=200)
 
 
 @csrf_exempt
-def interests_json(request, trip_pk):
+def interests_json(request, trip_pk):  # TODO: refactor
     if request.method == 'POST':
         interests = json.loads(request.body.decode('utf-8'))
         get_trip = get_object_or_404(Trip, pk=trip_pk)
         yelp_cats = ['activities', 'food', 'hotels']
         sg_cats = [('sport', 'sport1'), ('artist', 'artist1')]
         for cat in yelp_cats:
-            for sub_cat in interests[cat].keys():
-                if len(Interest.objects.filter(
-                        trip=get_trip, sub_category=sub_cat).all()) == 0:
-                    Interest.objects.create(
-                        category=cat,
-                        sub_category=sub_cat,
-                        trip=get_trip
-                    )
+            try:
+                for sub_cat in interests[cat].keys():
+                    if len(Interest.objects.filter(trip=get_trip,
+                                                   sub_category=sub_cat
+                                                   ).all()) == 0:
+                        Interest.objects.create(
+                            category=cat,
+                            sub_category=sub_cat,
+                            trip=get_trip
+                        )
+            except KeyError:
+                continue
         for cat in sg_cats:
-            for sub_cat in interests[cat[0]][cat[1]]:
-                if len(Interest.objects.filter(
-                        trip=get_trip,
-                        sub_category=interests[cat[0]][cat[1]][sub_cat])
-                        .all()) == 0:
-                    Interest.objects.create(
-                        category=cat[0],
-                        sub_category=interests[cat[0]][cat[1]][sub_cat],
-                        trip=get_trip
-                    )
-
+            try:
+                for sub_cat in interests[cat[0]][cat[1]]:
+                    if len(Interest.objects
+                            .filter(trip=get_trip,
+                                    sub_category=interests[cat[0]][cat[1]][sub_cat]).all()) == 0:
+                        Interest.objects.create(
+                            category=cat[0],
+                            sub_category=interests[cat[0]][cat[1]][sub_cat],
+                            trip=get_trip
+                        )
+            except KeyError:
+                continue
     return HttpResponse('', status=200)
 
 
@@ -208,20 +222,27 @@ def trip_save(request, trip_pk):
     else:
         get_trip.title = req['title']
     get_trip.save()
-    return HttpResponse('', status=200)
+    return JsonResponse({"username": request.user.username}, status=200)
 
 
 @api_view(['GET'])
 @permission_classes((IsAuthenticated,))
 def get_trips(request):
-    return JsonResponse({"trips": [{
-                                        "id": x.pk,
-                                        "title": x.title,
-                                        "origin": x.origin,
-                                        "destination": x.destination,
-                                        "origin_date": x.origin_date,
-                                        "destination_date": x.destination_date,
-                                   }
+    return JsonResponse({"username": request.user.username,
+                         "trips": [{
+                                    "id": x.pk,
+                                    "title": x.title,
+                                    "origin": x.origin,
+                                    "destination": x.destination,
+                                    "origin_date": x.origin_date,
+                                    "destination_date": x.destination_date,
+                                    }
                                    for x in Trip.objects
-                                                .filter(user=request.user)
-                                                .all()]})
+                                   .filter(user=request.user)
+                                   .all()]})
+
+
+@api_view(['GET'])
+@permission_classes((IsAuthenticated,))
+def who_am_i(request):
+    return JsonResponse({"username": request.user.username}, status=200)

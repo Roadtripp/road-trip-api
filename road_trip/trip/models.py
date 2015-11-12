@@ -17,6 +17,7 @@ class Trip(models.Model):
     destination_lat = models.FloatField(null=True, blank=True)
     destination_lon = models.FloatField(null=True, blank=True)
     user = models.ForeignKey(User, null=True)
+    
 
 
 class City(models.Model):
@@ -43,6 +44,10 @@ class Activity(models.Model):
     average_rating = models.FloatField(null=True, blank=True)
     num_ratings = models.IntegerField(null=True, blank=True)
     city = models.ForeignKey(City)
+    lowest_price = models.FloatField(null=True, blank=True)
+    average_price = models.FloatField(null=True, blank=True)
+    highest_price = models.FloatField(null=True, blank=True)
+
 
 
 class Interest(models.Model):
