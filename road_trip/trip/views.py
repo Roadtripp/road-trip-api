@@ -246,4 +246,4 @@ def get_trips(request):
 @api_view(['GET'])
 @permission_classes((IsAuthenticated,))
 def who_am_i(request):
-    return HttpResponse(request.user.username)
+    return JsonResponse({"username": request.user.username}, status=200)
