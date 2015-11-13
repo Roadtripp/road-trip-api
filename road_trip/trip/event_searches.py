@@ -104,6 +104,12 @@ sg_sports_alias = {
 "boxing":"57701",
 "wrestling":"136010",
 "tennis":"5702",
+"nfl":"2063",
+"nhl":"2129",
+"mlb":"2",
+"mls":"310281",
+"nba":"2100",
+"wwe":"136010",
 }
 
 sg_artist_alias = {
