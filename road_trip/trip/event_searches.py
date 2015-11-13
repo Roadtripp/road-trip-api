@@ -163,10 +163,8 @@ def search_events(trip_id):
         if Interest.objects.filter(trip=trip, category="sport").count() != 0:
             sports = Interest.objects.filter(trip=trip, category="sport").all()
             for x in sports:
-                print(x.sub_category.lower().replace(' ','-'))
-                print(sg_sports_alias.keys())
                 if x.sub_category.lower().replace(' ','-') in sg_sports_alias.keys():
-                    ret = (sg_sports_alias[x], x.sub_category.lower().replace(' ','-'))
+                    ret = (sg_sports_alias[x.sub_category.lower().replace(' ', '-')], x.sub_category.lower().replace(' ','-'))
                     interest_sports_list.append((x, ret))
                 else:
                     x_id = get_id(x.sub_category, x.category)
@@ -180,7 +178,7 @@ def search_events(trip_id):
             artist = Interest.objects.filter(trip=trip, category="artist").all()
             for x in artist:
                 if x.sub_category.lower().replace(' ','-') in sg_artist_alias.keys():
-                    ret = (sg_artist_alias[x], x.sub_category.lower().replace(' ','-'))
+                    ret = (sg_artist_alias[x.sub_category.lower().replace(' ', '-')], x.sub_category.lower().replace(' ','-'))
                     interest_artist_list.append((x, ret))
                 else:
                     x_id = get_id(x.sub_category, x.category)
@@ -288,10 +286,8 @@ def search_seatgeek(trip_id, performer, category, city, performer_id, city_busin
         if len(parsed_json["recommendations"]) != 0:
 
             for x in parsed_json["recommendations"]:
-                try:
+                if category == "sport":
                     event_type = parsed_json["recommendations"][counter]["event"]["taxonomies"][1]["name"]
-                except IndexError:
-                    event_type = 000
                 if float(parsed_json["recommendations"][counter]["event"]["score"]) > .70:
                     time = re.findall(r'\T(.*)[:]', parsed_json["recommendations"][counter]["event"]["datetime_local"])
                     time = ''.join(time)
@@ -328,11 +324,13 @@ def search_seatgeek(trip_id, performer, category, city, performer_id, city_busin
                     counter += 1
                     for x in city_businesses:
                         event_dates.append((x["date"],x["time"],x["address"]))
-                    if (rec_dict["date"], rec_dict["time"],rec_dict["address"]) not in event_dates and event_type == genre:
-                        recs.append(rec_dict)
+                    if category =="sport":
+                        if (rec_dict["date"], rec_dict["time"],rec_dict["address"]) not in event_dates and event_type == genre:
+                            recs.append(rec_dict)
                     else:
-                        print(event_type)
-                        print(genre)
+                        if (rec_dict["date"], rec_dict["time"],rec_dict["address"]) not in event_dates:
+                            recs.append(rec_dict)
+
                 else:
                     counter +=1
             return recs
