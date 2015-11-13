@@ -4,7 +4,7 @@ from rest_framework import viewsets
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
-from .permissions import TripPermissions
+from .permissions import TripPermissions, CityPermissions
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from .models import Trip, City, Interest, Activity
@@ -27,6 +27,8 @@ class TripViewSet(viewsets.ModelViewSet):
 class CityViewSet(viewsets.ModelViewSet):
     queryset = City.objects.all()
     serializer_class = CitySerializer
+    permission_classes = (CityPermissions,)
+    authentication_classes = (TokenAuthentication,)
 
     def get_queryset(self):
         trip_pk = self.kwargs["trip_pk"]
