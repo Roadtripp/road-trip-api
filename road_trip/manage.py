@@ -4,7 +4,6 @@ import sys
 import requests
 import requests_cache
 
-
 if __name__ == "__main__":
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "road_trip.settings")
 

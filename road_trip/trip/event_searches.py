@@ -6,7 +6,6 @@ from .city_selector import *
 from .models import Trip
 from .models import Interest
 import re
-import requests_cache
 
 
 #OAuth credential placeholders that must be filled in by users.
@@ -15,7 +14,6 @@ CONSUMER_SECRET = os.environ["YELP_CONSUMER_SECRET"]
 TOKEN = os.environ["YELP_TOKEN"]
 TOKEN_SECRET = os.environ["YELP_TOKEN_SECRET"]
 SEAT_GEEK = os.environ["SEAT_GEEK_KEY"]
-
 
 
 yelp = OAuth1Session(CONSUMER_KEY,
@@ -92,6 +90,50 @@ yelp_hotels_alias = {
 
 }
 
+sg_sports_alias = {
+"football": "2063",
+"soccer":"310281",
+"basketball": "2100",
+"golf": "5738",
+"baseball": "2",
+"hockey":"2129",
+"nascar":"5802",
+"boxing":"57701",
+"wrestling":"136010",
+"tennis":"5702",
+"nfl":"2063",
+"nhl":"2129",
+"mlb":"2",
+"mls":"310281",
+"nba":"2100",
+"wwe":"136010",
+}
+
+sg_artist_alias = {
+"comedy":"5172",
+"broadway":"296233",
+"country":"35",
+"rock":"1896",
+"rap":"1109",
+"hip-hop":"2351",
+"pop":"1173",
+"classic-rock":"93736",
+"punk":"147",
+"christian":"1913",
+"heavy-metal":"12845",
+"death-metal":"147969",
+"latin":"1531",
+"blues":"147120",
+"jazz":"8705",
+"reggae":"225970",
+"electronica":"19340",
+
+}
+
+
+
+
+
 def search_events(trip_id):
 
     trip = Trip.objects.get(pk=trip_id)
@@ -124,9 +166,13 @@ def search_events(trip_id):
         if Interest.objects.filter(trip=trip, category="sport").count() != 0:
             sports = Interest.objects.filter(trip=trip, category="sport").all()
             for x in sports:
-                x_id = get_id(x.sub_category, x.category)
-                if x_id is not None:
-                    interest_sports_list.append((x, x_id))
+                if x.sub_category.lower().replace(' ','-') in sg_sports_alias.keys():
+                    ret = (sg_sports_alias[x.sub_category.lower().replace(' ', '-')], x.sub_category.lower().replace(' ','-'))
+                    interest_sports_list.append((x, ret))
+                else:
+                    x_id = get_id(x.sub_category, x.category)
+                    if x_id is not None:
+                        interest_sports_list.append((x, x_id))
 
 
     interest_artist_list = []
@@ -134,9 +180,13 @@ def search_events(trip_id):
         if Interest.objects.filter(trip=trip, category="artist").count() != 0:
             artist = Interest.objects.filter(trip=trip, category="artist").all()
             for x in artist:
-                x_id = get_id(x.sub_category, x.category)
-                if x_id is not None:
-                    interest_artist_list.append((x, x_id))
+                if x.sub_category.lower().replace(' ','-') in sg_artist_alias.keys():
+                    ret = (sg_artist_alias[x.sub_category.lower().replace(' ', '-')], x.sub_category.lower().replace(' ','-'))
+                    interest_artist_list.append((x, ret))
+                else:
+                    x_id = get_id(x.sub_category, x.category)
+                    if x_id is not None:
+                        interest_artist_list.append((x, x_id))
 
 
     yelp_activity_list = ','.join(yelp_activity_list)
@@ -239,6 +289,8 @@ def search_seatgeek(trip_id, performer, category, city, performer_id, city_busin
         if len(parsed_json["recommendations"]) != 0:
 
             for x in parsed_json["recommendations"]:
+                if category == "sport":
+                    event_type = parsed_json["recommendations"][counter]["event"]["taxonomies"][1]["name"]
                 if float(parsed_json["recommendations"][counter]["event"]["score"]) > .70:
                     time = re.findall(r'\T(.*)[:]', parsed_json["recommendations"][counter]["event"]["datetime_local"])
                     time = ''.join(time)
@@ -275,10 +327,15 @@ def search_seatgeek(trip_id, performer, category, city, performer_id, city_busin
                     counter += 1
                     for x in city_businesses:
                         event_dates.append((x["date"],x["time"],x["address"]))
-                    if (rec_dict["date"], rec_dict["time"],rec_dict["address"]) not in event_dates:
-                        recs.append(rec_dict)
+                    if category =="sport":
+                        if (rec_dict["date"], rec_dict["time"],rec_dict["address"]) not in event_dates and event_type == genre:
+                            recs.append(rec_dict)
+                    else:
+                        if (rec_dict["date"], rec_dict["time"],rec_dict["address"]) not in event_dates:
+                            recs.append(rec_dict)
+
                 else:
-                    counter += 1
+                    counter +=1
             return recs
     except KeyError:
         pass
