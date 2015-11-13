@@ -3,6 +3,8 @@ from django.http import HttpResponse, JsonResponse
 from rest_framework import viewsets
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.authentication import TokenAuthentication
+from .permissions import TripPermissions
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from .models import Trip, City, Interest, Activity
@@ -18,6 +20,8 @@ from django.contrib.auth.models import User
 class TripViewSet(viewsets.ModelViewSet):
     queryset = Trip.objects.all()
     serializer_class = TripSerializer
+    permission_classes = (TripPermissions,)
+    authentication_classes = (TokenAuthentication,)
 
 
 class CityViewSet(viewsets.ModelViewSet):
