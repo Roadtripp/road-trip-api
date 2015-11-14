@@ -211,10 +211,7 @@ def search_events(trip_id):
             url_hotel = 'https://api.yelp.com/v2/search/?location={}&sort=2&category_filter={}&limit=3'.format(city[0], "hotels")
          urls = [(url_activity, "activities"), (url_food, "food"), (url_hotel, "hotels")]
 
-         if type(city) is tuple:
-             city_pd = city[0].title()
-         else:
-             city_pd = city.title()
+         city_pd = city[0].title()
          lat = df.get_value(city_pd, "latitude")
          lon = df.get_value(city_pd, "longitude")
 
@@ -222,7 +219,7 @@ def search_events(trip_id):
          if len(interest_sports_list) != 0:
              if trip.origin_date is not None and trip.destination_date is not None:
                  for x in interest_sports_list:
-                     ret = search_seatgeek(trip_id, x[0].sub_category, "sport", city, x[1][0], city_businesses, x[1][1], lat, lon)
+                     ret = search_seatgeek(trip_id, x[0].sub_category, "sport", city_pd, x[1][0], city_businesses, x[1][1], lat, lon)
                      try:
                          for r in ret:
                              if type(r) is not None:
@@ -234,7 +231,7 @@ def search_events(trip_id):
          if len(interest_artist_list) != 0:
             if trip.origin_date is not None and trip.destination_date is not None:
                 for x in interest_artist_list:
-                     ret = search_seatgeek(trip_id, x[0].sub_category, "artist", city, x[1][0], city_businesses, x[1][1], lat, lon)
+                     ret = search_seatgeek(trip_id, x[0].sub_category, "artist", city_pd, x[1][0], city_businesses, x[1][1], lat, lon)
                      try:
                          for r in ret:
                              if type(r) is not None:
