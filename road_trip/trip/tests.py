@@ -9,8 +9,8 @@ from .event_searches import *
 class CitySelectorTestCase(TestCase):
 
     def test_find_haversine(self):
-        self.assertEqual(find_dist(32.00,-112.00,34.00,-110.00), 180.39869644898968)
-        self.assertEqual(find_dist(43.00,-89.00,25.00,-110.00), 1721.0814638308734)
+        self.assertEqual(find_haversine(32.00,-112.00,34.00,-110.00), 180.39869644898968)
+        self.assertEqual(find_haversine(43.00,-89.00,25.00,-110.00), 1721.0814638308734)
 
     def test_find_cities(self):
         self.assertGreaterEqual(len(find_cities("Raleigh", "Boston")), 2)
@@ -44,6 +44,10 @@ class EventSearchesTestCase(TestCase):
 
     def test_get_interest_list(self):
         self.assertEqual(len(get_interest_list("food",1)), 1)
+        self.assertIn("chinese", get_interest_list("food",1))
+
+    def test_search_events(self):
+        self.assertGreaterEqual(len(search_events(1)), 1)
 
 
 # Create your tests here.

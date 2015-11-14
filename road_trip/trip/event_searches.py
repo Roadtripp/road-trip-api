@@ -35,15 +35,18 @@ def search_events(trip_id):
     city_list = find_cities(trip.origin, trip.destination)
 
     interest_food_list = get_interest_list("food", trip_id)
+    yelp_food_list=[]
     for item in interest_food_list:
         ret = yelp_food_alias[item]
         yelp_food_list.append(ret)
 
+    yelp_activity_list=[]
     interest_activity_list = get_interest_list("activity", trip_id)
     for item in interest_activity_list:
         ret = yelp_activity_alias[item]
         yelp_activity_list.append(ret)
 
+    yelp_hotels_list=[]
     interest_hotels_list = get_interest_list("hotels", trip_id)
     for item in interest_hotels_list:
         ret = yelp_hotels_alias[item]
