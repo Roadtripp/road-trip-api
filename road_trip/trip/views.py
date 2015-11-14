@@ -1,8 +1,10 @@
 from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, HttpResponseForbidden
 from rest_framework import viewsets
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.authentication import TokenAuthentication
+from .permissions import TripPermissions, CityPermissions, ActivityPermissions
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from .models import Trip, City, Interest, Activity
@@ -18,11 +20,15 @@ from django.contrib.auth.models import User
 class TripViewSet(viewsets.ModelViewSet):
     queryset = Trip.objects.all()
     serializer_class = TripSerializer
+    permission_classes = (TripPermissions,)
+    authentication_classes = (TokenAuthentication,)
 
 
 class CityViewSet(viewsets.ModelViewSet):
     queryset = City.objects.all()
     serializer_class = CitySerializer
+    permission_classes = (CityPermissions,)
+    authentication_classes = (TokenAuthentication,)
 
     def get_queryset(self):
         trip_pk = self.kwargs["trip_pk"]
@@ -38,6 +44,8 @@ class CityViewSet(viewsets.ModelViewSet):
 class ActivityViewSet(viewsets.ModelViewSet):
     queryset = Activity.objects.all()
     serializer_class = ActivitySerializer
+    permission_classes = (ActivityPermissions,)
+    authentication_classes = (TokenAuthentication,)
 
     def get_queryset(self):
         city_pk = self.kwargs["city_pk"]
@@ -48,6 +56,12 @@ class ActivityViewSet(viewsets.ModelViewSet):
         context = super().get_serializer_context().copy()
         context["city_pk"] = self.kwargs["city_pk"]
         return context
+
+
+def owned_and_not_owner(request, obj):
+    if not obj.user:
+        return False
+    return obj.user != request.user
 
 
 def list_gen(x, category):
@@ -77,6 +91,8 @@ def list_gen(x, category):
 
 def suggestion_json(request, trip_pk):
     trip = get_object_or_404(Trip, pk=trip_pk)
+    if owned_and_not_owner(request, trip):
+        return HttpResponseForbidden()
     data = search_events(trip_pk)
     data = [{"all_activities": city} for city in data]
 
@@ -120,6 +136,8 @@ def selection_json(request, trip_pk):
     if request.method == 'POST':
         selections = json.loads(request.body.decode('utf-8'))
         trip = get_object_or_404(Trip, pk=trip_pk)
+        if owned_and_not_owner(request, trip):
+            return HttpResponseForbidden()
         for wp in selections['waypoints']:
             if wp['stopover']:
                 if len(City.objects.filter(trip=trip, city_name=wp['location']).all()) == 0:
@@ -160,6 +178,8 @@ def interests_json(request, trip_pk):  # TODO: refactor
     if request.method == 'POST':
         interests = json.loads(request.body.decode('utf-8'))
         get_trip = get_object_or_404(Trip, pk=trip_pk)
+        if owned_and_not_owner(request, trip):
+            return HttpResponseForbidden()
         yelp_cats = ['activities', 'food', 'hotels']
         sg_cats = [('sport', 'sport1'), ('artist', 'artist1')]
         for cat in yelp_cats:
