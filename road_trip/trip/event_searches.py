@@ -24,7 +24,6 @@ yelp = OAuth1Session(CONSUMER_KEY,
 
 def get_interest_list(category, trip_id):
     trip = Trip.objects.get(pk=trip_id)
-    city_list = find_cities(trip.origin, trip.destination)
     interest_list = Interest.objects.filter(trip=trip, category=category).all()
     interest_list = [x.sub_category for x in interest_list]
     return interest_list
