@@ -188,6 +188,9 @@ def search_events(trip_id):
                     if x_id is not None:
                         interest_artist_list.append((x, x_id))
 
+     df = make_df()
+     df = df.set_index("City")
+
 
     yelp_activity_list = ','.join(yelp_activity_list)
     yelp_food_list = ','.join(yelp_food_list)
@@ -208,12 +211,18 @@ def search_events(trip_id):
             url_hotel = 'https://api.yelp.com/v2/search/?location={}&sort=2&category_filter={}&limit=3'.format(city[0], "hotels")
          urls = [(url_activity, "activities"), (url_food, "food"), (url_hotel, "hotels")]
 
+         if type(city) is tuple:
+             city_pd = city[0].title()
+         else:
+             city_pd = city.title()
+         lat = df.get_value(city_pd, "latitude")
+         lon = df.get_value(city_pd, "longitude")
 
          city_businesses = []
          if len(interest_sports_list) != 0:
              if trip.origin_date is not None and trip.destination_date is not None:
                  for x in interest_sports_list:
-                     ret = search_seatgeek(trip_id, x[0].sub_category, "sport", city, x[1][0], city_businesses, x[1][1])
+                     ret = search_seatgeek(trip_id, x[0].sub_category, "sport", city, x[1][0], city_businesses, x[1][1], lat, lon)
                      try:
                          for r in ret:
                              if type(r) is not None:
@@ -225,7 +234,7 @@ def search_events(trip_id):
          if len(interest_artist_list) != 0:
             if trip.origin_date is not None and trip.destination_date is not None:
                 for x in interest_artist_list:
-                     ret = search_seatgeek(trip_id, x[0].sub_category, "artist", city, x[1][0], city_businesses, x[1][1])
+                     ret = search_seatgeek(trip_id, x[0].sub_category, "artist", city, x[1][0], city_businesses, x[1][1], lat, lon)
                      try:
                          for r in ret:
                              if type(r) is not None:
@@ -270,16 +279,16 @@ def search_events(trip_id):
     return cities_events
 
 
-def search_seatgeek(trip_id, performer, category, city, performer_id, city_businesses, genre):
+def search_seatgeek(trip_id, performer, category, performer_id, city_businesses, genre, lat, lon):
     trip = Trip.objects.get(pk=trip_id)
-    if type(city) is tuple:
-        city_pd = city[0].title()
-    else:
-        city_pd = city.title()
-    df = make_df()
-    df = df.set_index("City")
-    lat = df.get_value(city_pd, "latitude")
-    lon = df.get_value(city_pd, "longitude")
+    # if type(city) is tuple:
+    #     city_pd = city[0].title()
+    # else:
+    #     city_pd = city.title()
+    # df = make_df()
+    # df = df.set_index("City")
+    # lat = df.get_value(city_pd, "latitude")
+    # lon = df.get_value(city_pd, "longitude")
 
     r = requests.get('http://api.seatgeek.com/2/recommendations?performers.id={id}&datetime_local.gte={start}&datetime_local.lt={end}&range=50mi&lat={lat}&lon={lon}&client_id={key}'.format(id=performer_id, start=str(trip.origin_date), end = str(trip.destination_date),lat = lat, lon = lon, key=SEAT_GEEK))
     parsed_json = r.json()
