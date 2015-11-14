@@ -3,6 +3,7 @@ import unittest
 from django.test import Client
 from .city_selector import *
 from .models import *
+from .event_searches import *
 
 # Create your tests here.
 class CitySelectorTestCase(TestCase):
@@ -13,7 +14,7 @@ class CitySelectorTestCase(TestCase):
 
     def test_find_cities(self):
         self.assertGreaterEqual(len(find_cities("Raleigh", "Boston")), 2)
-        self.assertIn(('New York', 'New York'), find_cities("Raleigh", "Boston"))
+        self.assertIn(('New York', 'NY'), find_cities("Raleigh", "Boston"))
 
     def test_get_waypoints(self):
         test = GoogleMapsDirections("Raleigh", "Boston")
@@ -23,6 +24,11 @@ class CitySelectorTestCase(TestCase):
     def test_format_waypoints(self):
         test = GoogleMapsDirections("Raleigh", "Boston")
         self.assertGreaterEqual(len(test.format_waypoints()), 3)
+
+
+class EventSearchesTestCase(TestCase):
+    def test_get_interest_list(self):
+        self.assertEqual(len(get_interest_list("food",1)), 4)
 
 
 # Create your tests here.
@@ -42,7 +48,7 @@ class TripTestCase(TestCase):
             destination_date="2008-04-13",
             destination_time="11:00:00-05",
         )
-        # test_trip2 = Trip.objects.create(
+        #test_trip2 = Trip.objects.create(
         #     pk=2,
         #     title="TITLE",
         #     origin="334 Blackwell St. Durham, NC",
