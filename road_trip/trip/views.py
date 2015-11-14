@@ -178,7 +178,7 @@ def interests_json(request, trip_pk):  # TODO: refactor
     if request.method == 'POST':
         interests = json.loads(request.body.decode('utf-8'))
         get_trip = get_object_or_404(Trip, pk=trip_pk)
-        if owned_and_not_owner(request, trip):
+        if owned_and_not_owner(request, get_trip):
             return HttpResponseForbidden()
         yelp_cats = ['activities', 'food', 'hotels']
         sg_cats = [('sport', 'sport1'), ('artist', 'artist1')]
