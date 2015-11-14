@@ -188,9 +188,9 @@ def search_events(trip_id):
                     if x_id is not None:
                         interest_artist_list.append((x, x_id))
 
+
     df = make_df()
     df = df.set_index("City")
-
 
     yelp_activity_list = ','.join(yelp_activity_list)
     yelp_food_list = ','.join(yelp_food_list)
@@ -285,10 +285,6 @@ def search_seatgeek(trip_id, performer, category, city, performer_id, city_busin
          city = city[0].title()
     else:
          city = city.title()
-    # df = make_df()
-    # df = df.set_index("City")
-    # lat = df.get_value(city_pd, "latitude")
-    # lon = df.get_value(city_pd, "longitude")
 
     r = requests.get('http://api.seatgeek.com/2/recommendations?performers.id={id}&datetime_local.gte={start}&datetime_local.lt={end}&range=50mi&lat={lat}&lon={lon}&client_id={key}'.format(id=performer_id, start=str(trip.origin_date), end = str(trip.destination_date),lat = lat, lon = lon, key=SEAT_GEEK))
     parsed_json = r.json()
