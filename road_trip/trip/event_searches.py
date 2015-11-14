@@ -22,29 +22,30 @@ yelp = OAuth1Session(CONSUMER_KEY,
                             resource_owner_secret=TOKEN_SECRET)
 
 
+def get_interest_list(category, trip_id):
+    trip = Trip.objects.get(pk=trip_id)
+    city_list = find_cities(trip.origin, trip.destination)
+    interest_list = Interest.objects.filter(trip=trip, category=category).all()
+    interest_list = [x.sub_category for x in interest_list]
+    return interest_list
+
 
 def search_events(trip_id):
 
     trip = Trip.objects.get(pk=trip_id)
     city_list = find_cities(trip.origin, trip.destination)
-    interest_food_list = Interest.objects.filter(trip=trip, category="food").all()
-    interest_food_list = [x.sub_category for x in interest_food_list]
-    yelp_food_list = []
+
+    interest_food_list = get_interest_list("food", trip_id)
     for item in interest_food_list:
         ret = yelp_food_alias[item]
         yelp_food_list.append(ret)
 
-    interest_activity_list = Interest.objects.filter(trip=trip, category="activities").all()
-    interest_activity_list = [x.sub_category for x in interest_activity_list]
-    yelp_activity_list = []
+    interest_activity_list = get_interest_list("activity", trip_id)
     for item in interest_activity_list:
         ret = yelp_activity_alias[item]
         yelp_activity_list.append(ret)
 
-
-    interest_hotels_list = Interest.objects.filter(trip=trip, category="hotels").all()
-    interest_hotels_list = [x.sub_category for x in interest_hotels_list]
-    yelp_hotels_list = []
+    interest_hotels_list = get_interest_list("hotels", trip_id)
     for item in interest_hotels_list:
         ret = yelp_hotels_alias[item]
         yelp_hotels_list.append(ret)

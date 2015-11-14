@@ -1,3 +1,6 @@
+##These alias are used in the event_searches file to convert user input to searchable terms
+
+
 yelp_food_alias = {
 
 "asianfusion":"asianfusion",
