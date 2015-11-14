@@ -188,8 +188,8 @@ def search_events(trip_id):
                     if x_id is not None:
                         interest_artist_list.append((x, x_id))
 
-     df = make_df()
-     df = df.set_index("City")
+    df = make_df()
+    df = df.set_index("City")
 
 
     yelp_activity_list = ','.join(yelp_activity_list)
@@ -279,12 +279,12 @@ def search_events(trip_id):
     return cities_events
 
 
-def search_seatgeek(trip_id, performer, category, performer_id, city_businesses, genre, lat, lon):
+def search_seatgeek(trip_id, performer, category, city, performer_id, city_businesses, genre, lat, lon):
     trip = Trip.objects.get(pk=trip_id)
-    # if type(city) is tuple:
-    #     city_pd = city[0].title()
-    # else:
-    #     city_pd = city.title()
+    if type(city) is tuple:
+         city = city[0].title()
+    else:
+         city = city.title()
     # df = make_df()
     # df = df.set_index("City")
     # lat = df.get_value(city_pd, "latitude")
