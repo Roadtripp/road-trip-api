@@ -267,7 +267,10 @@ def search_events(trip_id):
                     bus["lowest_price"]="null"
                     bus["average_price"]="null"
                     bus["highest_price"]="null"
-                    bus["img_url"]="null"
+                    try:
+                        bus["img_url"]=r['businesses'][counter]['snippet_image_url']
+                    except:
+                        bus["img_url"]="null"
                     city_businesses.append(bus)
                     counter += 1
                  except:
@@ -282,9 +285,10 @@ def search_seatgeek(trip_id, performer, category, city, performer_id, city_busin
     parsed_json = r.json()
     recs = []
     counter = 0
+    if city == "Las Vegas":
+        city = ("Las Vegas","NV")
     try:
         if len(parsed_json["recommendations"]) != 0:
-
             for x in parsed_json["recommendations"]:
                 if category == "sport":
                     event_type = parsed_json["recommendations"][counter]["event"]["taxonomies"][1]["name"]
@@ -318,8 +322,12 @@ def search_seatgeek(trip_id, performer, category, city, performer_id, city_busin
                         "lowest_price": parsed_json["recommendations"][counter]["event"]["stats"]["lowest_price"],
                         "average_price": parsed_json["recommendations"][counter]["event"]["stats"]["average_price"],
                         "highest_price": parsed_json["recommendations"][counter]["event"]["stats"]["highest_price"],
-                        "img_url":"null",
                         "city":city}
+                    try:
+                        rec_dict["img_url"]=parsed_json["recommendations"][counter]["event"]["performers"][0]["images"]["huge"]
+                    except:
+                        rec_dict["img_url"]="null"
+
                     event_dates = []
                     counter += 1
                     for x in city_businesses:
