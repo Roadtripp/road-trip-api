@@ -219,7 +219,7 @@ def search_events(trip_id):
          if len(interest_sports_list) != 0:
              if trip.origin_date is not None and trip.destination_date is not None:
                  for x in interest_sports_list:
-                     ret = search_seatgeek(trip_id, x[0].sub_category, "sport", city_pd, x[1][0], city_businesses, x[1][1], lat, lon)
+                     ret = search_seatgeek(trip_id, x[0].sub_category, "sport", city, x[1][0], city_businesses, x[1][1], lat, lon)
                      try:
                          for r in ret:
                              if type(r) is not None:
@@ -278,11 +278,6 @@ def search_events(trip_id):
 
 def search_seatgeek(trip_id, performer, category, city, performer_id, city_businesses, genre, lat, lon):
     trip = Trip.objects.get(pk=trip_id)
-    if type(city) is tuple:
-         city = city[0].title()
-    else:
-         city = city.title()
-
     r = requests.get('http://api.seatgeek.com/2/recommendations?performers.id={id}&datetime_local.gte={start}&datetime_local.lt={end}&range=50mi&lat={lat}&lon={lon}&client_id={key}'.format(id=performer_id, start=str(trip.origin_date), end = str(trip.destination_date),lat = lat, lon = lon, key=SEAT_GEEK))
     parsed_json = r.json()
     recs = []
