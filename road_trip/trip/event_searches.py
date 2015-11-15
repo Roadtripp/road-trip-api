@@ -231,7 +231,7 @@ def search_events(trip_id):
          if len(interest_artist_list) != 0:
             if trip.origin_date is not None and trip.destination_date is not None:
                 for x in interest_artist_list:
-                     ret = search_seatgeek(trip_id, x[0].sub_category, "artist", city_pd, x[1][0], city_businesses, x[1][1], lat, lon)
+                     ret = search_seatgeek(trip_id, x[0].sub_category, "artist", city, x[1][0], city_businesses, x[1][1], lat, lon)
                      try:
                          for r in ret:
                              if type(r) is not None:
@@ -285,8 +285,6 @@ def search_seatgeek(trip_id, performer, category, city, performer_id, city_busin
     parsed_json = r.json()
     recs = []
     counter = 0
-    if city == "Las Vegas":
-        city = ("Las Vegas","NV")
     try:
         if len(parsed_json["recommendations"]) != 0:
             for x in parsed_json["recommendations"]:
