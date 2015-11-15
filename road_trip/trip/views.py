@@ -235,10 +235,9 @@ def trip_save(request, trip_pk):
     get_trip = get_object_or_404(Trip, pk=trip_pk)
     get_trip.user = request.user
     req = json.loads(request.body.decode('utf-8'))
+    dest_city = get_trip.destination.split(',')[0]
     if req['title'] == None:
-        get_trip.title = "{} to {} ({})".format(get_trip.origin,
-                                                get_trip.destination,
-                                                get_trip.origin_date)
+        get_trip.title = "{} Trip".format(dest_city)
     else:
         get_trip.title = req['title']
     get_trip.save()
