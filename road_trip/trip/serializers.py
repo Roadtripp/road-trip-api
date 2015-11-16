@@ -38,11 +38,13 @@ class CitySerializer(serializers.ModelSerializer):
 
 class TripSerializer(serializers.ModelSerializer):
     origin_date = serializers.DateField(required=False,
+                                        allow_null=True,
                                         format="%m/%d/%Y",
                                         input_formats=['iso-8601', "%m/%d/%Y",
                                                        '%Y-%m-%dT%H:%M:%S.%fZ'])
                                                     #    2015-11-19T05:00:00.000Z
     destination_date = serializers.DateField(required=False,
+                                             allow_null=True,
                                              format="%m/%d/%Y",
                                              input_formats=['iso-8601', "%m/%d/%Y",
                                                             '%Y-%m-%dT%H:%M:%S.%fZ'])
