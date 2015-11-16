@@ -57,26 +57,6 @@ class GoogleMapsDirections:
         return waypoints
 
 
-    def format_waypoints_snap(self):
-        #To be used with Snap To Roads requests
-        dictionary = self.get_waypoints()
-        waypoints = []
-        for x in dictionary["waypoints"]:
-            waypoints.append(str(x[0])+","+str(x[1]))
-        waypoints = "|".join(waypoints)
-        start = str(dictionary["start_coord"][0])+","+ str(dictionary["start_coord"][1])
-        end = str(dictionary["end_coord"][0])+","+ str(dictionary["end_coord"][1])
-        formatted_waypoints = start +"|"+ waypoints + "|" + end
-        return formatted_waypoints
-
-
-    def get_incremental_points(self):
-        #formatting Snap To Roads requests
-        waypoints = self.format_waypoints
-        r = requests.get('https://roads.googleapis.com/v1/snapToRoads?path={}&interpolate=True&key={}'.format(waypoints, gm_key))
-        return r.json()
-
-
 
 def make_df():
     #makes a Pandas dataframe from the cities csv file that contains cities and their

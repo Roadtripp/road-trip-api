@@ -189,31 +189,37 @@ def search_events(trip_id):
                         interest_artist_list.append((x, x_id))
 
 
+    df = make_df()
+    df = df.set_index("City")
+
     yelp_activity_list = ','.join(yelp_activity_list)
     yelp_food_list = ','.join(yelp_food_list)
     yelp_hotels_list = ','.join(yelp_hotels_list)
     cities_events = []
     for city in city_list:
          if len(yelp_activity_list) != 0:
-            url_activity = 'https://api.yelp.com/v2/search/?location={}&sort=2&category_filter={}'.format(city[0], yelp_activity_list)
+            url_activity = 'https://api.yelp.com/v2/search/?location={}&sort=2&category_filter={}&limit=3'.format(city[0], yelp_activity_list)
          else:
-            url_activity = 'https://api.yelp.com/v2/search/?location={}&sort=2&category_filter={}'.format(city[0], "active")
+            url_activity = 'https://api.yelp.com/v2/search/?location={}&sort=2&category_filter={}&limit=3'.format(city[0], "active")
          if len(yelp_food_list) != 0:
-            url_food = 'https://api.yelp.com/v2/search/?location={}&sort=2&category_filter={}'.format(city[0], yelp_food_list)
+            url_food = 'https://api.yelp.com/v2/search/?location={}&sort=2&category_filter={}&limit=3'.format(city[0], yelp_food_list)
          else:
-            url_food = 'https://api.yelp.com/v2/search/?location={}&sort=2&category_filter={}'.format(city[0], "restaurants")
+            url_food = 'https://api.yelp.com/v2/search/?location={}&sort=2&category_filter={}&limit=3'.format(city[0], "restaurants")
          if len(yelp_hotels_list) != 0:
-            url_hotel = 'https://api.yelp.com/v2/search/?location={}&sort=2&category_filter={}'.format(city[0], yelp_hotels_list)
+            url_hotel = 'https://api.yelp.com/v2/search/?location={}&sort=2&category_filter={}&limit=3'.format(city[0], yelp_hotels_list)
          else:
-            url_hotel = 'https://api.yelp.com/v2/search/?location={}&sort=2&category_filter={}'.format(city[0], "hotels")
+            url_hotel = 'https://api.yelp.com/v2/search/?location={}&sort=2&category_filter={}&limit=3'.format(city[0], "hotels")
          urls = [(url_activity, "activities"), (url_food, "food"), (url_hotel, "hotels")]
 
+         city_pd = city[0].title()
+         lat = df.get_value(city_pd, "latitude")
+         lon = df.get_value(city_pd, "longitude")
 
          city_businesses = []
          if len(interest_sports_list) != 0:
              if trip.origin_date is not None and trip.destination_date is not None:
                  for x in interest_sports_list:
-                     ret = search_seatgeek(trip_id, x[0].sub_category, "sport", city, x[1][0], city_businesses, x[1][1])
+                     ret = search_seatgeek(trip_id, x[0].sub_category, "sport", city, x[1][0], city_businesses, x[1][1], lat, lon)
                      try:
                          for r in ret:
                              if type(r) is not None:
@@ -225,7 +231,7 @@ def search_events(trip_id):
          if len(interest_artist_list) != 0:
             if trip.origin_date is not None and trip.destination_date is not None:
                 for x in interest_artist_list:
-                     ret = search_seatgeek(trip_id, x[0].sub_category, "artist", city, x[1][0], city_businesses, x[1][1])
+                     ret = search_seatgeek(trip_id, x[0].sub_category, "artist", city, x[1][0], city_businesses, x[1][1], lat, lon)
                      try:
                          for r in ret:
                              if type(r) is not None:
@@ -261,7 +267,10 @@ def search_events(trip_id):
                     bus["lowest_price"]="null"
                     bus["average_price"]="null"
                     bus["highest_price"]="null"
-                    bus["img_url"]="null"
+                    try:
+                        bus["img_url"]=r['businesses'][counter]['snippet_image_url']
+                    except:
+                        bus["img_url"]="null"
                     city_businesses.append(bus)
                     counter += 1
                  except:
@@ -270,24 +279,14 @@ def search_events(trip_id):
     return cities_events
 
 
-def search_seatgeek(trip_id, performer, category, city, performer_id, city_businesses, genre):
+def search_seatgeek(trip_id, performer, category, city, performer_id, city_businesses, genre, lat, lon):
     trip = Trip.objects.get(pk=trip_id)
-    if type(city) is tuple:
-        city_pd = city[0].title()
-    else:
-        city_pd = city.title()
-    df = make_df()
-    df = df.set_index("City")
-    lat = df.get_value(city_pd, "latitude")
-    lon = df.get_value(city_pd, "longitude")
-
     r = requests.get('http://api.seatgeek.com/2/recommendations?performers.id={id}&datetime_local.gte={start}&datetime_local.lt={end}&range=50mi&lat={lat}&lon={lon}&client_id={key}'.format(id=performer_id, start=str(trip.origin_date), end = str(trip.destination_date),lat = lat, lon = lon, key=SEAT_GEEK))
     parsed_json = r.json()
     recs = []
     counter = 0
     try:
         if len(parsed_json["recommendations"]) != 0:
-
             for x in parsed_json["recommendations"]:
                 if category == "sport":
                     event_type = parsed_json["recommendations"][counter]["event"]["taxonomies"][1]["name"]
@@ -321,8 +320,12 @@ def search_seatgeek(trip_id, performer, category, city, performer_id, city_busin
                         "lowest_price": parsed_json["recommendations"][counter]["event"]["stats"]["lowest_price"],
                         "average_price": parsed_json["recommendations"][counter]["event"]["stats"]["average_price"],
                         "highest_price": parsed_json["recommendations"][counter]["event"]["stats"]["highest_price"],
-                        "img_url":"null",
                         "city":city}
+                    try:
+                        rec_dict["img_url"]=parsed_json["recommendations"][counter]["event"]["performers"][0]["images"]["huge"]
+                    except:
+                        rec_dict["img_url"]="null"
+
                     event_dates = []
                     counter += 1
                     for x in city_businesses:
