@@ -1,5 +1,8 @@
 import pickle
 import json
+import pandas as pd
+import requests
+from bs4 import BeautifulSoup
 # from models import Trip
 
 
@@ -12,53 +15,17 @@ def p():
     return pickle.load(open('data.pkl', 'rb'))
 
 
-def list_gen(x, category):
-    return [
-        {
-            "title": item["name"],
-            "address": " ".join(item["address"]),
-            "sub_categories": item["subcategory"],
-            "activity_stopover": False,
-            "url": item["url"],
-            "small_rate_img_url": item["rating_img_url_small"],
-            "large_rate_img_url": item["rating_img_url"],
-            "average_rating": item["rating"],
-            "num_ratings": item["num_reviews"]
-
-
-        }
-        for item in x[category]
-    ]
+def pic(city, state):
+    pass
 
 
 def main():
-    data = p()
-    # trip = Trip.objects.get(pk=3)
-    data = [{"all_activities": city} for city in data]
-    c = ["activity", "food", "sports", "artist", "hotel"]
-    for city in data:
-        for category in c:
-            city[category] = []
-        for activity in city["all_activities"]:
-            city[activity["category"]].append(activity)
-
-    w(
-        [
-            {
-                "location": ", ".join(x["all_activities"][1]["city"]),
-                "location_plus": ",+".join(x["all_activities"][1]["city"]),
-                "stopover": False,
-                "activities": list_gen(x, "activity"),
-                "hotels": list_gen(x, "hotel"),
-                "sports": list_gen(x, "sports"),
-                "food": list_gen(x, "food"),
-                "artist": list_gen(x, "artist")
-
-            }
-
-            for x in data
-        ]
-    )
+    df = pd.read_csv("road_trip/trip/best_us_cities.csv", encoding="latin-1")
+    # print(df.iloc[0::2][["City", "State"]])
+    # pic("Seattle", "WA")
+    resp = requests.get('http://www.google.com/search?q=Seattle+WA')
+    print(resp.text)
+    print(resp.status_code)
 
 
 if __name__ == '__main__':
