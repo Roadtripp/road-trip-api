@@ -14,6 +14,7 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 from .event_searches import search_events
 from django.contrib.auth.models import User
+from datetime import datetime
 
 
 # Create your views here.
@@ -275,9 +276,9 @@ def trip_create(request):
         new_trip = json.loads(request.body.decode('utf-8'))
         trip = Trip.objects.create(
                 origin=new_trip['origin'],
-                origin_date=new_trip['origin_date'],
+                origin_date=datetime.strptime(new_trip['origin_date'],'%Y-%m-%dT%H:%M:%S.%fZ').date(),
                 destination=new_trip['destination'],
-                destination_date=new_trip['destination_date'],
+                destination_date=datetime.strptime(new_trip['destination_date'],'%Y-%m-%dT%H:%M:%S.%fZ').date(),
         )
         return JsonResponse({'img_url': trip_pic(request, new_trip),
                              'destination': trip.destination,
