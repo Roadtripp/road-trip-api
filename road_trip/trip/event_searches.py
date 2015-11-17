@@ -181,64 +181,64 @@ def search_seatgeek(trip_id, performer, category, city, performer_id, city_busin
         score = .70
     elif category == "artist":
         score = .60
+    for x in range(3):
+        try:
+            if len(parsed_json["recommendations"]) != 0:
+                for x in parsed_json["recommendations"]:
+                    if category == "sport":
+                        event_type = parsed_json["recommendations"][counter]["event"]["taxonomies"][1]["name"]
+                    if float(parsed_json["recommendations"][counter]["event"]["score"]) > score:
+                        time = re.findall(r'\T(.*)[:]', parsed_json["recommendations"][counter]["event"]["datetime_local"])
+                        time = ''.join(time)
+                        hours = time[0]+time[1]
+                        if int(hours) > 12:
+                             hours = int(hours) - 12
+                             newtime = str(hours) + time[2] +time[3] +time[4] + "PM"
+                        elif int(hours) == 12:
+                            newtime = str(hours) + time[2] +time[3] +time[4] + "PM"
+                        else:
+                            newtime = time + "AM"
 
-    try:
-        if len(parsed_json["recommendations"]) != 0:
-            for x in parsed_json["recommendations"]:
-                if category == "sport":
-                    event_type = parsed_json["recommendations"][counter]["event"]["taxonomies"][1]["name"]
-                if float(parsed_json["recommendations"][counter]["event"]["score"]) > score:
-                    time = re.findall(r'\T(.*)[:]', parsed_json["recommendations"][counter]["event"]["datetime_local"])
-                    time = ''.join(time)
-                    hours = time[0]+time[1]
-                    if int(hours) > 12:
-                         hours = int(hours) - 12
-                         newtime = str(hours) + time[2] +time[3] +time[4] + "PM"
-                    elif int(hours) == 12:
-                        newtime = str(hours) + time[2] +time[3] +time[4] + "PM"
+                        date = str((parsed_json["recommendations"][counter]["event"]["datetime_local"])).split("T")
+                        date = date[0]
+                        rec_dict = {
+                            "name": parsed_json["recommendations"][counter]["event"]["title"],
+                            "category": category,
+                            "subcategory": performer,
+                            "rating": "null",
+                            "url":parsed_json["recommendations"][counter]["event"]["url"],
+                            "num_reviews": "null",
+                            "rating_img_url_small": "null",
+                            "rating_img_url": "null",
+                            "phone": "null",
+                            "date":date,
+                            "time": newtime,
+                            "address" :[parsed_json["recommendations"][counter]["event"]["venue"]["address"], parsed_json["recommendations"][counter]["event"]["venue"]["extended_address"]],
+                            "lowest_price": parsed_json["recommendations"][counter]["event"]["stats"]["lowest_price"],
+                            "average_price": parsed_json["recommendations"][counter]["event"]["stats"]["average_price"],
+                            "highest_price": parsed_json["recommendations"][counter]["event"]["stats"]["highest_price"],
+                            "city":city}
+                        try:
+                            rec_dict["img_url"]=parsed_json["recommendations"][counter]["event"]["performers"][0]["images"]["huge"]
+                        except:
+                            rec_dict["img_url"]="null"
+
+                        event_dates = []
+                        counter += 1
+                        for x in city_businesses:
+                            event_dates.append((x["date"],x["time"],x["address"]))
+                        if category =="sport":
+                            if (rec_dict["date"], rec_dict["time"],rec_dict["address"]) not in event_dates and event_type == genre:
+                                recs.append(rec_dict)
+                        else:
+                            if (rec_dict["date"], rec_dict["time"],rec_dict["address"]) not in event_dates:
+                                recs.append(rec_dict)
+
                     else:
-                        newtime = time + "AM"
-
-                    date = str((parsed_json["recommendations"][counter]["event"]["datetime_local"])).split("T")
-                    date = date[0]
-                    rec_dict = {
-                        "name": parsed_json["recommendations"][counter]["event"]["title"],
-                        "category": category,
-                        "subcategory": performer,
-                        "rating": "null",
-                        "url":parsed_json["recommendations"][counter]["event"]["url"],
-                        "num_reviews": "null",
-                        "rating_img_url_small": "null",
-                        "rating_img_url": "null",
-                        "phone": "null",
-                        "date":date,
-                        "time": newtime,
-                        "address" :[parsed_json["recommendations"][counter]["event"]["venue"]["address"], parsed_json["recommendations"][counter]["event"]["venue"]["extended_address"]],
-                        "lowest_price": parsed_json["recommendations"][counter]["event"]["stats"]["lowest_price"],
-                        "average_price": parsed_json["recommendations"][counter]["event"]["stats"]["average_price"],
-                        "highest_price": parsed_json["recommendations"][counter]["event"]["stats"]["highest_price"],
-                        "city":city}
-                    try:
-                        rec_dict["img_url"]=parsed_json["recommendations"][counter]["event"]["performers"][0]["images"]["huge"]
-                    except:
-                        rec_dict["img_url"]="null"
-
-                    event_dates = []
-                    counter += 1
-                    for x in city_businesses:
-                        event_dates.append((x["date"],x["time"],x["address"]))
-                    if category =="sport":
-                        if (rec_dict["date"], rec_dict["time"],rec_dict["address"]) not in event_dates and event_type == genre:
-                            recs.append(rec_dict)
-                    else:
-                        if (rec_dict["date"], rec_dict["time"],rec_dict["address"]) not in event_dates:
-                            recs.append(rec_dict)
-
-                else:
-                    counter +=1
-            return recs
-    except KeyError:
-        pass
+                        counter +=1
+                return recs
+        except KeyError:
+            pass
 
 def get_id(performer, cat):
     slug = performer.lower().replace(' ', '-')
