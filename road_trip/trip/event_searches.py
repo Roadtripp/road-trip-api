@@ -41,7 +41,7 @@ def search_events(trip_id):
         yelp_food_list.append(ret)
 
     yelp_activity_list=[]
-    interest_activity_list = get_interest_list("activity", trip_id)
+    interest_activity_list = get_interest_list("activities", trip_id)
     for item in interest_activity_list:
         ret = yelp_activity_alias[item]
         yelp_activity_list.append(ret)
