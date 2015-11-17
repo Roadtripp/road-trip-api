@@ -18,7 +18,8 @@ from django.contrib import admin
 from rest_framework_nested import routers
 from trip.views import TripViewSet, CityViewSet, ActivityViewSet, \
                        suggestion_json, selection_json, interests_json, \
-                       user_create, logout, trip_save, get_trips, who_am_i
+                       user_create, logout, trip_save, get_trips, who_am_i, \
+                       trip_create
 
 router = routers.DefaultRouter()
 router.register(r'trip', TripViewSet)
@@ -38,6 +39,7 @@ urlpatterns = [
     url(r'api/trip/(?P<trip_pk>\d+)/selections/', selection_json),
     url(r'api/trip/(?P<trip_pk>\d+)/interests/', interests_json),
     url(r'api/trip/(?P<trip_pk>\d+)/save/', trip_save),
+    url(r'api/trip/', trip_create),
     url(r'api/trips/', get_trips),
     url(r'api/', include(router.urls)),
     url(r'api/', include(trip_router.urls)),
