@@ -30,13 +30,15 @@ def pic(city, state):
 
 def main():
     key = os.environ['GOOGLE_MAPS']
-    location = "Seattle+WA"
+    location = "Vancouver MA"
     url = 'https://maps.googleapis.com/maps/api/geocode/json?key={}&address={}'.format(key, location)
     resp = requests.get(url)
     j = json.loads(resp.text)['results'][0]['geometry']['location']
     df = make_df()
-    for index, row in df[abs(j['lng']-df['longitude']) < 2][abs(j['lat']-df['latitude']) < 2].iterrows():
-        print(find_haversine(row['latitude'], row['longitude'], j['lat'], j['lng']))
+    print([row.img_url for index, row in df[abs(j['lng']-df['longitude']) < .45][abs(j['lat']-df['latitude']) < .45].iterrows()][0])
+        # print(find_haversine(row['latitude'], row['longitude'], j['lat'], j['lng']))
+        # print(row.City)
+
 
     # print(j)
     # print(resp.status_code)
