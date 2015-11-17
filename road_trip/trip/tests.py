@@ -3,17 +3,18 @@ import unittest
 from django.test import Client
 from .city_selector import *
 from .models import *
+from .event_searches import *
 
 # Create your tests here.
 class CitySelectorTestCase(TestCase):
 
-    def test_find_dist(self):
-        self.assertEqual(find_dist(32.00,-112.00,34.00,-110.00), 180.39869644898968)
-        self.assertEqual(find_dist(43.00,-89.00,25.00,-110.00), 1721.0814638308734)
+    def test_find_haversine(self):
+        self.assertEqual(find_haversine(32.00,-112.00,34.00,-110.00), 180.39869644898968)
+        self.assertEqual(find_haversine(43.00,-89.00,25.00,-110.00), 1721.0814638308734)
 
     def test_find_cities(self):
         self.assertGreaterEqual(len(find_cities("Raleigh", "Boston")), 2)
-        self.assertIn(('New York', 'New York'), find_cities("Raleigh", "Boston"))
+        self.assertIn(('New York', 'NY'), find_cities("Raleigh", "Boston"))
 
     def test_get_waypoints(self):
         test = GoogleMapsDirections("Raleigh", "Boston")
@@ -23,6 +24,30 @@ class CitySelectorTestCase(TestCase):
     def test_format_waypoints(self):
         test = GoogleMapsDirections("Raleigh", "Boston")
         self.assertGreaterEqual(len(test.format_waypoints()), 3)
+
+
+class EventSearchesTestCase(TestCase):
+    def setUp(self):
+        test_trip = Trip.objects.create(
+        pk=1,
+        origin="Raleigh, NC",
+        destination="San Diego, CA",
+        origin_date="2015-11-15",
+        destination_date="2015-11-20",
+        title="Test Trip"
+        )
+        interest = Interest.objects.create(
+        trip=test_trip,
+        category="food",
+        sub_category="chinese"
+        )
+
+    def test_get_interest_list(self):
+        self.assertEqual(len(get_interest_list("food",1)), 1)
+        self.assertIn("chinese", get_interest_list("food",1))
+
+    def test_search_events(self):
+        self.assertGreaterEqual(len(search_events(1)), 1)
 
 
 # Create your tests here.
@@ -42,7 +67,7 @@ class TripTestCase(TestCase):
             destination_date="2008-04-13",
             destination_time="11:00:00-05",
         )
-        # test_trip2 = Trip.objects.create(
+        #test_trip2 = Trip.objects.create(
         #     pk=2,
         #     title="TITLE",
         #     origin="334 Blackwell St. Durham, NC",

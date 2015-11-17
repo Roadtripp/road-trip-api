@@ -1,1 +1,146 @@
-2012 rank,City,State,2012 estimate,2010 Census,Change,2010 land area,2010 population density,Location1,New York,NY,"83,36,697","81,75,133",1.98%,302.643_sq_mi,"27,012_per_sq_mi",40.6643N 73.9385W,,,,,,783.842_km2,"10,430_km-2",2,Los Angeles,CA,"38,57,799","37,92,621",1.72%,468.670_sq_mi,"8,092_per_sq_mi",34.0194N 118.4108W,,,,,,"1,213.850_km2","3,124_km-2",3,Chicago,IL,"27,14,856","26,95,598",0.71%,227.635_sq_mi,"11,842_per_sq_mi",41.8376N 87.6818W,,,,,,589.571_km2,"4,572_km-2",4,Houston,TX,"21,60,821","21,00,263",2.88%,599.589_sq_mi,"3,501_per_sq_mi",29.7805N 95.3863W,,,,,,"1,552.929_km2","1,352_km-2",5,Philadelphia,PA,"15,47,607","15,26,006",1.42%,134.101_sq_mi,"11,379_per_sq_mi",40.0094N 75.1333W,,,,,,347.321_km2,"4,394_km-2",6,Phoenix,AZ,"14,88,750","14,45,632",2.98%,516.704_sq_mi,"2,798_per_sq_mi",33.5722N 112.0880W,,,,,,"1,338.256_km2","1,080_km-2",7,San Antonio,TX,"13,82,951","13,27,407",4.18%,460.933_sq_mi,"2,880_per_sq_mi",29.4724N 98.5251W,,,,,,"1,193.812_km2","1,112_km-2",8,San Diego,CA,"13,38,348","13,07,402",2.37%,325.188_sq_mi,"4,020_per_sq_mi",32.8153N 117.1350W,,,,,,842.233_km2,"1,552_km-2",9,Dallas,TX,"12,41,162","11,97,816",3.62%,340.519_sq_mi,"3,518_per_sq_mi",32.7757N 96.7967W,,,,,,881.939_km2,"1,358_km-2",10,San Jose,CA,"9,82,765","9,45,942",3.89%,176.526_sq_mi,"5,359_per_sq_mi",37.2969N 121.8193W,,,,,,457.201_km2,"2,069_km-2",11,Austin,TX,"8,42,592","7,90,390",6.60%,297.896_sq_mi,"2,653_per_sq_mi",30.3072N 97.7560W,,,,,,771.547_km2,"1,024_km-2",12,Jacksonville,FL,"8,36,507","8,21,784",1.79%,747.003_sq_mi,"1,100_per_sq_mi",30.3370N 81.6613W,,,,,,"1,934.729_km2",425_km-2,13,Indianapolis,IN,"8,34,852","8,20,445",1.76%,361.433_sq_mi,"2,270_per_sq_mi",39.7767N 86.1459W,,,,,,936.108_km2,876_km-2,14,San Francisco,CA,"8,25,863","8,05,235",2.56%,46.873_sq_mi,"17,179_per_sq_mi",37.7751N 122.4193W,,,,,,121.400_km2,"6,633_km-2",15,Columbus,OH,"8,09,798","7,87,033",2.89%,217.169_sq_mi,"3,624_per_sq_mi",39.9848N 82.9850W,,,,,,562.466_km2,"1,399_km-2",17,Charlotte,NC,"7,75,202","7,31,424",5.99%,297.678_sq_mi,"2,457_per_sq_mi",35.2087N 80.8307W,,,,,,770.984_km2,949_km-2,18,Detroit,MI,"7,01,475","7,13,777",?1.72%,138.750_sq_mi,"5,144_per_sq_mi",42.3830N 83.1022W,,,,,,359.362_km2,"1,986_km-2",19,El Paso,TX,"6,72,538","6,49,121",3.61%,255.235_sq_mi,"2,543_per_sq_mi",31.8484N 106.4270W,,,,,,661.057_km2,982_km-2,20,Memphis,TN,"6,55,155","6,46,889",1.28%,315.055_sq_mi,"2,053_per_sq_mi",35.1035N 89.9785W,,,,,,815.988_km2,793_km-2,21,Boston,MA,"6,36,479","6,17,594",3.06%,48.277_sq_mi,"12,793_per_sq_mi",42.3320N 71.0202W,,,,,,125.037_km2,"4,939_km-2",22,Seattle,WA,"6,34,535","6,08,660",4.25%,83.943_sq_mi,"7,251_per_sq_mi",47.6205N 122.3509W,,,,,,217.410_km2,"2,800_km-2",23,Denver,CO,"6,34,265","6,00,158",5.68%,153.000_sq_mi,"3,923_per_sq_mi",39.7618N 104.8806W,,,,,,396.269_km2,"1,515_km-2",24,Washington,DC,"6,32,323","6,01,723",5.09%,61.048_sq_mi,"9,856_per_sq_mi",38.9041N 77.0171W,,,,,,158.115_km2,"3,806_km-2",25,Nashville,TN,"6,24,496","6,01,222",3.87%,475.126_sq_mi,"1,265_per_sq_mi",36.1718N 86.7850W,,,,,,"1,230.570_km2",489_km-2,27,Louisville,KY,"6,05,110","5,97,337",1.30%,325.248_sq_mi,"1,837_per_sq_mi",38.1781N 85.6667W,,,,,,842.389_km2,709_km-2,28,Portland,OR,"6,03,106","5,83,776",3.31%,133.427_sq_mi,"4,375_per_sq_mi",45.5370N 122.6500W,,,,,,345.573_km2,"1,689_km-2",29,Oklahoma City,OK,"5,99,199","5,79,999",3.31%,606.410_sq_mi,956_per_sq_mi,35.4671N 97.5137W,,,,,,"1,570.596_km2",369_km-2,30,Milwaukee,WI,"5,98,916","5,94,833",0.69%,96.122_sq_mi,"6,188_per_sq_mi",43.0633N 87.9667W,,,,,,248.955_km2,"2,389_km-2",31,Las Vegas,NV,"5,96,424","5,83,756",2.17%,135.815_sq_mi,"4,298_per_sq_mi",36.2277N 115.2640W,,,,,,351.759_km2,"1,660_km-2",32,Albuquerque,NM,"5,55,417","5,45,852",1.75%,187.730_sq_mi,"2,908_per_sq_mi",35.1056N 106.6474W,,,,,,486.218_km2,"1,123_km-2",33,Tucson,AZ,"5,24,295","5,20,116",0.80%,226.709_sq_mi,"2,294_per_sq_mi",32.1543N 110.8711W,,,,,,587.173_km2,886_km-2,34,Fresno,CA,"5,05,882","4,94,665",2.27%,111.957_sq_mi,"4,418_per_sq_mi",36.7827N 119.7945W,,,,,,289.967_km2,"1,706_km-2",35,Sacramento,CA,"4,75,516","4,66,488",1.94%,97.915_sq_mi,"4,764_per_sq_mi",38.5666N 121.4686W,,,,,,253.600_km2,"1,839_km-2",37,Kansas City,MO,"4,64,310","4,59,787",0.98%,314.950_sq_mi,"1,460_per_sq_mi",39.1252N 94.5511W,,,,,,815.717_km2,564_km-2,39,Virginia Beach,VA,"4,47,021","4,37,994",2.06%,249.016_sq_mi,"1,759_per_sq_mi",36.7793N 76.0240W,,,,,,644.949_km2,679_km-2,40,Atlanta,GA,"4,43,775","4,20,003",5.66%,133.152_sq_mi,"3,154_per_sq_mi",33.7629N 84.4227W,,,,,,344.861_km2,"1,218_km-2",42,Raleigh,NC,"4,23,179","4,03,892",4.78%,142.903_sq_mi,"2,826_per_sq_mi",35.8302N 78.6414W,,,,,,370.117_km2,"1,091_km-2",43,Omaha,NE,"4,21,570","4,08,958",3.08%,127.088_sq_mi,"3,218_per_sq_mi",41.2647N 96.0419W,,,,,,329.157_km2,"1,242_km-2",44,Miami,FL,"4,13,892","3,99,457",3.61%,35.871_sq_mi,"11,136_per_sq_mi",25.7752N 80.2086W,,,,,,92.906_km2,"4,300_km-2",46,Tulsa,OK,"3,93,987","3,91,906",0.53%,196.754_sq_mi,"1,992_per_sq_mi",36.1279N 95.9023W,,,,,,509.590_km2,769_km-2,48,Cleveland,OH,"3,90,928","3,96,815",?1.48%,77.697_sq_mi,"5,107_per_sq_mi",41.4781N 81.6795W,,,,,,201.234_km2,"1,972_km-2",49,Omaha,KS,"3,85,577","3,82,368",0.84%,159.295_sq_mi,"2,400_per_sq_mi",37.6907N 97.3427W,,,,,,412.571_km2,927_km-2,51,New Orleans,LA,"3,69,250","3,43,829",7.39%,169.423_sq_mi,"2,029_per_sq_mi",30.0686N 89.9390W,,,,,,438.803_km2,784_km-2,53,Tampa,FL,"3,47,645","3,35,709",3.56%,113.409_sq_mi,"2,960_per_sq_mi",27.9701N 82.4797W,,,,,,293.728_km2,"1,143_km-2",58,St. Louis,MO,"3,18,172","3,19,294",?0.35%,61.909_sq_mi,"5,157_per_sq_mi",38.6357N 90.2446W,,,,,,160.343_km2,"1,991_km-2",61,Pittsburgh,PA,"3,06,211","3,05,704",0.17%,55.367_sq_mi,"5,521_per_sq_mi",40.4398N 79.9766W,,,,,,143.400_km2,"2,132_km-2",65,Cincinnati,OH,"2,96,550","2,96,943",?0.13%,77.942_sq_mi,"3,810_per_sq_mi",39.1399N 84.5064W,,,,,,201.870_km2,"1,471_km-2",66,Saint Paul,MN,"2,90,770","2,85,068",2.00%,51.979_sq_mi,"5,484_per_sq_mi",44.9489N 93.1039W,,,,,,134.624_km2,"2,118_km-2",73,Buffalo,NY,"2,59,384","2,61,310",?0.74%,40.384_sq_mi,"6,471_per_sq_mi",42.8925N 78.8597W,,,,,,104.594_km2,"2,498_km-2",77,Orlando,FL,"2,49,562","2,38,300",4.73%,102.395_sq_mi,"2,327_per_sq_mi",28.4159N 81.2988W,,,,,,265.203_km2,899_km-2,82,Madison,WI,"2,40,323","2,33,209",3.05%,76.789_sq_mi,"3,037_per_sq_mi",43.0878N 89.4301W,,,,,,198.882_km2,"1,173_km-2",83,Durham,NC,"2,39,358","2,28,330",4.83%,107.370_sq_mi,"2,127_per_sq_mi",35.9810N 78.9056W,,,,,,278.088_km2,821_km-2,89,Reno,NV,"2,31,027","2,25,221",2.58%,103.009_sq_mi,"2,186_per_sq_mi",39.4745N 119.7765W,,,,,,266.793_km2,844_km-2,90,Baton Rouge,LA,"2,30,058","2,29,493",0.25%,76.947_sq_mi,"2,982_per_sq_mi",30.4485N 91.1259W,,,,,,199.292_km2,"1,152_km-2",99,Boise,ID,"2,12,303","2,05,671",3.22%,79.364_sq_mi,"2,592_per_sq_mi",43.5985N 116.2311W,,,,,,205.551_km2,"1,001_km-2",100,Birmingham,AL,"2,12,038","2,12,237",?0.09%,146.067_sq_mi,"1,453_per_sq_mi",33.5274N 86.7990W,,,,,,378.311_km2,561_km-2,101,Rochester,NY,"2,10,532","2,10,565",?0.02%,35.781_sq_mi,"5,885_per_sq_mi",43.1699N 77.6169W,,,,,,92.672_km2,"2,272_km-2",104,Des Moines,IA,"2,06,688","2,03,433",1.60%,80.869_sq_mi,"2,516_per_sq_mi",41.5739N 93.6167W,,,,,,209.451_km2,971_km-2,120,Mobile,AL,"1,94,822","1,95,111",?0.15%,139.109_sq_mi,"1,403_per_sq_mi",30.6684N 88.1002W,,,,,,360.290_km2,542_km-2,124,Salt Lake City,UT,"1,89,314","1,86,440",1.54%,111.110_sq_mi,"1,678_per_sq_mi",40.7785N 111.9314W,,,,,,287.773_km2,648_km-2,138,Chattanooga,TN,"1,71,279","1,67,674",2.15%,137.152_sq_mi,"1,223_per_sq_mi",35.0665N 85.2471W,,,,,,355.222_km2,472_km-2,145,Vancouver,WA,"1,65,489","1,61,791",2.29%,46.456_sq_mi,"3,483_per_sq_mi",45.6372N 122.5965W,,,,,,120.322_km2,"1,345_km-2",149,Sioux Falls,SD,"1,59,908","1,53,888",3.91%,72.964_sq_mi,"2,109_per_sq_mi",43.5383N 96.7320W,,,,,,188.977_km2,814_km-2,180,Savannah,GA,"1,42,022","1,36,286",4.21%,103.151_sq_mi,"1,321_per_sq_mi",32.0025N 81.1536W,,,,,,267.160_km2,510_km-2,205,Charleston,SC,"1,25,583","1,20,083",4.58%,108.979_sq_mi,"1,102_per_sq_mi",32.8179N 79.9589W,,,,,,282.253_km2,425_km-2,243,Wilmington,NC,"1,09,922","1,06,476",3.24%,51.493_sq_mi,"2,068_per_sq_mi",34.2092N 77.8858W,,,,,,133.366_km2,798_km-2,245,Fargo,ND,"1,09,779","1,05,549",4.01%,48.821_sq_mi,"2,162_per_sq_mi",46.8652N 96.8290W,,,,,,126.446_km2,835_km-2,258,Billings,MT,"1,06,954","1,04,170",2.67%,43.413_sq_mi,"2,399_per_sq_mi",45.7895N 108.5499W,,,,,,112.440_km2,926_km-2,289,Charleston,WV,,,,,,38.3472 N 81.6333 W,,,,,,,,290,Cheyenne,WY,,,,,,41.1456 N 104.8019 W,,,,,,,,292,Jackson,WY,,,,,,43.4753ç N 110.7692ç W,,,,,,,,293,Rapid City,SD,,,,,,44.0760ç N 103.2280ç W,,,,,,,,294,Asheville,NC,,,,,,35.5800ç N 82.5558ç W
+2012 rank,City,State,2012 estimate,2010 Census,Change,2010 land area,2010 population density,Location,img_url
+1,New York,NY,"83,36,697","81,75,133",1.98%,302.643_sq_mi,"27,012_per_sq_mi",40.6643åº· 73.9385æ™ƒ,http://media-cdn.tripadvisor.com/media/photo-s/03/9b/2d/f2/new-york-city.jpg
+,,,,,,783.842_km2,"10,430_km-2",,
+2,Los Angeles,CA,"38,57,799","37,92,621",1.72%,468.670_sq_mi,"8,092_per_sq_mi",34.0194åº· 118.4108æ™ƒ,http://socialventurepartners.org.s3.amazonaws.com/www.socialventurepartners.org/sites/49/2013/05/Los-Angeles-Slider1.jpg
+,,,,,,"1,213.850_km2","3,124_km-2",,
+3,Chicago,IL,"27,14,856","26,95,598",0.71%,227.635_sq_mi,"11,842_per_sq_mi",41.8376åº· 87.6818æ™ƒ,"https://upload.wikimedia.org/wikipedia/commons/e/e8/20090524_Buildings_along_Chicago_River_line_the_south_border_of_the_Near_North_Side_and_Streeterville_and_the_north_border_of_Chicago_Loop,_Lakeshore_East_and_Illinois_Center.jpg"
+,,,,,,589.571_km2,"4,572_km-2",,
+4,Houston,TX,"21,60,821","21,00,263",2.88%,599.589_sq_mi,"3,501_per_sq_mi",29.7805åº· 95.3863æ™ƒ,https://upload.wikimedia.org/wikipedia/commons/4/44/Panoramic_Houston_skyline.jpg
+,,,,,,"1,552.929_km2","1,352_km-2",,
+5,Philadelphia,PA,"15,47,607","15,26,006",1.42%,134.101_sq_mi,"11,379_per_sq_mi",40.0094åº· 75.1333æ™ƒ,https://geoguessr.com/images/dd05effb76800125147b1b4b86956f0c.jpg
+,,,,,,347.321_km2,"4,394_km-2",,
+6,Phoenix,AZ,"14,88,750","14,45,632",2.98%,516.704_sq_mi,"2,798_per_sq_mi",33.5722åº· 112.0880æ™ƒ,http://westwoodps.com/sites/default/files/styles/slideshow_slide_small/public/phoenix_1_0.jpg?itok=qw1E-P3V
+,,,,,,"1,338.256_km2","1,080_km-2",,
+7,San Antonio,TX,"13,82,951","13,27,407",4.18%,460.933_sq_mi,"2,880_per_sq_mi",29.4724åº· 98.5251æ™ƒ,http://www.chcp.edu/sites/default/files/content/CHCP-San-Antonio-Campus
+,,,,,,"1,193.812_km2","1,112_km-2",,
+8,San Diego,CA,"13,38,348","13,07,402",2.37%,325.188_sq_mi,"4,020_per_sq_mi",32.8153åº· 117.1350æ™ƒ,http://media-cdn.tripadvisor.com/media/photo-s/05/a4/ee/8f/san-diego.jpg
+,,,,,,842.233_km2,"1,552_km-2",,
+9,Dallas,TX,"12,41,162","11,97,816",3.62%,340.519_sq_mi,"3,518_per_sq_mi",32.7757åº· 96.7967æ™ƒ,https://www.smu.edu/~/media/Site/Simmons/EdLeadership/Higher%20Ed/Dallas%20Skyline.ashx?la=en
+,,,,,,881.939_km2,"1,358_km-2",,
+10,San Jose,CA,"9,82,765","9,45,942",3.89%,176.526_sq_mi,"5,359_per_sq_mi",37.2969åº· 121.8193æ™ƒ,http://www.sfmoving.com/wp-content/uploads/2015/05/san-jose.jpg
+,,,,,,457.201_km2,"2,069_km-2",,
+11,Austin,TX,"8,42,592","7,90,390",6.60%,297.896_sq_mi,"2,653_per_sq_mi",30.3072åº· 97.7560æ™ƒ,https://www.spiabroad.com/wp-content/uploads/2015/10/austin-tx.jpg
+,,,,,,771.547_km2,"1,024_km-2",,
+12,Jacksonville,FL,"8,36,507","8,21,784",1.79%,747.003_sq_mi,"1,100_per_sq_mi",30.3370åº· 81.6613æ™ƒ,http://www.clubcorp.com/var/ezflow_site/storage/images/media/clubs/university-club-of-jacksonville-media-folder/images/facilities/views/univerisity-club-of-jacksonville-jacksonville-fl-down-town-view-960x410/3007808-1-eng-US/Univerisity-Club-of-Jacksonville-Jacksonville-FL-down-town-view-960x410_rotatingGalleryFront.jpg
+,,,,,,"1,934.729_km2",425_km-2,,
+13,Indianapolis,IN,"8,34,852","8,20,445",1.76%,361.433_sq_mi,"2,270_per_sq_mi",39.7767åº· 86.1459æ™ƒ,http://www.diversifiedvehicleservices.com/diversifiedvehicleservices/images/indianapolis.jpg
+,,,,,,936.108_km2,876_km-2,,
+14,San Francisco,CA,"8,25,863","8,05,235",2.56%,46.873_sq_mi,"17,179_per_sq_mi",37.7751åº· 122.4193æ™ƒ,http://static3.businessinsider.com/image/51d31170eab8ea101b000001/san-francisco-is-americas-snobbiest-city-according-to-the-rest-of-the-country.jpg
+,,,,,,121.400_km2,"6,633_km-2",,
+15,Columbus,OH,"8,09,798","7,87,033",2.89%,217.169_sq_mi,"3,624_per_sq_mi",39.9848åº· 82.9850æ™ƒ,http://www.usanova.com/wp-content/uploads/2014/08/Columbus-OH-Skyline.jpg
+,,,,,,562.466_km2,"1,399_km-2",,
+17,Charlotte,NC,"7,75,202","7,31,424",5.99%,297.678_sq_mi,"2,457_per_sq_mi",35.2087åº· 80.8307æ™ƒ,https://upload.wikimedia.org/wikipedia/commons/0/0a/Charlotte_Skyline_2011_-_Ricky_W.jpg
+,,,,,,770.984_km2,949_km-2,,
+18,Detroit,MI,"7,01,475","7,13,777",?1.72%,138.750_sq_mi,"5,144_per_sq_mi",42.3830åº· 83.1022æ™ƒ,http://i.huffpost.com/gen/1731420/images/o-DETROIT-SKYLINE-facebook.jpg
+,,,,,,359.362_km2,"1,986_km-2",,
+19,El Paso,TX,"6,72,538","6,49,121",3.61%,255.235_sq_mi,"2,543_per_sq_mi",31.8484åº· 106.4270æ™ƒ,http://stayinelpaso.com/images/el-paso-skyline.jpg
+,,,,,,661.057_km2,982_km-2,,
+20,Memphis,TN,"6,55,155","6,46,889",1.28%,315.055_sq_mi,"2,053_per_sq_mi",35.1035åº· 89.9785æ™ƒ,https://www.usnscf.com/ckfinder/userfiles/files/Memphis/Memphis%20downtown.jpg
+,,,,,,815.988_km2,793_km-2,,
+21,Boston,MA,"6,36,479","6,17,594",3.06%,48.277_sq_mi,"12,793_per_sq_mi",42.3320åº· 71.0202æ™ƒ,http://media-cdn.tripadvisor.com/media/photo-s/03/9b/2f/47/boston.jpg
+,,,,,,125.037_km2,"4,939_km-2",,
+22,Seattle,WA,"6,34,535","6,08,660",4.25%,83.943_sq_mi,"7,251_per_sq_mi",47.6205åº· 122.3509æ™ƒ,https://depts.washington.edu/biowww/images/seattle_kerry_park.png
+,,,,,,217.410_km2,"2,800_km-2",,
+23,Denver,CO,"6,34,265","6,00,158",5.68%,153.000_sq_mi,"3,923_per_sq_mi",39.7618åº· 104.8806æ™ƒ,http://halftimeinstitute.org/wp-content/uploads/2014/07/denver.jpg
+,,,,,,396.269_km2,"1,515_km-2",,
+24,Washington,DC,"6,32,323","6,01,723",5.09%,61.048_sq_mi,"9,856_per_sq_mi",38.9041åº· 77.0171æ™ƒ,http://alumni.umich.edu/clubs/sites/default/files/uploads/washington_dc.jpg
+,,,,,,158.115_km2,"3,806_km-2",,
+25,Nashville,TN,"6,24,496","6,01,222",3.87%,475.126_sq_mi,"1,265_per_sq_mi",36.1718åº· 86.7850æ™ƒ,http://nashville.uli.org/wp-content/uploads/sites/32/2012/10/nashvilleskyline.jpg
+,,,,,,"1,230.570_km2",489_km-2,,
+27,Louisville,KY,"6,05,110","5,97,337",1.30%,325.248_sq_mi,"1,837_per_sq_mi",38.1781åº· 85.6667æ™ƒ,https://upload.wikimedia.org/wikipedia/commons/1/16/Louisville_Skyline.jpg
+,,,,,,842.389_km2,709_km-2,,
+28,Portland,OR,"6,03,106","5,83,776",3.31%,133.427_sq_mi,"4,375_per_sq_mi",45.5370åº· 122.6500æ™ƒ,https://upload.wikimedia.org/wikipedia/commons/5/50/Portland_panorama3.jpg
+,,,,,,345.573_km2,"1,689_km-2",,
+29,Oklahoma City,OK,"5,99,199","5,79,999",3.31%,606.410_sq_mi,956_per_sq_mi,35.4671åº· 97.5137æ™ƒ,http://www.travelok.com/images/photos/slideshows/1241199497_1241199497-iokoklahomacity652x292.jpg
+,,,,,,"1,570.596_km2",369_km-2,,
+30,Milwaukee,WI,"5,98,916","5,94,833",0.69%,96.122_sq_mi,"6,188_per_sq_mi",43.0633åº· 87.9667æ™ƒ,http://choosemilwaukee.com/~/media/Images/Content%20Headers/MKE_Skyline_1%20for%20CM.ashx?mw=532
+,,,,,,248.955_km2,"2,389_km-2",,
+31,Las Vegas,NV,"5,96,424","5,83,756",2.17%,135.815_sq_mi,"4,298_per_sq_mi",36.2277åº· 115.2640æ™ƒ,https://anniebananie.com/wp-content/uploads/2013/08/H1-Las-Vegas-Strip.jpg
+,,,,,,351.759_km2,"1,660_km-2",,
+32,Albuquerque,NM,"5,55,417","5,45,852",1.75%,187.730_sq_mi,"2,908_per_sq_mi",35.1056åº· 106.6474æ™ƒ,http://media-cdn.tripadvisor.com/media/photo-s/01/e8/1f/24/sandia-sunset.jpg
+,,,,,,486.218_km2,"1,123_km-2",,
+33,Tucson,AZ,"5,24,295","5,20,116",0.80%,226.709_sq_mi,"2,294_per_sq_mi",32.1543åº· 110.8711æ™ƒ,http://socialventurepartners.org.s3.amazonaws.com/www.socialventurepartners.org/sites/43/2013/05/Tucson-Slider.jpg
+,,,,,,587.173_km2,886_km-2,,
+34,Fresno,CA,"5,05,882","4,94,665",2.27%,111.957_sq_mi,"4,418_per_sq_mi",36.7827åº· 119.7945æ™ƒ,https://upload.wikimedia.org/wikipedia/commons/4/4d/Downtown_Fresno_Night.png
+,,,,,,289.967_km2,"1,706_km-2",,
+35,Sacramento,CA,"4,75,516","4,66,488",1.94%,97.915_sq_mi,"4,764_per_sq_mi",38.5666åº· 121.4686æ™ƒ,https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Tower_Bridge_Sacramento_edit.jpg/220px-Tower_Bridge_Sacramento_edit.jpg
+,,,,,,253.600_km2,"1,839_km-2",,
+37,Kansas City,MO,"4,64,310","4,59,787",0.98%,314.950_sq_mi,"1,460_per_sq_mi",39.1252åº· 94.5511æ™ƒ,https://upload.wikimedia.org/wikipedia/commons/9/92/Kcsky.jpg
+,,,,,,815.717_km2,564_km-2,,
+39,Virginia Beach,VA,"4,47,021","4,37,994",2.06%,249.016_sq_mi,"1,759_per_sq_mi",36.7793åº· 76.0240æ™ƒ,http://www.artfestival.com/sites/default/files/cities/virginia-beach.jpg
+,,,,,,644.949_km2,679_km-2,,
+40,Atlanta,GA,"4,43,775","4,20,003",5.66%,133.152_sq_mi,"3,154_per_sq_mi",33.7629åº· 84.4227æ™ƒ,http://dm.lmc.gatech.edu/digra2013/wp-content/uploads/2013/05/AtlantaSkyline.jpg
+,,,,,,344.861_km2,"1,218_km-2",,
+42,Raleigh,NC,"4,23,179","4,03,892",4.78%,142.903_sq_mi,"2,826_per_sq_mi",35.8302åº· 78.6414æ™ƒ,https://upload.wikimedia.org/wikipedia/commons/0/0d/Raleigh_North_Carolina_downtown_skyline.jpg
+,,,,,,370.117_km2,"1,091_km-2",,
+43,Omaha,NE,"4,21,570","4,08,958",3.08%,127.088_sq_mi,"3,218_per_sq_mi",41.2647åº· 96.0419æ™ƒ,http://www.justice.gov/usao/ne/slideshow/omaha1.jpg
+,,,,,,329.157_km2,"1,242_km-2",,
+44,Miami,FL,"4,13,892","3,99,457",3.61%,35.871_sq_mi,"11,136_per_sq_mi",25.7752åº· 80.2086æ™ƒ,https://upload.wikimedia.org/wikipedia/commons/a/a5/Mouth_of_Miami_River_20100211.jpg
+,,,,,,92.906_km2,"4,300_km-2",,
+46,Tulsa,OK,"3,93,987","3,91,906",0.53%,196.754_sq_mi,"1,992_per_sq_mi",36.1279åº· 95.9023æ™ƒ,https://upload.wikimedia.org/wikipedia/commons/f/fa/Tulsa_Skyline.jpg
+,,,,,,509.590_km2,769_km-2,,
+48,Cleveland,OH,"3,90,928","3,96,815",?1.48%,77.697_sq_mi,"5,107_per_sq_mi",41.4781åº· 81.6795æ™ƒ,"https://upload.wikimedia.org/wikipedia/commons/1/17/Bridge_in_Cleveland,_Ohio.jpg"
+,,,,,,201.234_km2,"1,972_km-2",,
+,,,,,,,,,
+,,,,,,,,,
+51,New Orleans,LA,"3,69,250","3,43,829",7.39%,169.423_sq_mi,"2,029_per_sq_mi",30.0686åº· 89.9390æ™ƒ,https://upload.wikimedia.org/wikipedia/commons/e/ef/Cafe_du_Monde_New_Orleans.jpg
+,,,,,,438.803_km2,784_km-2,,
+53,Tampa,FL,"3,47,645","3,35,709",3.56%,113.409_sq_mi,"2,960_per_sq_mi",27.9701åº· 82.4797æ™ƒ,http://www.tampagov.net/sites/default/files/front/slideshow/TampaGov-Main-Image-16.jpg
+,,,,,,293.728_km2,"1,143_km-2",,
+58,St. Louis,MO,"3,18,172","3,19,294",?0.35%,61.909_sq_mi,"5,157_per_sq_mi",38.6357åº· 90.2446æ™ƒ,https://upload.wikimedia.org/wikipedia/commons/d/de/St_Louis_night_expblend.jpg
+,,,,,,160.343_km2,"1,991_km-2",,
+61,Pittsburgh,PA,"3,06,211","3,05,704",0.17%,55.367_sq_mi,"5,521_per_sq_mi",40.4398åº· 79.9766æ™ƒ,https://upload.wikimedia.org/wikipedia/commons/a/a8/PittSkyline082904.jpg
+,,,,,,143.400_km2,"2,132_km-2",,
+65,Cincinnati,OH,"2,96,550","2,96,943",?0.13%,77.942_sq_mi,"3,810_per_sq_mi",39.1399åº· 84.5064æ™ƒ,https://upload.wikimedia.org/wikipedia/commons/3/30/Cincinnati_oh_skyline.jpg
+,,,,,,201.870_km2,"1,471_km-2",,
+66,Saint Paul,MN,"2,90,770","2,85,068",2.00%,51.979_sq_mi,"5,484_per_sq_mi",44.9489åº· 93.1039æ™ƒ,http://streets.mn/wp-content/uploads/2014/02/StPaul03.jpg
+,,,,,,134.624_km2,"2,118_km-2",,
+73,Buffalo,NY,"2,59,384","2,61,310",?0.74%,40.384_sq_mi,"6,471_per_sq_mi",42.8925åº· 78.8597æ™ƒ,http://www.ag.ny.gov/sites/default/files/images/tour/BuffaloSkyline.jpg
+,,,,,,104.594_km2,"2,498_km-2",,
+77,Orlando,FL,"2,49,562","2,38,300",4.73%,102.395_sq_mi,"2,327_per_sq_mi",28.4159åº· 81.2988æ™ƒ,https://upload.wikimedia.org/wikipedia/commons/8/82/OrlandoNightSkyline.jpg
+,,,,,,265.203_km2,899_km-2,,
+82,Madison,WI,"2,40,323","2,33,209",3.05%,76.789_sq_mi,"3,037_per_sq_mi",43.0878åº· 89.4301æ™ƒ,http://miraclesone.org/wordpress/wp-content/uploads/2010/08/farm6.staticflickr.com_5121_5232011862_6590dfaefc_z.jpg
+,,,,,,198.882_km2,"1,173_km-2",,
+83,Durham,NC,"2,39,358","2,28,330",4.83%,107.370_sq_mi,"2,127_per_sq_mi",35.9810åº· 78.9056æ™ƒ,http://svcdn.simpleviewinc.com/v3/cache/www_durham-nc_com/E7618173336423CE6D1A5DDA868F718C.jpg
+,,,,,,278.088_km2,821_km-2,,
+89,Reno,NV,"2,31,027","2,25,221",2.58%,103.009_sq_mi,"2,186_per_sq_mi",39.4745åº· 119.7765æ™ƒ,https://upload.wikimedia.org/wikipedia/commons/6/64/Reno_skyline.JPG
+,,,,,,266.793_km2,844_km-2,,
+90,Baton Rouge,LA,"2,30,058","2,29,493",0.25%,76.947_sq_mi,"2,982_per_sq_mi",30.4485åº· 91.1259æ™ƒ,https://upload.wikimedia.org/wikipedia/commons/b/b5/Downtown_Baton_Rouge.jpg
+,,,,,,199.292_km2,"1,152_km-2",,
+99,Boise,ID,"2,12,303","2,05,671",3.22%,79.364_sq_mi,"2,592_per_sq_mi",43.5985åº· 116.2311æ™ƒ,http://www.simplemovinglabor.com/sites/default/files/boise-idaho.jpg
+,,,,,,205.551_km2,"1,001_km-2",,
+100,Birmingham,AL,"2,12,038","2,12,237",?0.09%,146.067_sq_mi,"1,453_per_sq_mi",33.5274åº· 86.7990æ™ƒ,http://www.hwnn.com/wp-content/uploads/2013/12/Birmingham_1920.jpg
+,,,,,,378.311_km2,561_km-2,,
+101,Rochester,NY,"2,10,532","2,10,565",?0.02%,35.781_sq_mi,"5,885_per_sq_mi",43.1699åº· 77.6169æ™ƒ,http://www.totalmortgage.com/blog/wp-content/uploads/2015/09/Rochesterny.jpg
+,,,,,,92.672_km2,"2,272_km-2",,
+104,Des Moines,IA,"2,06,688","2,03,433",1.60%,80.869_sq_mi,"2,516_per_sq_mi",41.5739åº· 93.6167æ™ƒ,https://www.dmgov.org/SiteCollectionImages/MainWindow/WesternGatewayPark.jpg
+,,,,,,209.451_km2,971_km-2,,
+120,Mobile,AL,"1,94,822","1,95,111",?0.15%,139.109_sq_mi,"1,403_per_sq_mi",30.6684åº· 88.1002æ™ƒ,http://www.southalabama.edu/colleges/scesp/cce/images/MobileAL.jpg
+,,,,,,360.290_km2,542_km-2,,
+124,Salt Lake City,UT,"1,89,314","1,86,440",1.54%,111.110_sq_mi,"1,678_per_sq_mi",40.7785åº· 111.9314æ™ƒ,http://nationalwood.com/wp-content/uploads/2013/08/salt-lake-city-downtown-2.jpg
+,,,,,,287.773_km2,648_km-2,,
+138,Chattanooga,TN,"1,71,279","1,67,674",2.15%,137.152_sq_mi,"1,223_per_sq_mi",35.0665åº· 85.2471æ™ƒ,http://www.ironman.com/~/media/f18f962c396942a7a88b4abe19f95b21/chattanooga%20main.jpg
+,,,,,,355.222_km2,472_km-2,,
+145,Vancouver,WA,"1,65,489","1,61,791",2.29%,46.456_sq_mi,"3,483_per_sq_mi",45.6372åº· 122.5965æ™ƒ,"http://www.careeroverview.com/media/photos/WA/Vancouver,_Washington-Vancouverwaskyline_004.jpg"
+,,,,,,120.322_km2,"1,345_km-2",,
+149,Sioux Falls,SD,"1,59,908","1,53,888",3.91%,72.964_sq_mi,"2,109_per_sq_mi",43.5383åº· 96.7320æ™ƒ,http://southdakotapatent.com/wp-content/uploads/2013/02/sioux-falls-404x256.jpg
+,,,,,,188.977_km2,814_km-2,,
+180,Savannah,GA,"1,42,022","1,36,286",4.21%,103.151_sq_mi,"1,321_per_sq_mi",32.0025åº· 81.1536æ™ƒ,http://cdn.aarp.net/content/dam/travel/destination-images/georgia/savannah/1400-savannah-georgia-night-view.imgcache.rev1409257977517.web.1400.720.jpg
+,,,,,,267.160_km2,510_km-2,,
+205,Charleston,SC,"1,25,583","1,20,083",4.58%,108.979_sq_mi,"1,102_per_sq_mi",32.8179åº· 79.9589æ™ƒ,https://upload.wikimedia.org/wikipedia/commons/6/64/BroadStreetCharleston.jpg
+,,,,,,282.253_km2,425_km-2,,
+243,Wilmington,NC,"1,09,922","1,06,476",3.24%,51.493_sq_mi,"2,068_per_sq_mi",34.2092åº· 77.8858æ™ƒ,"https://upload.wikimedia.org/wikipedia/commons/7/76/Wilmington,_North_Carolina.jpg"
+,,,,,,133.366_km2,798_km-2,,
+245,Fargo,ND,"1,09,779","1,05,549",4.01%,48.821_sq_mi,"2,162_per_sq_mi",46.8652åº· 96.8290æ™ƒ,http://fargoconnect.com/images/aerial-fargo.jpg
+,,,,,,126.446_km2,835_km-2,,
+258,Billings,MT,"1,06,954","1,04,170",2.67%,43.413_sq_mi,"2,399_per_sq_mi",45.7895åº· 108.5499æ™ƒ,http://ci.billings.mt.us/images/pages/N1/skyline.jpg
+,,,,,,112.440_km2,926_km-2,,
+289,Charleston,WV,,,,,,38.3472ï¿½ N 81.6333ï¿½ W,"http://charlestonwv.com/images/News-Images/Charleston,WV%20-Steve%20Shaluta.jpg"
+,,,,,,,,,
+290,Cheyenne,WY,,,,,,41.1456ï¿½ N 104.8019ï¿½ W,https://upload.wikimedia.org/wikipedia/commons/9/9a/CheyenneWY_downtown.jpg
+,,,,,,,,,
+292,Jackson,WY,,,,,,43.4753ï¿½ N 110.7692ï¿½ W,https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Jackson_from_snowking.jpg/250px-Jackson_from_snowking.jpg
+,,,,,,,,,
+293,Rapid City,SD,,,,,,44.0760ï¿½ N 103.2280ï¿½ W,https://markp427.files.wordpress.com/2011/06/p1010265.jpg
+,,,,,,,,,
+294,Asheville,NC,,,,,,35.5800ï¿½ N 82.5558ï¿½ W,http://cdn.theatlantic.com/assets/media/img/mt/2015/04/AshevilleScene/lead_960.jpg?1430308869

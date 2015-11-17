@@ -6,7 +6,7 @@ from .city_selector import *
 from .models import Trip
 from .models import Interest
 import re
-
+from .alias_lib import *
 
 #OAuth credential placeholders that must be filled in by users.
 CONSUMER_KEY = os.environ["YELP_CONSUMER"]
@@ -22,140 +22,32 @@ yelp = OAuth1Session(CONSUMER_KEY,
                             resource_owner_secret=TOKEN_SECRET)
 
 
-yelp_food_alias = {
-
-"asianfusion":"asianfusion",
-"barbeque":"bbq",
-"burgers":"burgers",
-"cafes":"cafes",
-"chinese":"chinese",
-"comfortfood":"comfortfood",
-"filipino":"filipino",
-"fishandchips":"fishnchips",
-"foodstands":"foodstands",
-"gastropubs":"gastropubs",
-"glutenfree":"gluten_free",
-"italian":"italian",
-"mexican":"mexican",
-"americannew":"newamerican",
-"pizza":"pizza",
-"salad":"salad",
-"sandwiches":"sandwiches",
-"seafood":"seafood",
-"restaurants":"restaurants",
-"steakhouses":"steak",
-"thai":"thai",
-"americantraditional":"tradamerican",
-"vegan":"vegan"
-}
-
-
-yelp_activity_alias  = {
-
-"amusementparks":"amusementparks",
-"aquariums":"aquariums",
-"beaches":"beaches",
-"bikerentals":"bikerentals",
-"boating":"boating",
-"bowling":"bowling",
-"challengecourses":"challengecourses",
-"climbing":"climbing",
-"discgolf":"discgolf",
-"jetskis":"jetskis",
-"kidsactivities":"kids_activities",
-"parks":"parks",
-"publicplazas":"publicplazas",
-"waterparks":"waterparks",
-"zoos":"zoos",
-"nightlife":"nightlife",
-"bars":"bars",
-"museums":"museums",
-"sportsteams":"sportsteams",
-"wineries":"wineries",
-"shopping":"shoppingcenters,outlet_stores,souvenirs,deptstores",
-"tours":"tours"
-
-}
-
-yelp_hotels_alias = {
-
-"bedandbreakfast":"bedbreakfast",
-"campgrounds":"campgrounds",
-"healthretreats":"healthretreats",
-"hostels":"hostels",
-"hotels":"hotels",
-"resorts":"resorts",
-"rvparks":"rvparks",
-"skiresorts":"skiresorts"
-
-}
-
-sg_sports_alias = {
-"football": "2063",
-"soccer":"310281",
-"basketball": "2100",
-"golf": "5738",
-"baseball": "2",
-"hockey":"2129",
-"nascar":"5802",
-"boxing":"57701",
-"wrestling":"136010",
-"tennis":"5702",
-"nfl":"2063",
-"nhl":"2129",
-"mlb":"2",
-"mls":"310281",
-"nba":"2100",
-"wwe":"136010",
-}
-
-sg_artist_alias = {
-"comedy":"5172",
-"broadway":"296233",
-"country":"35",
-"rock":"1896",
-"rap":"1109",
-"hip-hop":"2351",
-"pop":"1173",
-"classic-rock":"93736",
-"punk":"147",
-"christian":"1913",
-"heavy-metal":"12845",
-"death-metal":"147969",
-"latin":"1531",
-"blues":"147120",
-"jazz":"8705",
-"reggae":"225970",
-"electronica":"19340",
-
-}
-
-
-
+def get_interest_list(category, trip_id):
+    trip = Trip.objects.get(pk=trip_id)
+    interest_list = Interest.objects.filter(trip=trip, category=category).all()
+    interest_list = [x.sub_category for x in interest_list]
+    return interest_list
 
 
 def search_events(trip_id):
 
     trip = Trip.objects.get(pk=trip_id)
     city_list = find_cities(trip.origin, trip.destination)
-    interest_food_list = Interest.objects.filter(trip=trip, category="food").all()
-    interest_food_list = [x.sub_category for x in interest_food_list]
-    yelp_food_list = []
+
+    interest_food_list = get_interest_list("food", trip_id)
+    yelp_food_list=[]
     for item in interest_food_list:
         ret = yelp_food_alias[item]
         yelp_food_list.append(ret)
 
-    interest_activity_list = Interest.objects.filter(trip=trip, category="activities").all()
-    interest_activity_list = [x.sub_category for x in interest_activity_list]
-    yelp_activity_list = []
+    yelp_activity_list=[]
+    interest_activity_list = get_interest_list("activity", trip_id)
     for item in interest_activity_list:
         ret = yelp_activity_alias[item]
         yelp_activity_list.append(ret)
 
-
-    interest_hotels_list = Interest.objects.filter(trip=trip, category="hotels").all()
-    interest_hotels_list = [x.sub_category for x in interest_hotels_list]
-    yelp_hotels_list = []
+    yelp_hotels_list=[]
+    interest_hotels_list = get_interest_list("hotels", trip_id)
     for item in interest_hotels_list:
         ret = yelp_hotels_alias[item]
         yelp_hotels_list.append(ret)
@@ -211,10 +103,7 @@ def search_events(trip_id):
             url_hotel = 'https://api.yelp.com/v2/search/?location={}&sort=2&category_filter={}&limit=3'.format(city[0], "hotels")
          urls = [(url_activity, "activities"), (url_food, "food"), (url_hotel, "hotels")]
 
-         if type(city) is tuple:
-             city_pd = city[0].title()
-         else:
-             city_pd = city.title()
+         city_pd = city[0].title()
          lat = df.get_value(city_pd, "latitude")
          lon = df.get_value(city_pd, "longitude")
 
@@ -270,7 +159,10 @@ def search_events(trip_id):
                     bus["lowest_price"]="null"
                     bus["average_price"]="null"
                     bus["highest_price"]="null"
-                    bus["img_url"]="null"
+                    try:
+                        bus["img_url"]=r['businesses'][counter]['snippet_image_url']
+                    except:
+                        bus["img_url"]="null"
                     city_businesses.append(bus)
                     counter += 1
                  except:
@@ -281,22 +173,21 @@ def search_events(trip_id):
 
 def search_seatgeek(trip_id, performer, category, city, performer_id, city_businesses, genre, lat, lon):
     trip = Trip.objects.get(pk=trip_id)
-    if type(city) is tuple:
-         city = city[0].title()
-    else:
-         city = city.title()
-
     r = requests.get('http://api.seatgeek.com/2/recommendations?performers.id={id}&datetime_local.gte={start}&datetime_local.lt={end}&range=50mi&lat={lat}&lon={lon}&client_id={key}'.format(id=performer_id, start=str(trip.origin_date), end = str(trip.destination_date),lat = lat, lon = lon, key=SEAT_GEEK))
     parsed_json = r.json()
     recs = []
     counter = 0
+    if category == "sport":
+        score = .70
+    elif category == "artist":
+        score = .50
+
     try:
         if len(parsed_json["recommendations"]) != 0:
-
             for x in parsed_json["recommendations"]:
                 if category == "sport":
                     event_type = parsed_json["recommendations"][counter]["event"]["taxonomies"][1]["name"]
-                if float(parsed_json["recommendations"][counter]["event"]["score"]) > .70:
+                if float(parsed_json["recommendations"][counter]["event"]["score"]) > score:
                     time = re.findall(r'\T(.*)[:]', parsed_json["recommendations"][counter]["event"]["datetime_local"])
                     time = ''.join(time)
                     hours = time[0]+time[1]
@@ -326,8 +217,12 @@ def search_seatgeek(trip_id, performer, category, city, performer_id, city_busin
                         "lowest_price": parsed_json["recommendations"][counter]["event"]["stats"]["lowest_price"],
                         "average_price": parsed_json["recommendations"][counter]["event"]["stats"]["average_price"],
                         "highest_price": parsed_json["recommendations"][counter]["event"]["stats"]["highest_price"],
-                        "img_url":"null",
                         "city":city}
+                    try:
+                        rec_dict["img_url"]=parsed_json["recommendations"][counter]["event"]["performers"][0]["images"]["huge"]
+                    except:
+                        rec_dict["img_url"]="null"
+
                     event_dates = []
                     counter += 1
                     for x in city_businesses:

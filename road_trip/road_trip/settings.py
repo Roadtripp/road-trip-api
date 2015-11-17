@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 import requests_cache
-requests_cache.install_cache(cache = "tmp/cache", backend="sqlite", expire_after=173000)
+requests_cache.install_cache(cache = "tmp/cache", backend="sqlite", expire_after=605000)
 
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

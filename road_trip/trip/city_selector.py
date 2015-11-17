@@ -62,10 +62,10 @@ def make_df():
     #makes a Pandas dataframe from the cities csv file that contains cities and their
     #coordinates
     df = pd.read_csv("road_trip/trip/best_us_cities.csv", encoding="latin-1")
-    newdf = df[['City', 'State', 'Location']]
+    newdf = df[['City', 'State', 'Location', 'img_url']]
     newdf = newdf.dropna()
     newdf['latitude']=newdf['Location'].str.extract('(\d\d.\d\d\d\d)')
-    newdf['longitude']=newdf['Location'].str.extract('N ([\d.]+)')
+    newdf['longitude']=newdf['Location'].str.extract('åº· ([\d.]+)')
     newdf.latitude = newdf.latitude.astype(float)
     newdf.longitude = newdf.longitude.astype(float)
     newdf['longitude']= -newdf['longitude']
@@ -136,7 +136,10 @@ def find_cities(origin, dest, radius=50):
     cities = []
     for point in waypoints:
         for index, row in df.iterrows():
-            dist = find_haversine(lat1=point[0],lon1=point[1],lat2=row['latitude'],lon2=row['longitude'])
+            if row["latitude"] <= point[0] + 2 and row["latitude"] >= point[0] - 2:
+                dist = find_haversine(lat1=point[0],lon1=point[1],lat2=row['latitude'],lon2=row['longitude'])
+            else:
+                dist = 10000
             if dist <= radius:
                 if (row['City'], row['State']) not in cities:
                     if row['City'].lower() != origin.split(",")[0].lower():

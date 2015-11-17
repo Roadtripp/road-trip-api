@@ -178,7 +178,7 @@ def interests_json(request, trip_pk):  # TODO: refactor
     if request.method == 'POST':
         interests = json.loads(request.body.decode('utf-8'))
         get_trip = get_object_or_404(Trip, pk=trip_pk)
-        if owned_and_not_owner(request, trip):
+        if owned_and_not_owner(request, get_trip):
             return HttpResponseForbidden()
         yelp_cats = ['activities', 'food', 'hotels']
         sg_cats = [('sport', 'sport1'), ('artist', 'artist1')]
@@ -237,10 +237,9 @@ def trip_save(request, trip_pk):
         return HttpResponseForbidden()
     get_trip.user = request.user
     req = json.loads(request.body.decode('utf-8'))
+    dest_city = get_trip.destination.split(',')[0]
     if req['title'] == None:
-        get_trip.title = "{} to {} ({})".format(get_trip.origin,
-                                                get_trip.destination,
-                                                get_trip.origin_date)
+        get_trip.title = "{} Trip".format(dest_city)
     else:
         get_trip.title = req['title']
     get_trip.save()
