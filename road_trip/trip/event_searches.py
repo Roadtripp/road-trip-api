@@ -180,7 +180,7 @@ def search_seatgeek(trip_id, performer, category, city, performer_id, city_busin
     if category == "sport":
         score = .70
     elif category == "artist":
-        score = .50
+        score = .60
 
     try:
         if len(parsed_json["recommendations"]) != 0:
