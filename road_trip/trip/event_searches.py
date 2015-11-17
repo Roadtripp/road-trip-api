@@ -182,13 +182,18 @@ def search_seatgeek(trip_id, performer, category, city, performer_id, city_busin
     parsed_json = r.json()
     recs = []
     counter = 0
+    if category == "sport":
+        score = .70
+    elif category == "artist":
+        score = .50
+
     try:
         if len(parsed_json["recommendations"]) != 0:
 
             for x in parsed_json["recommendations"]:
                 if category == "sport":
                     event_type = parsed_json["recommendations"][counter]["event"]["taxonomies"][1]["name"]
-                if float(parsed_json["recommendations"][counter]["event"]["score"]) > .70:
+                if float(parsed_json["recommendations"][counter]["event"]["score"]) > score:
                     time = re.findall(r'\T(.*)[:]', parsed_json["recommendations"][counter]["event"]["datetime_local"])
                     time = ''.join(time)
                     hours = time[0]+time[1]
