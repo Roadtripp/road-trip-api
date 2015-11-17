@@ -39,7 +39,7 @@ urlpatterns = [
     url(r'api/trip/(?P<trip_pk>\d+)/selections/', selection_json),
     url(r'api/trip/(?P<trip_pk>\d+)/interests/', interests_json),
     url(r'api/trip/(?P<trip_pk>\d+)/save/', trip_save),
-    url(r'api/trip/', trip_create),
+    url(r'api/trip/^', trip_create),
     url(r'api/trips/', get_trips),
     url(r'api/', include(router.urls)),
     url(r'api/', include(trip_router.urls)),
