@@ -233,6 +233,8 @@ def logout(request):
 @permission_classes((IsAuthenticated,))
 def trip_save(request, trip_pk):
     get_trip = get_object_or_404(Trip, pk=trip_pk)
+    if owned_and_not_owner(request, get_trip):
+        return HttpResponseForbidden()
     get_trip.user = request.user
     req = json.loads(request.body.decode('utf-8'))
     if req['title'] == None:
