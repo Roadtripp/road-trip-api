@@ -233,6 +233,8 @@ def logout(request):
 @permission_classes((IsAuthenticated,))
 def trip_save(request, trip_pk):
     get_trip = get_object_or_404(Trip, pk=trip_pk)
+    if owned_and_not_owner(request, get_trip):
+        return HttpResponseForbidden()
     get_trip.user = request.user
     req = json.loads(request.body.decode('utf-8'))
     dest_city = get_trip.destination.split(',')[0]
@@ -265,3 +267,37 @@ def get_trips(request):
 @permission_classes((IsAuthenticated,))
 def who_am_i(request):
     return JsonResponse({"username": request.user.username}, status=200)
+
+
+@csrf_exempt
+def trip_create(request):
+    if request.method == 'POST':
+        new_trip = json.loads(request.body.decode('utf-8'))
+        trip = Trip.objects.create(
+                origin=new_trip['origin'],
+                origin_date=new_trip['origin_date'],
+                destination=new_trip['destination'],
+                destination_date=new_trip['destination_date'],
+        )
+        return JsonResponse({'img_url': trip_pic(request, new_trip),
+                             'destination': trip.destination,
+                             'origin': trip.origin,
+                             'destination_date': trip.destination_date,
+                             'origin_date': trip.origin_date,
+                             'id': trip.id}, status=201)
+
+
+def trip_pic(request, trip):
+    df = make_df()
+    for index, row in df.iterrows():
+        if row["City"] in trip['destination']:
+            return row['img_url']
+    # if not, geo-cache
+    key = os.environ['GOOGLE_MAPS']
+    url = 'https://maps.googleapis.com/maps/api/geocode/json?key={}&address={}'.format(key, trip['destination'])
+    resp = requests.get(url)
+    j = json.loads(resp.text)['results'][0]['geometry']['location']
+    try:
+        return [row.img_url for index, row in df[abs(j['lng']-df['longitude']) < .45][abs(j['lat']-df['latitude']) < .45].iterrows()][0]
+    except IndexError:
+        return 'https://cloud.githubusercontent.com/assets/14016133/11154210/f2a610a2-8a0b-11e5-82f3-c218e845ae59.png'
